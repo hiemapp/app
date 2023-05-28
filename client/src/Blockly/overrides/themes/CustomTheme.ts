@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core';
-import { FlowBlockCategoryManifest } from '~shared/types/flows/FlowBlockCategory';
+import { FlowBlockCategoryManifest } from 'zylax/types/flows/FlowBlockCategory';
 import { getColorValue } from '@/utils/colors';
 import { colorpalettes } from '@tjallingf/react-utils';
 import app from '@/utils/app';

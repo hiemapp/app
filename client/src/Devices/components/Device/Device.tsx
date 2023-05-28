@@ -10,7 +10,7 @@ import DeviceDisplayButtons from '../DeviceDisplayButtons';
 import DeviceStateDisplayRecording from '../DeviceStateDisplayRecording';
 import useSocketEvent from '@/hooks/useSocketEvent';
 import { trpc } from '@/utils/trpc';
-import { type DevicePropsSerialized } from '~shared/types/devices/Device';
+import { type DevicePropsSerialized } from 'zylax/types/devices/Device';
 
 const { textDark } = colors;
 

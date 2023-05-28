@@ -1,6 +1,6 @@
 import { IntlShape } from 'react-intl';
-import type { FlowBlockManifestSerialized, FlowBlockManifestParameter, FlowBlockManifestParameterOption, FlowBlockManifestParameterShadowType } from '~shared/types/flows/FlowBlock';
-import type { FlowBlockCategoryManifest } from '~shared/types/flows/FlowBlockCategory';
+import type { FlowBlockManifestSerialized, FlowBlockManifestParameter, FlowBlockManifestParameterOption, FlowBlockManifestParameterShadowType } from 'zylax/types/flows/FlowBlock';
+import type { FlowBlockCategoryManifest } from 'zylax/types/flows/FlowBlockCategory';
 
 export interface FlowEditorBlockOptions {
     messageFormatter: IntlShape['formatMessage'];

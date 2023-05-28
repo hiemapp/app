@@ -1,7 +1,7 @@
 import { LoadingIcon } from '@tjallingf/react-utils';
 import useQuery from '@/hooks/useQuery';
 import './DeviceStateDisplayRecording.scss';
-import { type DeviceStateDisplay } from '~shared/types/devices/DeviceState';
+import { type DeviceStateDisplay } from 'zylax/types/devices/DeviceState';
 
 export interface IDeviceStateDisplayRecordingProps {
     id: number;

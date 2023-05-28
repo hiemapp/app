@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import * as Blockly from 'blockly/core';
 import { RefObject, createRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { FlowBlockCategoryManifest } from '~shared/types/flows/FlowBlockCategory';
+import { FlowBlockCategoryManifest } from 'zylax/types/flows/FlowBlockCategory';
 
 interface ToolboxItemDef {
     kind: string;
