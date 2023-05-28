@@ -1,0 +1,31 @@
+.ToggleInput {
+    position: relative;
+    min-height: var(--ToggleInput__track-height);
+    cursor: pointer;
+
+    > .ToggleInput__track {
+        height: var(--ToggleInput__track-height);
+        width: var(--ToggleInput__track-width);
+        border-radius: var(--ToggleInput__track-border-radius);
+        background: var(--ToggleInput__track-background);
+    }
+
+    > .ToggleInput__thumb {
+        height: var(--ToggleInput__thumb-height);
+        width: var(--ToggleInput__thumb-width);
+        border-radius: var(--ToggleInput__thumb-border-radius);
+        background-color: var(--ToggleInput__thumb-background);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: var(--ToggleInput__thumb-offset);
+        transition: 125ms left ease-in, 125ms background-color ease-in;
+    }
+
+    &.ToggleInput--enabled {
+        > .ToggleInput__thumb {
+            background-color: var(--ToggleInput--enabled__thumb-background);
+            left: calc(var(--ToggleInput__track-width) - var(--ToggleInput__thumb-width) - var(--ToggleInput__thumb-offset));
+        }
+    }
+}

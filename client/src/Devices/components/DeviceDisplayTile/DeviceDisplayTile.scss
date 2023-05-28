@@ -1,0 +1,16 @@
+.DeviceDisplayTile {
+  width: 100%;
+
+  .DeviceDisplayTile__thumbnail {
+    > img {
+      max-height: var(--Tile__thumbnail-img-size);
+      height: var(--Tile__thumbnail-img-size);
+      width: var(--Tile__thumbnail-img-size);
+      border-radius: var(--border-radius-sm);
+    }
+  }
+
+  .DeviceDisplayTile__content {
+    font-size: var(--font-size-sm);
+  }
+}

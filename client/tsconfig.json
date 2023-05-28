@@ -1,0 +1,30 @@
+{
+    "include": ["src/"],
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "es2022",
+        "esModuleInterop": true,
+        "strict": true,
+        "noImplicitReturns": false,
+        "strictPropertyInitialization": false,
+        "allowSyntheticDefaultImports": true,
+        "types": ["vite/client"],
+        "target": "es2020",
+        "useDefineForClassFields": true,
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "allowJs": false,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "baseUrl": "./",
+        "rootDir": "../",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@/utils/trpc": ["./src/utils/trpc"]
+        }
+    },
+    "references": [{ "path": "./tsconfig.node.json" }]
+}

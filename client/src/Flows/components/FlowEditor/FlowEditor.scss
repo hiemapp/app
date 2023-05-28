@@ -1,0 +1,22 @@
+.FlowEditor {
+    --BlocklyWorkspace-border: 2px solid var(--gray-1);
+    --BlocklyWorkspace-background: var(--gray-0);
+    --BlocklyWorkspace-toolbox-background: var(--gray-0);
+    --BlocklyWorkspace-toolbox__item--selected-background: var(--gray-2);
+    --BlocklyWorkspace-toolbox__item-border: 1px solid var(--gray-1);
+    --BlocklyWorkspace-toolbox-flyout-fill: var(--gray-1);
+    --BlocklyWorkspace-toolbox__item-accent: inherit;
+    --BlocklyWorkspace-draggable-highlight-stroke: none;
+
+    .FlowEditor__toolbar {
+        background: var(--gray-0);
+        border-bottom: var(--BlocklyWorkspace-border);
+    }
+
+    .FlowEditor__toolbar-divider {
+        display: inline-block;
+        height: 100%;
+        border-left: var(--BlocklyWorkspace-border);
+        margin: 0 0.5rem;
+    }
+}

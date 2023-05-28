@@ -1,0 +1,39 @@
+.TextInput {
+    background: var(--TextInput-background);
+    color: var(--TextInput-color) !important;
+    border-radius: var(--border-radius-md);
+    outline: none;
+    border: none;
+    padding: var(--TextInput-padding-y) var(--TextInput-padding-x);
+    position: relative;
+    z-index: 1;
+
+    &:focus {
+        box-shadow: 0 0 1px 1px var(--blue-5);
+    }
+
+    &::placeholder {
+        color: var(--text-muted);
+    }
+}
+
+.TextInput-wrapper {
+    > :not(:first-child) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: none;
+    }
+
+    > :not(:last-child) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none;
+    }
+
+    > .Button {
+        background: var(--TextInput-background) !important;
+        color: var(--TextInput-color) !important;
+        --Button-padding-y: var(--TextInput-padding-y);
+        --Button-padding-x: var(--TextInput-padding-x);
+    }
+}
