@@ -1,5 +1,5 @@
 import { User, UserController, type Constructor, type GetPropsSerializedType } from 'zylax';
-import ModelWithProps from 'zylax/dist/lib/ModelWithProps';
+import { type ModelWithProps } from 'zylax';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
 
