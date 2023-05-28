@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { FlowBlock, FlowBlockCategory, logger, Extension, ExtensionController } from 'zylax';
-import { type FlowBlockManifest } from '../../../../shared/types/flows/FlowBlock';
+import { type FlowBlockManifest } from 'zylax/types';
 import _ from 'lodash';
 
 export const flowEditorRouter = router({
