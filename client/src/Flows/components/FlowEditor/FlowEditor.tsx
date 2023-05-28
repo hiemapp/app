@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState, useRef } from 'react';
-import { Button, Icon, Box, colorpalettes } from '@tjallingf/react-utils';
+import { Button, Box, colorpalettes } from '@tjallingf/react-utils';
+import Icon from '@/components/Icon/Icon';
 import * as Blockly from 'blockly/core';
 import '@blockly/field-date';
 import '@blockly/block-plus-minus';
@@ -160,17 +161,17 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
         <Box direction="column" className="FlowEditor h-100 w-100">
             <Box direction="row" className="FlowEditor__toolbar p-2 w-100" gutterX={1}>
                 <Button square variant="secondary" onClick={() => blocklyWorkspaceRef.current?.undo(false)}>
-                    <Icon id="undo" />
+                    <Icon id="arrow-rotate-left" />
                 </Button>
                 <Button square variant="secondary" onClick={() => blocklyWorkspaceRef.current?.undo(true)}>
-                    <Icon id="redo" />
+                    <Icon id="arrow-rotate-right" />
                 </Button>
                 <div className="FlowEditor__toolbar-divider"></div>
                 <Button square variant="secondary" onClick={() => doTestRun()} primary={colorpalettes.green}>
                     <Icon id="play" />
                 </Button>
                 <Button square variant="secondary" onClick={() => pushEditsToServer()} primary={colorpalettes.yellow}>
-                    <Icon id="sync" />
+                    <Icon id="arrows-rotate" />
                 </Button>
             </Box>
             <BlocklyWorkspace
