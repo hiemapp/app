@@ -1,5 +1,5 @@
-import { Icon, Button, colorpalettes } from '@tjallingf/react-utils';
-import { useRef } from 'react';
+import { Button, colorpalettes } from '@tjallingf/react-utils';
+import Icon from '@/components/Icon/Icon';
 import * as Blockly from 'blockly/core';
 import { RefObject, createRef } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -47,7 +47,7 @@ export default class CustomToolboxCategory extends Blockly.ToolboxCategory {
         root.render(
             <div ref={this.clickTargetRef} style={{pointerEvents: 'none'}}>
                 <Button variant="secondary" className="w-100" square>
-                    <Icon id={itemDef.manifest.icon ?? 'question-circle'} font="light" className="me-2" />
+                    <Icon id={itemDef.manifest.icon ?? 'question-circle'} weight="light" className="me-2" />
                     <span>{itemDef.name}</span>
                 </Button>
             </div>
