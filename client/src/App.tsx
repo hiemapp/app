@@ -58,7 +58,7 @@ const App: React.FunctionComponent = () => {
                 </Container>
             </Topbar>
             <Navbar show={true}>
-                {renderNavbarButton('/dashboard', 'home')}
+                {renderNavbarButton('/dashboard', 'house')}
                 {renderNavbarButton('/devices', 'plug')}
                 {renderNavbarButton('/recordings', 'chart-simple')}
                 {renderNavbarButton('/flows', 'clock')}
