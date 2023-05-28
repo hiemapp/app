@@ -1,0 +1,58 @@
+{
+    "38404f0cb7354dc4a4f54c0546c01cb9": {
+        "enabled": true,
+        "name": "Lorem ipsum dolor sit amet",
+        "blocks": {
+            "7138540ac41a4933a577e75f2b6679c4": {
+                "type": "core/datetime/sun",
+                "parameters": {
+                    "offsetTime": {"value": 0},
+                    "offsetModifier": {"value": -1},
+                    "event": {"value": "sunrise"}
+                }
+            },
+            "ba9f74499ccc42be89ee1260d73fb67a": {
+                "type": "core/datetime/now"
+            },
+            "0011c411f491eba4ef860d7f77fce8ee": {
+                "type": "core/datetime/time",
+                "parameters": {
+                    "time": {"value": 26100}
+                }
+            },
+            "ebd440da2fa24c38afba03f786968aee": {
+                "type": "core/devices/read_value",
+                "parameters": {
+                    "deviceId": {"value": "5a80aa1826244d6ca42c049051d5cac6"},
+                    "input": {"value": "main"}
+                }
+            },
+            "3c11d5822f5b47daa6faece57dd7ab0c": {
+                "type": "core/math/compare",
+                "parameters": {
+                    "valA": {"ref": "ebd440da2fa24c38afba03f786968aee"},
+                    "operator": {"value": "equal"},
+                    "valB": {"value": false}
+                }
+            },
+            "dce5bf07852f42e59b1908abecd0a5c1": {
+                "type": "core/devices/write_value",
+                "parameters": {
+                    "deviceId": {"value": "5a80aa1826244d6ca42c049051d5cac6"},
+                    "input": {"value": "main"},
+                    "value": {"value": true}
+                }
+            }
+        },
+        "structure": {
+            "trigger": "0011c411f491eba4ef860d7f77fce8ee",
+            "action": {
+                "groups": {
+                    "45f11c9593da8e72ebff3050": {
+                        "blocks": ["dce5bf07852f42e59b1908abecd0a5c1"]
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "server": {
+        "port": 4300
+    },
+    "users": {
+        "defaultUser": "__DEFAULT__"
+    },
+    "flows": {
+        "interval": 60
+    },
+    "logs": {
+        "printLevels": ["error", "info", "debug", "warn"]
+    }
+}

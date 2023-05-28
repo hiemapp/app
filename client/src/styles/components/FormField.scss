@@ -1,0 +1,36 @@
+.FormField {
+    position: relative;
+
+    &.FormField--has-animated-label {
+        .FormLabel {
+            position: absolute;
+            margin-left: var(--TextInput-padding-x);
+            color: var(--text-muted);
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 10;
+            background: var(--TextInput-background);
+            padding: 0 0.25rem;
+            transition: 250ms top, 250ms font-size;
+        }
+        
+        
+        .Form__Input {
+            &::placeholder {
+                visibility: hidden;
+            }
+
+            &:focus + .FormLabel {
+                top: 0;
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
+
+.Form.Form--is-validated {
+    .Form__Input:invalid {
+        box-shadow: 0 0 1px 1px var(--red-5) !important;
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "exclude": ["./src/utils/trpc.*"],
+    "compilerOptions": {
+        "paths": {
+            "@/utils/trpc": ["./src/utils/trpcMock"],
+            "@/*": ["./src/*"],
+            "~shared/*": ["./../shared/*"]
+        }
+    }
+}

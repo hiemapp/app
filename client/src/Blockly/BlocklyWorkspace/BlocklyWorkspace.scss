@@ -1,0 +1,66 @@
+.BlocklyWorkspace {
+    height: 100%;
+    width: 100%;
+
+    .blocklyMainBackground {
+        stroke: none;
+    }
+
+    .blocklySvg {
+        background: var(--BlocklyWorkspace-background);
+        height: 100%;
+        width: 100%;
+    }
+
+    .blocklyFlyout {
+        padding-left: 10px;
+        overflow: visible;
+        background: var(--BlocklyWorkspace-toolbox-flyout-fill);
+
+        .blocklyFlyoutBackground {
+            fill: var(--BlocklyWorkspace-toolbox-flyout-fill);
+            fill-opacity: 1;
+        }
+    }
+
+    .blocklySelected > .blocklyPath {
+        stroke: var(--BlocklyWorkspace-draggable-highlight-stroke) !important;
+    }
+
+    /** Puzzle piece highlight on hover **/
+    .blocklyHighlightedConnectionPath {
+        stroke: var(--BlocklyWorkspace-draggable-highlight-stroke) !important;
+    }
+
+    .blocklyToolboxDiv {
+        padding-top: 0.5rem;
+        background: var(--BlocklyWorkspace-toolbox-background);
+        border-right: var(--BlocklyWorkspace-border);
+
+        .blocklyToolboxCategory {
+            padding: 0 0.5rem;
+            margin-bottom: 0.5rem;
+
+            .Button {
+                color: inherit;
+                
+                .Icon {
+                    color: var(--BlocklyWorkspace-toolbox__item-accent);
+                }
+            }
+        }
+
+        .blocklyToolboxCategory {
+            .blocklyTreeRow {
+                height: auto;
+                margin-bottom: 0;
+                cursor: pointer;
+                color: inherit !important;
+
+                &.blocklyTreeSelected {
+                    background: var(--BlocklyWorkspace-toolbox__item--selected-background) !important;
+                }
+            }
+        }
+    }
+}
