@@ -18,5 +18,5 @@ export const userRouter = router({
             }
             
             return await ctx.getDocumentOrThrow(User, userId);
-        }),
+        })
 })
