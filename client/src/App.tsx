@@ -14,6 +14,7 @@ import Login from '@/Login/pages/Login.page';
 import RouteError from './Errors/pages/RouteError.page';
 import MessageContainer from './messages/MessageContainer';
 import { trim } from 'lodash';
+import Dashboard from './Dashboard/pages/Dashboard.page';
 
 const App: React.FunctionComponent = () => {
     const { pathname } = useTrimmedLocation();
@@ -65,6 +66,7 @@ const App: React.FunctionComponent = () => {
                 {renderNavbarButton('/admin', 'wrench')}
             </Navbar>
             <Routes>
+                <Route path="/dashboard" element={wrapRouteElement(<Dashboard />)} />
                 <Route path="/devices" element={wrapRouteElement(<Devices />)} />
                 <Route path="/login" element={wrapRouteElement(<Login />)} />
                 <Route path="/recordings" element={wrapRouteElement(<Recordings />)} />
