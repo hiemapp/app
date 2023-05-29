@@ -19,7 +19,7 @@ const Device: React.FunctionComponent<DevicePropsSerialized> = (props) => {
     const { id, state, color, name, icon, connection } = updatedProps;
     const { user } = useAuth();
     const isActive = state?.isActive;
-    const input = trpc.device.input.useMutation();
+    const input = trpc.device.handleInput.useMutation();
 
     useSocketEvent('devices:change', (e) => {
         if (e.device.id !== props.id) return;
