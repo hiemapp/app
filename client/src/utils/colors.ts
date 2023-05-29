@@ -2,9 +2,11 @@ import { colorpalettes } from '@tjallingf/react-utils';
 const { red } = colorpalettes;
 const a = red[3];
 
+export type Color = (typeof colorpalettes)[number][number];
+
 const BODY_COMPUTED_STYLE = window.getComputedStyle(document.body);
 
-export function getColorValue(color: (typeof colorpalettes)[0][0]): string {
+export function getColorValue(color: Color): string {
     return BODY_COMPUTED_STYLE.getPropertyValue(`--${color.name}-${color.intensity}`);
 }
 
