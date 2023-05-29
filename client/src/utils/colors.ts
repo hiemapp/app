@@ -10,6 +10,13 @@ export function getColorValue(color: Color): string {
     return BODY_COMPUTED_STYLE.getPropertyValue(`--${color.name}-${color.intensity}`);
 }
 
+export function getColorPalette(color: string, fallback: string = 'blue') {
+    if(color.startsWith('$'))
+        return (colorpalettes[color.substring(1)] ?? colorpalettes[fallback]);
+
+    return color;
+}
+
 export function parseColor(color: string, lightness: number = 5, fallback: string = 'blue') {
     if(color.startsWith('$')) {
         return (colorpalettes[color.substring(1)] ?? colorpalettes[fallback])[lightness];
