@@ -19,7 +19,7 @@ export const deviceRouter = router({
             return await ctx.getDocumentOrThrow(Device, input.id);
         }),
 
-    input: publicProcedure
+    handleInput: publicProcedure
         .input(z.object({
         id: z.number(),
             values: z.array(
