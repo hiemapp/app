@@ -1,7 +1,8 @@
 import type { DashboardWidgetManifest, SerializedNode } from 'zylax';
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import Icon from '@/components/Icon/Icon';
-import { Button, Tile, Box } from '@tjallingf/react-utils';
+import { Button, Tile, Box, colorpalettes } from '@tjallingf/react-utils';
+import { getColorPalette } from '@/utils/colors';
 
 export interface DashboardWidgetProps {
     manifest: DashboardWidgetManifest;
@@ -16,7 +17,17 @@ const ALLOWED_TAGS = [
 ];
 
 const ALLOWED_COMPONENTS: Record<string, React.ComponentType> = {
-    Fragment, Icon, Button
+    Fragment, 
+    Icon, 
+    Button: (props: any) => {
+        const fixedProps = {
+            ...props,
+            primary: typeof props.primary === 'string' ? getColorPalette(props.primary) : undefined,
+            secondary: typeof props.secondary === 'string' ? getColorPalette(props.secondary) : undefined
+        }
+
+        return <Button {...fixedProps} />;
+    } 
 }
 
 function resolveWidgetElement(tag: string): string | React.ComponentType | undefined {
@@ -30,7 +41,7 @@ function resolveWidgetElement(tag: string): string | React.ComponentType | undef
     }
 }
 
-const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = ({
+const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
     content,
     manifest,
     handleWidgetNodeEvent
@@ -86,6 +97,6 @@ const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = ({
             </Box>
         </Tile>
     )
-};
+}, (prev, next) => prev.content === next.content);
 
 export default DashboardWidget;
