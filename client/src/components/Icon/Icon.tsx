@@ -2,6 +2,7 @@ import './Icon.scss';
 import classNames from 'classnames';
 import lightSpriteFilepath from '@/icons/sprites/light.svg';
 import solidSpriteFilepath from '@/icons/sprites/solid.svg';
+import { parseColor } from '@/utils/colors';
 
 const spriteFilepaths = {
     light: lightSpriteFilepath,
@@ -15,6 +16,8 @@ export interface IconProps {
     className?: string;
     rotate?: number;
     children?: React.ReactNode;
+    color?: string;
+    lightness?: number;
 }
 
 const Icon: React.FunctionComponent<IconProps> = ({
@@ -23,6 +26,8 @@ const Icon: React.FunctionComponent<IconProps> = ({
     weight = 'light',
     className,
     rotate,
+    color = 'inherit',
+    lightness,
     children
 }) => {
     const getSize = () => {
@@ -38,6 +43,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
 
     const style = {
         fontSize: getSize(),
+        color: parseColor(color, lightness),
         '--Icon-rotate': rotate && rotate + 'deg'
     } as React.CSSProperties;
 
