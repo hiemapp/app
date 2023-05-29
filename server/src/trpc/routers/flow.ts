@@ -13,7 +13,5 @@ export const flowRouter = router({
             console.log({ a: input.workspace })
 
             flow.updateWorkspace(input.workspace);
-
-            console.log({ input, flow });
         })
 })
