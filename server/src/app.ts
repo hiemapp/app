@@ -1,4 +1,4 @@
-import { Database, Config, logger, DeviceController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner } from 'zylax';
+import { Database, Config, logger, DeviceController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, Extension, DashboardWidget } from 'zylax';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import * as server from './server';
@@ -42,6 +42,8 @@ import path from 'path';
     LanguageController.load();
     await DeviceController.load();
     await FlowController.load();
+
+    const WeatherWidget = ExtensionController.findModule(DashboardWidget, '@zylax/core.weather');
 
     // Start the webserver
     logger.debug('Starting server...');

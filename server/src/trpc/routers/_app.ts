@@ -5,7 +5,7 @@ import { flowRouter } from './flow';
 import { authRouter } from './auth';
 import { flowEditorRouter } from './flowEditor';
 import { router } from '../trpc';
-import { CreateRouterInner } from '@trpc/server';
+import { dashboardRouter } from './dashboard';
 
 export const appRouter = router({
     user: userRouter,
@@ -13,7 +13,8 @@ export const appRouter = router({
     device: deviceRouter,
     auth: authRouter,
     flowEditor: flowEditorRouter,
-    flow: flowRouter
+    flow: flowRouter,
+    dashboard: dashboardRouter
 });
 
 export type AppRouter = typeof appRouter;
