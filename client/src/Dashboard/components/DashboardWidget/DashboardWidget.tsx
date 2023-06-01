@@ -1,13 +1,15 @@
 import type { DashboardWidgetManifest, SerializedNode } from 'zylax';
 import { Fragment, memo } from 'react';
+import { forOwn } from 'lodash';
 import Icon from '@/components/Icon/Icon';
-import { Button, Tile, Box, colorpalettes } from '@tjallingf/react-utils';
-import { getColorPalette } from '@/utils/colors';
+import { Button, Tile, Box } from '@tjallingf/react-utils';
+import { parseColorPalette, parseColor } from '@/utils/colors';
+import './DashboardWidget.scss';
 
 export interface DashboardWidgetProps {
     manifest: DashboardWidgetManifest;
     content: SerializedNode;
-    handleWidgetNodeEvent: (e: React.SyntheticEvent, node: SerializedNode) => unknown
+    handleWidgetNodeEvent: (listenerId: string) => unknown
 }
 
 const ALLOWED_TAGS = [
@@ -19,14 +21,25 @@ const ALLOWED_TAGS = [
 const ALLOWED_COMPONENTS: Record<string, React.ComponentType> = {
     Fragment, 
     Icon, 
+    Box,
     Button: (props: any) => {
         const fixedProps = {
             ...props,
-            primary: typeof props.primary === 'string' ? getColorPalette(props.primary) : undefined,
-            secondary: typeof props.secondary === 'string' ? getColorPalette(props.secondary) : undefined
+            primary: typeof props.primary === 'string' ? parseColorPalette(props.primary) : undefined,
+            secondary: typeof props.secondary === 'string' ? parseColorPalette(props.secondary) : undefined
         }
 
         return <Button {...fixedProps} />;
+    },
+    Tile: (props: any) => {
+        console.log({ props, a: parseColor(props.color )});
+        const fixedProps = {
+            ...props,
+            color: typeof props.color === 'string' ? parseColor(props.color) : undefined,
+            background: typeof props.background === 'string' ? parseColor(props.background) : undefined
+        }
+
+        return <Tile {...fixedProps} />;
     } 
 }
 
@@ -62,10 +75,11 @@ const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
             }
 
             const props = node.attributes ?? {};
-            if (node.events) {
-                node.events.forEach(event => {
-                    props[event] = (e: React.SyntheticEvent) => {
-                        handleWidgetNodeEvent(e, node);
+            if (node.listeners) {
+                forOwn(node.listeners, (listener, event) => {
+                    if(typeof listener.id !== 'string') return;
+                    props[event] = () => {
+                        handleWidgetNodeEvent(listener.id);
                     };
                 })
             }
@@ -91,7 +105,7 @@ const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
                         <span className="text-truncate ms-2">{manifest.title}</span>
                     </Box>
                 </Tile.Title>
-                <div className="DashboardWidget__content">
+                <div className="DashboardWidget__content w-100 px-1">
                     {renderNode(content)}
                 </div>
             </Box>
