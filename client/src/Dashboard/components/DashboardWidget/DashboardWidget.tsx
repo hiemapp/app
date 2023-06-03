@@ -1,101 +1,21 @@
-import type { DashboardWidgetManifest, SerializedNode } from 'zylax';
-import { Fragment, memo } from 'react';
-import { forOwn } from 'lodash';
+import type { DashboardWidgetManifest, SerializedElement } from 'zylax';
+import { memo } from 'react';
 import Icon from '@/components/Icon/Icon';
-import { Button, Tile, Box } from '@tjallingf/react-utils';
-import { parseColorPalette, parseColor } from '@/utils/colors';
+import { Tile, Box } from '@tjallingf/react-utils';
+import { renderElement, type EventHandler } from '@/utils/dynamicUi';
 import './DashboardWidget.scss';
 
 export interface DashboardWidgetProps {
     manifest: DashboardWidgetManifest;
-    content: SerializedNode;
-    handleWidgetNodeEvent: (listenerId: string) => unknown
-}
-
-const ALLOWED_TAGS = [
-    'p', 'span', 'a',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'div'
-];
-
-const ALLOWED_COMPONENTS: Record<string, React.ComponentType> = {
-    Fragment, 
-    Icon, 
-    Box,
-    Button: (props: any) => {
-        const fixedProps = {
-            ...props,
-            primary: typeof props.primary === 'string' ? parseColorPalette(props.primary) : undefined,
-            secondary: typeof props.secondary === 'string' ? parseColorPalette(props.secondary) : undefined
-        }
-
-        return <Button {...fixedProps} />;
-    },
-    Tile: (props: any) => {
-        console.log({ props, a: parseColor(props.color )});
-        const fixedProps = {
-            ...props,
-            color: typeof props.color === 'string' ? parseColor(props.color) : undefined,
-            background: typeof props.background === 'string' ? parseColor(props.background) : undefined
-        }
-
-        return <Tile {...fixedProps} />;
-    } 
-}
-
-function resolveWidgetElement(tag: string): string | React.ComponentType | undefined {
-    const firstLetter = tag.substring(0, 1);
-    const isComponent = (firstLetter === firstLetter.toUpperCase());
-
-    if (isComponent) {
-        return ALLOWED_COMPONENTS[tag];
-    } else {
-        return tag.toLowerCase();
-    }
+    content?: SerializedElement;
+    eventHandler: EventHandler
 }
 
 const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
     content,
     manifest,
-    handleWidgetNodeEvent
+    eventHandler
 }) => {
-    function renderNode(node: SerializedNode): string | null | React.ReactNode {
-        if (node.text) {
-            return node.text;
-        } else if (node.tag) {
-            const Element = resolveWidgetElement(node.tag);
-            if (!Element) {
-                console.warn(`Can not find widget element '${node.tag}'.`);
-                return null;
-            }
-
-            if (typeof Element === 'string' && !ALLOWED_TAGS.includes(node.tag)) {
-                console.warn(`Illegal widget element: '${node.tag}'.`);
-                return null;
-            }
-
-            const props = node.attributes ?? {};
-            if (node.listeners) {
-                forOwn(node.listeners, (listener, event) => {
-                    if(typeof listener.id !== 'string') return;
-                    props[event] = () => {
-                        handleWidgetNodeEvent(listener.id);
-                    };
-                })
-            }
-
-            return (
-                // @ts-ignore
-                <Element {...props}>
-                    {node.children && node.children.map(renderNode)}
-                </Element>
-            )
-        }
-
-        return null;
-
-    }
-
     return (
         <Tile className="DashboardWidget">
             <Box direction="column">
@@ -106,7 +26,7 @@ const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
                     </Box>
                 </Tile.Title>
                 <div className="DashboardWidget__content w-100 px-1">
-                    {renderNode(content)}
+                    {content ? renderElement(content, eventHandler) : null}
                 </div>
             </Box>
         </Tile>
