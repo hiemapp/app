@@ -1,5 +1,5 @@
-import { Button, colorpalettes } from '@tjallingf/react-utils';
-import Icon from '@/components/Icon/Icon';
+import { Button, parseColor } from '@tjallingf/react-utils';
+import { Icon } from '@tjallingf/react-utils';
 import * as Blockly from 'blockly/core';
 import { RefObject, createRef } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -26,7 +26,7 @@ export default class CustomToolboxCategory extends Blockly.ToolboxCategory {
         if(itemDef.manifest.customColors?.main) {
             colorValue = itemDef.manifest.customColors.main;
         } else {
-            colorValue = (colorpalettes[itemDef.manifest.color!] || colorpalettes['blue'])[4].toString()
+            colorValue = parseColor(itemDef.manifest.color, true);
         }
         
         div.style.setProperty('--BlocklyWorkspace-toolbox__item-accent', colorValue);

@@ -1,1 +1,1 @@
-export { default as Icon } from '@/components/Icon/Icon';
+export { Icon } from '@tjallingf/react-utils';

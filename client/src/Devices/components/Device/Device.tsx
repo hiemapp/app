@@ -1,7 +1,7 @@
 import useAuth from '@/hooks/useAuth';
 import { useState, useMemo } from 'react';
-import { Button, Box, Tile, colors, colorpalettes } from '@tjallingf/react-utils';
-import Icon from '@/components/Icon/Icon';
+import { Button, Box, Tile, colors, findColorPalette } from '@tjallingf/react-utils';
+import { Icon } from '@tjallingf/react-utils';
 import classNames from 'classnames';
 import fetchQuery from '@/utils/fetchQuery';
 import './Device.scss';
@@ -63,18 +63,19 @@ const Device: React.FunctionComponent<DevicePropsSerialized> = (props) => {
 
     return (
         <Tile
+            size="lg"
             className={classNames('Device', { 'Device--active': isActive })}
             style={
                 {
-                    '--Device--active-background-start': colorpalettes[color][2],
-                    '--Device--active-background-stop': colorpalettes[color][3],
+                    '--Device--active-background-start': findColorPalette(color)[2],
+                    '--Device--active-background-stop': findColorPalette(color)[3],
                     '--Device--active-color': textDark,
                 } as React.CSSProperties
             }
         >
-            <Box direction="column" className="overflow-hidden mw-100">
+            <Box direction="column" className="overflow-hidden mw-100" gutterY={1}>
                 <Tile.Title className="overflow-hidden mw-100 Device__header">
-                    <Button to={`/devices/${id}`} variant="unstyled" size="md" className="overflow-hidden mw-100 p-1">
+                    <Button to={`/devices/${id}`} variant="unstyled" size="md" className="overflow-hidden mw-100 p-0">
                         <Box gutterX={1} align="center" className="overflow-hidden mw-100">
                             <Icon id={icon} size={20} weight={isActive ? 'solid' : 'light'} />
                             <span className="text-truncate ms-2">{name}</span>

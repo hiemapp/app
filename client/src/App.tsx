@@ -1,12 +1,11 @@
 // TODO: Add translations for aria-label (see Topbar Button[to="/login"])
 // TODO: Hide animated form labels when a value is present
 import { Navbar, Topbar, Box, Button, Container } from '@tjallingf/react-utils';
-import Icon from './components/Icon/Icon';
+import { Icon } from '@tjallingf/react-utils';
 import { Routes, Route } from 'react-router-dom';
 import useTrimmedLocation from '@/hooks/useTrimmedLocation';
 import { FormattedMessage } from 'react-intl';
 import ErrorBoundary from './ErrorBoundary';
-
 import FlowEdit from './Flows/pages/FlowEdit.page';
 import Recordings from '@/Recordings/pages/Recordings.page';
 import Devices from '@/Devices/pages/Devices.page';

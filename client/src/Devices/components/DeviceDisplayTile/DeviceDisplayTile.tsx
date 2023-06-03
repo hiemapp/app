@@ -1,5 +1,5 @@
 import { Tile, Box } from '@tjallingf/react-utils';
-import Icon from '@/components/Icon/Icon';
+import { Icon } from '@tjallingf/react-utils';
 import './DeviceDisplayTile.scss';
 import { type DeviceStateDisplay } from 'zylax/types/devices/DeviceState';
 
