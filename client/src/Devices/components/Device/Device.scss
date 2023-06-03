@@ -13,7 +13,7 @@
     left: 0;
     opacity: 0;
     pointer-events: none;
-    transition: 125ms opacity ease-out;
+    transition: var(--Button-background-transition-duration) opacity ease-out;
     background: linear-gradient(135deg, var(--Device--active-background-start), var(--Device--active-background-stop));
   }
 }
