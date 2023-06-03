@@ -11,16 +11,16 @@ export interface IAuthProviderProps {
 
 const AuthProvider: React.FunctionComponent<IAuthProviderProps> = ({ children }) => {
     const [ value, setValue ] = useState({} as IAuthContext);
-    const user = trpc.user.get.useQuery({ id: 'me' });
+    const userQuery = trpc.user.get.useQuery({ id: 'me' });
 
     useEffect(() => {
-        if(!user.data) return;
+        if(!userQuery.data) return;
 
         setValue({
-            user: new User(user.data),
-            refresh: user.refetch
+            user: new User(userQuery.data),
+            refresh: userQuery.refetch
         })
-    }, [ user.data ]);
+    }, [ userQuery.data ]);
 
     useEffect(() => {
         if(!value.user) return;
