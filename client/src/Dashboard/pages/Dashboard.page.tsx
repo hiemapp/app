@@ -7,7 +7,7 @@ import useSocketEvent from '@/hooks/useSocketEvent';
 
 const Dashboard: React.FunctionComponent = () => {
     const widgetSlugs: string[] = app().currentUser.getSetting('dashboardWidgets') ?? [];
-    const widgetNodeEventMutation = trpc.dashboard.handleNodeEvent.useMutation();
+    const widgetEventMutation = trpc.dashboard.handleWidgetEvent.useMutation();
 
     const widgetQueries = trpc.useQueries(t =>
         widgetSlugs.map(slug => t.dashboard.getRenderedWidget({ slug }))
@@ -28,7 +28,7 @@ const Dashboard: React.FunctionComponent = () => {
         )
     })
 
-    useSocketEvent('dashboard:widgetupdate', e => {
+    useSocketEvent('widgets:update', e => {
         widgetQueries.forEach(q => {
             if(q.isSuccess && q.data?.sessionId === e.widgetSessionId) {
                 q.refetch();
@@ -37,7 +37,7 @@ const Dashboard: React.FunctionComponent = () => {
     })
 
     function widgetEventHandler(sessionId: string, listenerId: string) {
-        widgetNodeEventMutation.mutate({
+        widgetEventMutation.mutate({
             sessionId,
             listenerId
         })
