@@ -11,27 +11,17 @@ import DeviceStateDisplayRecording from '../DeviceStateDisplayRecording';
 import useSocketEvent from '@/hooks/useSocketEvent';
 import { trpc } from '@/utils/trpc';
 import { type DevicePropsSerialized } from 'zylax/types/devices/Device';
-
 const { textDark } = colors;
 
-const Device: React.FunctionComponent<DevicePropsSerialized> = (props) => {
-    const [updatedProps, setUpdatedProps] = useState<DevicePropsSerialized>(props);
-    const { id, state, color, name, icon, connection } = updatedProps;
+export interface DeviceProps {
+    data: DevicePropsSerialized,
+    handleInput: (name: string, value: any) => unknown
+}
+
+const Device: React.FunctionComponent<DeviceProps> = ({ data, handleInput }) => {
+    const { id, state, color, name, icon, connection } = data;
     const { user } = useAuth();
     const isActive = state?.isActive;
-    const input = trpc.device.handleInput.useMutation();
-
-    useSocketEvent('devices:change', (e) => {
-        if (e.device.id !== props.id) return;
-        setUpdatedProps(e.device);
-    });
-
-    function handleInput(name: string, value: any) {
-        input.mutate({ 
-            id: props.id, 
-            values: [{ name, value }]
-        });
-    }
 
     const stateDisplay = useMemo(() => {
         if (!state?.display) return null;
@@ -47,7 +37,7 @@ const Device: React.FunctionComponent<DevicePropsSerialized> = (props) => {
         if (state.display.recording && user.hasPermission(`devices.${id}.records.view`)) {
             return <DeviceStateDisplayRecording display={state.display} deviceColor={color} id={id} />;
         }
-    }, []);
+    }, [ state.display ]);
 
     const error: { icon: string; message: string } | null = (() => {
         if (!connection.exists) {
