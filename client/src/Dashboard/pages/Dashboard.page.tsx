@@ -28,7 +28,7 @@ const Dashboard: React.FunctionComponent = () => {
         )
     })
 
-    useSocketEvent('widgets:update', e => {
+    useSocketEvent('widget:update', e => {
         widgetQueries.forEach(q => {
             if(q.isSuccess && q.data?.sessionId === e.widgetSessionId) {
                 q.refetch();
