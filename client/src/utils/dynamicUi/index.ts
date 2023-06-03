@@ -43,6 +43,5 @@ export function renderElement(element: SerializedElement, eventHandler: EventHan
 
     const renderedChildren = (element?.children ?? []).map(child => renderElement(child, eventHandler));
 
-    console.log({ props });
     return createElement(ElementType, props, ...renderedChildren);
 }
