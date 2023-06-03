@@ -17,6 +17,8 @@
         "strictPropertyInitialization": false,
         "allowSyntheticDefaultImports": true,
         "baseUrl": "./",
+        "jsx": "react",
+        "jsxFactory": "jsx.h",
         "rootDir": "src/",
         "paths": {
             "@/*": ["src/*"]
