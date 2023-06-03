@@ -1,6 +1,6 @@
 import type { DashboardWidgetManifest, SerializedElement } from 'zylax';
 import { memo } from 'react';
-import Icon from '@/components/Icon/Icon';
+import { Icon } from '@tjallingf/react-utils';
 import { Tile, Box } from '@tjallingf/react-utils';
 import { renderElement, type EventHandler } from '@/utils/dynamicUi';
 import './DashboardWidget.scss';

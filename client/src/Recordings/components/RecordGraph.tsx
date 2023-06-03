@@ -1,5 +1,5 @@
 import React, { useMemo, lazy, useRef } from 'react';
-import { Tile, colorpalettes } from '@tjallingf/react-utils';
+import { Tile } from '@tjallingf/react-utils';
 import useQuery from '@/hooks/useQuery';
 import Chart from '@/Chart';
 
@@ -76,7 +76,7 @@ const RecordGraph: React.FunctionComponent<IRecordGraphProps> = ({ deviceId, pre
     };
 
     return (
-        <Tile className="RecordGraph w-100" background={colorpalettes.gray[2]}>
+        <Tile className="RecordGraph w-100" background="$gray-2">
             <Chart type="line" data={data as any} options={options as any} canvasRef={canvasRef}></Chart>
         </Tile>
     );

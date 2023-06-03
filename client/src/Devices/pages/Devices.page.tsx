@@ -10,7 +10,6 @@ const Devices: React.FunctionComponent = () => {
 
     const renderDevices = () => {
         if(devices.isLoading || !devices.data) return;
-        console.log({ devices: devices.data });
         // if(typeof rooms == 'undefined' || !activeRoom) return null;
 
         // const filteredDevices = devices!.filter(props =>
@@ -22,8 +21,8 @@ const Devices: React.FunctionComponent = () => {
                 className="flex-row align-items-start"
             >
                 {devices.data.map((props: any) => (
-                    <ErrorBoundary>
-                        <Device {...props} key={props.id} />
+                    <ErrorBoundary key={props.id}>
+                        <Device {...props} />
                     </ErrorBoundary>
                 ))}
             </Masonry>

@@ -1,7 +1,6 @@
 import * as Blockly from 'blockly/core';
 import { FlowBlockCategoryManifest } from 'zylax/types/flows/FlowBlockCategory';
-import { getColorValue } from '@/utils/colors';
-import { colorpalettes } from '@tjallingf/react-utils';
+import { findColorPalette, getColorValue } from '@tjallingf/react-utils';
 import app from '@/utils/app';
 
 interface FlowBlockCategory {
@@ -24,7 +23,7 @@ function CustomTheme(categories: FlowBlockCategory[]) {
                 colourTertiary: c.manifest.customColors.border
             };
         } else {
-            const colorpalette = (colorpalettes[c.manifest.color!] || colorpalettes['blue']);
+            const colorpalette = findColorPalette(c.manifest.color, 'blue');
             const isDarkScheme = (app().currentColorScheme() === 'dark');
 
             styleConfig = {

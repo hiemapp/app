@@ -1259,10 +1259,10 @@
     "@tanstack/query-core" "4.29.5"
     use-sync-external-store "^1.2.0"
 
-"@tjallingf/react-utils@^0.1.24":
-  version "0.1.24"
-  resolved "https://registry.yarnpkg.com/@tjallingf/react-utils/-/react-utils-0.1.24.tgz#9868906b543553bb65a8a648a169236014c7dabf"
-  integrity sha512-v/W6oIfsChOdb9SOjb9iXR/7cejCnxrq6nhgSawXOQRlXHghbIWk66Ddub8fnJS3HDPYGMU0KMIklKqfyQPiqg==
+"@tjallingf/react-utils@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@tjallingf/react-utils/-/react-utils-0.2.3.tgz#59e76de941b890245943a1bdeb8b7e491413bb2d"
+  integrity sha512-XQ1u3yx3X3IMRKMuYGDyaRaSGiUP8x0p7ZE+mBrtc02ct3nGeVkXkJ/S2b4mewScHWoUvZbnw1nAyLBWqVBTRg==
 
 "@tootallnate/once@2":
   version "2.0.0"

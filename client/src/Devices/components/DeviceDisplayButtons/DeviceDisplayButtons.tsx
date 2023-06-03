@@ -1,6 +1,6 @@
 import React, { MouseEvent, useRef } from 'react';
-import { Box, Button, Tile, colorpalettes } from '@tjallingf/react-utils';
-import Icon from '@/components/Icon/Icon';
+import { Box, Button, Tile } from '@tjallingf/react-utils';
+import { Icon } from '@tjallingf/react-utils';
 import { type DeviceStateDisplay } from 'zylax/types/devices/DeviceState';
 
 export interface IDeviceDisplayButtonsProps {
@@ -28,9 +28,11 @@ const DeviceDisplayButtons: React.FunctionComponent<IDeviceDisplayButtonsProps> 
     const renderButtons = () => {
         if(!display.buttons?.length) return [];
         return display.buttons.map((button) => {
-            const { icon, color, isActive, input } = button;
+            let { icon, color, isActive, input } = button;
 
-            const colorpalette = colorpalettes[color!] ?? colorpalettes[deviceColor];
+            if(typeof color !== 'string' || color === 'auto') {
+                color = deviceColor;
+            }
 
             return (
                 <Button
@@ -39,7 +41,7 @@ const DeviceDisplayButtons: React.FunctionComponent<IDeviceDisplayButtonsProps> 
                     square
                     size="sm"
                     active={isActive}
-                    primary={colorpalette}
+                    primary={color}
                     onClick={(e: MouseEvent) => handleClick(e, input)}
                 >
                     {icon && <Icon id={icon} weight={isActive ? 'solid' : 'light'} />}
@@ -49,7 +51,7 @@ const DeviceDisplayButtons: React.FunctionComponent<IDeviceDisplayButtonsProps> 
     };
 
     return (
-        <Tile className="DeviceDisplayButtons p-1">
+        <Tile className="DeviceDisplayButtons" size="sm">
             <Box gutterX={2} gutterY={2} wrap="wrap">
                 {renderButtons()}
             </Box>

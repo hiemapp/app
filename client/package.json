@@ -14,7 +14,7 @@
         "@blockly/block-plus-minus": "^4.0.12",
         "@blockly/field-date": "^6.0.12",
         "@tanstack/react-query": "^4.29.5",
-        "@tjallingf/react-utils": "^0.1.24",
+        "@tjallingf/react-utils": "^0.2.3",
         "@trpc/client": "^10.26.0",
         "@trpc/react-query": "^10.26.0",
         "@trpc/server": "^10.26.0",

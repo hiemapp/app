@@ -34,10 +34,10 @@ export function renderElement(element: SerializedElement, eventHandler: EventHan
     const props = element.props ?? {};
     if (element.listeners) {
         forOwn(element.listeners, (listener, event) => {
-            if(typeof listener.id !== 'string') return;
-            props[event] = () => {
-                eventHandler(listener.id);
-            };
+            if(typeof listener.id === 'string') {
+                // Add the event handler to the props
+                (props as any)[event] = () => eventHandler(listener.id);
+            }  
         })
     }
 
