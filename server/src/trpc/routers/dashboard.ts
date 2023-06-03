@@ -1,8 +1,9 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import _ from 'lodash';
 import { z } from 'zod';
-import { ExtensionController, renderWidgetAndSerialize } from 'zylax';
-import { utils, DashboardWidget } from 'zylax';
+import { DashboardWidgetManager, ExtensionController, renderWidgetAndSerialize } from 'zylax';
+import { DashboardWidget } from 'zylax';
 
 const widgetSessions: Record<string, DashboardWidget> = {};
 
@@ -12,29 +13,46 @@ export const dashboardRouter = router({
             slug: z.string()
         }))
         .query(({ ctx, input }) => {
-            const widgetSessionId = `${input.slug}#user${ctx.user.getId()}`;
-            const widgetType = ExtensionController.findModule(DashboardWidget, input.slug);
-            
-            // Find the widget by the session id
-            let widget = widgetSessions[widgetSessionId];
+            const sessionId = `${input.slug.trim()}#user${ctx.user.getId()}`;
+            const widget = DashboardWidgetManager.getOrCreateWidget(input.slug, sessionId);
 
-            // If no widget exists for this session, create it
             if(!widget) {
-                // Construct the widget
-                widget = new widgetType(widgetSessionId);
-
-                // Store the widget by the session id
-                widgetSessions[widgetSessionId] = widget;
-
-                // Call the mount listener
-                widget.onMount();
+                throw new TRPCError({
+                    message: 'Invalid widget session.',
+                    code: 'NOT_FOUND'
+                })
             }
 
-
             return {
-                sessionId: widgetSessionId,
+                sessionId: sessionId,
                 manifest: widget.getManifest(),
-                content: renderWidgetAndSerialize(widget)
+                content: widget.render()
             };
+        }),
+
+    handleNodeEvent: publicProcedure
+        .input(z.object({
+            sessionId: z.string(),
+            listenerId: z.string()
+        }))
+        .mutation(({ ctx, input }) => {
+            // Find the widget by the session id
+            const widget = DashboardWidgetManager.getWidget(input.sessionId);
+            if(!widget) {
+                throw new TRPCError({
+                    message: 'Invalid widget session.',
+                    code: 'NOT_FOUND'
+                })
+            }
+
+            const listener = widget.getListener(input.listenerId);
+            if(!listener) {
+                throw new TRPCError({
+                    message: 'Invalid listener id.',
+                    code: 'NOT_FOUND'
+                })
+            }
+
+            listener.callback();
         })
 })
