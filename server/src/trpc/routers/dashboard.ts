@@ -30,7 +30,7 @@ export const dashboardRouter = router({
             };
         }),
 
-    handleNodeEvent: publicProcedure
+    handleWidgetEvent: publicProcedure
         .input(z.object({
             sessionId: z.string(),
             listenerId: z.string()
