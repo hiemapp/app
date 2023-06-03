@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
 import { Device, DeviceController, type GetPropsSerializedType } from 'zylax';
@@ -29,10 +30,15 @@ export const deviceRouter = router({
                 })
             )
         }))
-        .mutation(({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const device = DeviceController.find(input.id);
-            input.values.forEach(({ name, value }) => {
-                device.handleInput(name, value);
-            })
+            await Promise.all(input.values.map(async ({ name, value }) => {
+                return await device.handleInput(name, value).catch((err: Error) => {
+                    throw new TRPCError({
+                        message: err.message,
+                        code: 'METHOD_NOT_SUPPORTED'
+                    })
+                })
+            }))
         })
 })
