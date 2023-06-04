@@ -13,27 +13,27 @@ const Dashboard: React.FunctionComponent = () => {
         widgetSlugs.map(slug => t.dashboard.getRenderedWidget({ slug }))
     );
 
-    const widgets = widgetQueries.map(q => {
-        if(q.isLoading || !q.data?.manifest) return null;
-
-        return (
-            <DashboardWidget 
-                key={q.data.sessionId}
-                manifest={q.data.manifest}
-                content={q.data.content!}
-                eventHandler={(listenerId: string) => {
-                    widgetEventHandler(q.data.sessionId, listenerId);
-                }}
-            />
-        )
-    })
-
     useSocketEvent('widget:update', e => {
         widgetQueries.forEach(q => {
             if(q.isSuccess && q.data?.sessionId === e.widgetSessionId) {
                 q.refetch();
             }
         })
+    })
+
+    const widgets = widgetQueries.map(q => {
+        if(q.isLoading || !q.data?.manifest) return null;
+
+        return (
+            <DashboardWidget 
+                key={q.data.sessionId}
+                data={q.data}
+                dataUpdatedAt={q.dataUpdatedAt}
+                eventHandler={(listenerId: string) => {
+                    widgetEventHandler(q.data.sessionId, listenerId);
+                }}
+            />
+        )
     })
 
     function widgetEventHandler(sessionId: string, listenerId: string) {
