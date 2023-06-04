@@ -1,5 +1,5 @@
 import useAuth from '@/hooks/useAuth';
-import { useState, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Button, Box, Tile, colors, findColorPalette } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
 import classNames from 'classnames';
@@ -8,17 +8,16 @@ import './Device.scss';
 import DeviceDisplayTile from '../DeviceDisplayTile';
 import DeviceDisplayButtons from '../DeviceDisplayButtons';
 import DeviceStateDisplayRecording from '../DeviceStateDisplayRecording';
-import useSocketEvent from '@/hooks/useSocketEvent';
-import { trpc } from '@/utils/trpc';
 import { type DevicePropsSerialized } from 'zylax/types/devices/Device';
 const { textDark } = colors;
 
 export interface DeviceProps {
-    data: DevicePropsSerialized,
+    data: DevicePropsSerialized;
+    dataUpdatedAt: number;
     handleInput: (name: string, value: any) => unknown
 }
 
-const Device: React.FunctionComponent<DeviceProps> = ({ data, handleInput }) => {
+const Device: React.FunctionComponent<DeviceProps> = memo(({ data, handleInput }) => {
     const { id, state, color, name, icon, connection } = data;
     const { user } = useAuth();
     const isActive = state?.isActive;
@@ -84,6 +83,6 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data, handleInput }) => 
             </Box>
         </Tile>
     );
-};
+}, (prev, next) => prev.dataUpdatedAt === next.dataUpdatedAt);
 
 export default Device;
