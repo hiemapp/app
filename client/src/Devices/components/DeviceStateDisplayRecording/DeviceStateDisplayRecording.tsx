@@ -10,6 +10,7 @@ export interface IDeviceStateDisplayRecordingProps {
 }
 
 const DeviceStateDisplayRecording: React.FunctionComponent<IDeviceStateDisplayRecordingProps> = ({ id }) => {
+    return null;
     const { result, aggregation, isLoading } = useQuery<any[]>(`devices/${id}/records?top=1`);
 
     const getLatestValues = () => {
