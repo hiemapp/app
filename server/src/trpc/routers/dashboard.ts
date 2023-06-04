@@ -53,6 +53,6 @@ export const dashboardRouter = router({
                 })
             }
 
-            listener.callback();
+            listener.callback.apply(widget);
         })
 })
