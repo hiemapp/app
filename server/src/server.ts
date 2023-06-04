@@ -7,6 +7,8 @@ import ExpressMySQLSession from 'express-mysql-session';
 import passportService from './express/auth/services/passport';
 import { WebSocket, Database, Config, logger } from 'zylax';
 import { trpcMiddleware } from './express/middleware/trpcMiddleware';
+import { utils } from 'zylax';
+const { getDir } = utils;
 
 const MySQLStore = ExpressMySQLSession(session as any);
 export const serverLogger = logger.child({ label: 'Server' });
@@ -18,7 +20,7 @@ export function start() {
     server.use(cookieParser());
 
     // Setup static directory
-    server.use(express.static('public'));
+    server.use(express.static(getDir('PUBLIC')));
 
     // Allow CORS
     server.use(cors());
