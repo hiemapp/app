@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import { FlowController } from 'zylax';
+import { FlowController, Flow } from 'zylax';
 
 export const flowRouter = router({
     edit: publicProcedure
@@ -13,5 +13,13 @@ export const flowRouter = router({
             console.log({ a: input.workspace })
 
             flow.updateWorkspace(input.workspace);
+        }),
+
+
+    index: publicProcedure
+        .query(async ({ ctx }) => {
+            return await ctx.getIndex(Flow, ['name', 'icon', 'color'], (d) => {
+                return ctx.user.hasPermission(`flows.read.${d.getId()}`);
+            });
         })
 })
