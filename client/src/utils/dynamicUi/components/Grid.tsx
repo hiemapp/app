@@ -1,3 +1,1 @@
-export const Grid = ({ children }: { children: any }) => {
-    return children;
-}
+export { Grid } from '@tjallingf/react-utils';
