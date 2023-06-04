@@ -3,19 +3,22 @@ import { memo } from 'react';
 import { Icon } from '@tjallingf/react-utils';
 import { Tile, Box } from '@tjallingf/react-utils';
 import { renderElement, type EventHandler } from '@/utils/dynamicUi';
-import './DashboardWidget.scss';
 
 export interface DashboardWidgetProps {
-    manifest: DashboardWidgetManifest;
-    content?: SerializedElement;
-    eventHandler: EventHandler
+    data: {
+        manifest: DashboardWidgetManifest;
+        content?: SerializedElement;
+    },
+    dataUpdatedAt: number;
+    eventHandler: EventHandler;
 }
 
 const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
-    content,
-    manifest,
+    data,
     eventHandler
 }) => {
+    const { manifest, content } = data;
+
     return (
         <Tile className="DashboardWidget">
             <Box direction="column">
@@ -31,6 +34,6 @@ const DashboardWidget: React.FunctionComponent<DashboardWidgetProps> = memo(({
             </Box>
         </Tile>
     )
-}, (prev, next) => prev.content === next.content);
+}, (prev, next) => prev.dataUpdatedAt === next.dataUpdatedAt);
 
 export default DashboardWidget;
