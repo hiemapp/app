@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import { Device, DeviceController, type GetPropsSerializedType } from 'zylax';
+import { Device, DeviceController, DevicePropsSerialized, type GetPropsSerializedType } from 'zylax';
 
 export const deviceRouter = router({
     list: publicProcedure
@@ -11,11 +11,18 @@ export const deviceRouter = router({
             });
         }),
 
+    index: publicProcedure
+        .query(async ({ ctx }) => {
+            return await ctx.getIndex(Device, [], d => {
+                return ctx.user.hasPermission(`devices.read.${d.getId()}`);
+            });
+        }),
+
     get: publicProcedure
         .input(z.object({
             id: z.number(),
         }))
-        .query(async ({ ctx, input }): Promise<GetPropsSerializedType<Device>> => {  
+        .query(async ({ ctx, input }) => {  
             ctx.requirePermission(`devices.read.${input.id}`);
             return await ctx.getDocumentOrThrow(Device, input.id);
         }),
