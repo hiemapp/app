@@ -17,6 +17,10 @@ export function getElementType(tag: string): string {
 }
 
 export function renderElement(element: SerializedElement | SerializedElement[], eventHandler: EventHandler): string | null | React.ReactNode {
+    if(!element) {
+        return null;
+    }
+    
     if(Array.isArray(element)) {
         // If element is an array of elements, render the elements and wrap them in a fragment.
         return createElement(Fragment, {}, element.map(e => renderElement(e, eventHandler)));
