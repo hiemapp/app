@@ -2,6 +2,8 @@
     "extends": "./tsconfig.json",
     "exclude": ["./src/utils/trpc.*"],
     "compilerOptions": {
+        // Disable TRPC errors
+        "noImplicitAny": false,
         "paths": {
             "@/utils/trpc": ["./src/utils/trpcMock"],
             "@/*": ["./src/*"],
