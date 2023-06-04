@@ -7,6 +7,7 @@ import useTrimmedLocation from '@/hooks/useTrimmedLocation';
 import { FormattedMessage } from 'react-intl';
 import ErrorBoundary from './ErrorBoundary';
 import FlowEdit from './Flows/pages/FlowEdit.page';
+import Flows from './Flows/pages/Flows.page';
 import Recordings from '@/Recordings/pages/Recordings.page';
 import Devices from '@/Devices/pages/Devices.page';
 import Login from '@/Login/pages/Login.page';
@@ -69,6 +70,7 @@ const App: React.FunctionComponent = () => {
                 <Route path="/devices" element={wrapRouteElement(<Devices />)} />
                 <Route path="/login" element={wrapRouteElement(<Login />)} />
                 <Route path="/recordings" element={wrapRouteElement(<Recordings />)} />
+                <Route path="/flows" element={wrapRouteElement(<Flows />)} />
                 <Route path="/flows/:id/edit" element={wrapRouteElement(<FlowEdit />)} />
             </Routes>
         </>
