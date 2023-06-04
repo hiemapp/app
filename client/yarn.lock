@@ -924,16 +924,6 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@blockly/block-plus-minus@^4.0.12":
-  version "4.0.12"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-4.0.12.tgz#e2e1d976bb8c1758e12f7e5926797bf75a81e785"
-  integrity sha512-SNrBnd4rqjJIbxkx/Bjl7WDCXOXZIJjTxN17kvJ7hCBGfEip3PrvB4jJZVNsPFDsDqmAoXA5BGCmlBItkGbWYQ==
-
-"@blockly/field-date@^6.0.12":
-  version "6.0.12"
-  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-6.0.12.tgz#7f8120e47099313fcf5dc076d3c6bee2e2dc6e97"
-  integrity sha512-TlZXdeEWP4fjSxURovzYUqOsY64PzrKUvrBXTH2OEawAKH6CNY7As1N9JHolhTLyClRyTS9KBVs1A31LXGpX1g==
-
 "@esbuild/android-arm64@0.17.17":
   version "0.17.17"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.17.17.tgz#164b054d58551f8856285f386e1a8f45d9ba3a31"

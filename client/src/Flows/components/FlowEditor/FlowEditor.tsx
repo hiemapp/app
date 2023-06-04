@@ -2,8 +2,6 @@ import React, { memo, useEffect, useState, useRef } from 'react';
 import { Button, Box } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
 import * as Blockly from 'blockly/core';
-import '@blockly/field-date';
-import '@blockly/block-plus-minus';
 import BlocklyWorkspace from '@/Blockly/BlocklyWorkspace';
 import FlowEditorBlock from '@/utils/flows/FlowEditorBlock';
 import { useIntl } from 'react-intl';
