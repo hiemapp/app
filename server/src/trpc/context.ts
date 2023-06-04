@@ -23,21 +23,32 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         return true;
     }
 
-    const getDocumentOrThrow = async <T extends ModelWithProps<any, any>>(model: Constructor<T>, id: number | string): Promise<GetPropsSerializedType<T>> => {
+    const getResourceOrThrow = async<T extends ModelWithProps<any, any>>(model: Constructor<T>, id: number | string): Promise<T> => {
         const controller = model.prototype._getConfig().controller;
-        const document = controller.find(id);
+        const resource = controller.find(id);
         
-        if(!document) {
+        if(!resource) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
                 message: `${model.name} ${id} not found.`
             })
         }
 
-        return await document.serialize();
+        return resource;
     }
 
-    const getCollection = async <T extends ModelWithProps<any, any>>(model: Constructor<T>, hasPermission?: (document: T) => boolean) => {
+    const getDocumentOrThrow = async <T extends ModelWithProps>(
+        model: Constructor<T>, 
+        id: number
+    ): Promise<ReturnType<T['serialize']>> => {
+        const resource = await getResourceOrThrow(model, id);
+        return await resource.serialize() as ReturnType<T['serialize']>;
+    }
+
+    const getCollection = async <T extends ModelWithProps<any, any>>(
+        model: Constructor<T>, 
+        hasPermission?: (document: T) => boolean
+    ): Promise<T[]> => {
         const controller = model.prototype._getConfig().controller;
         let collection = controller.index();
 
@@ -48,13 +59,34 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         return collection;
     }
 
+    const getIndex = async <T extends ModelWithProps<any, any>>(
+        model: Constructor<T>,
+        props: string[], 
+        hasPermission?: (document: T) => boolean
+    ): Promise<Record<string, any>[]> => {
+        const collection = await getCollection(model, hasPermission);
+
+        return collection.map(m => {
+            const data: Record<string, any> = { id: m.getId() };
+
+            props.forEach(name => {
+                data[name] = m.getProp(name);
+            })
+
+            return data;
+        });
+    }
+
+
     return {
         user,
         req,
         res,
         requirePermission,
         getDocumentOrThrow,
-        getCollection
+        getResourceOrThrow,
+        getCollection,
+        getIndex
     };
 };
 
