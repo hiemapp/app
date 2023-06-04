@@ -1,7 +1,7 @@
 import { SerializedElement } from 'zylax';
 import * as components from './components'
 import { forOwn } from 'lodash';
-import { createElement } from 'react';
+import { createElement, Fragment } from 'react';
 
 export type EventHandler = (listenerId: string) => unknown;
 
@@ -16,7 +16,12 @@ export function getElementType(tag: string): string {
     }
 }
 
-export function renderElement(element: SerializedElement, eventHandler: EventHandler): string | null | React.ReactNode {
+export function renderElement(element: SerializedElement | SerializedElement[], eventHandler: EventHandler): string | null | React.ReactNode {
+    if(Array.isArray(element)) {
+        // If element is an array of elements, render the elements and wrap them in a fragment.
+        return createElement(Fragment, {}, element.map(e => renderElement(e, eventHandler)));
+    }
+    
     if (typeof element.tag !== 'string') {
         if(typeof element.text === 'string') {
             return element.text;
