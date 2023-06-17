@@ -1,6 +1,6 @@
 import { IntlShape } from 'react-intl';
-import type { FlowBlockManifestSerialized, FlowBlockManifestParameter, FlowBlockManifestParameterOption, FlowBlockManifestParameterShadowType } from 'zylax/types/flows/FlowBlock';
-import type { FlowBlockCategoryManifest } from 'zylax/types/flows/FlowBlockCategory';
+import type { FlowBlockManifestSerialized, FlowBlockManifestParameter, FlowBlockManifestParameterOption, FlowBlockManifestParameterShadowType } from 'zylax/@types/flows/FlowBlock';
+import type { FlowBlockCategoryManifest } from 'zylax';
 
 export interface FlowEditorBlockOptions {
     messageFormatter: IntlShape['formatMessage'];
@@ -216,7 +216,7 @@ export default class FlowEditorBlock {
         let { value, label, key } = option;
 
         // Force label and value to be a string
-        label = label + '';
+        label = (label || value) + '';
         value = value + '';
 
         // If a key is defined, get the translated label
