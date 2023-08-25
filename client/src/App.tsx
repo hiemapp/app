@@ -1,6 +1,7 @@
 // TODO: Add translations for aria-label (see Topbar Button[to="/login"])
 // TODO: Hide animated form labels when a value is present
 import { Navbar, Topbar, Box, Button, Container } from '@tjallingf/react-utils';
+import { Navigate } from 'react-router-dom';
 import { Icon } from '@tjallingf/react-utils';
 import { Routes, Route } from 'react-router-dom';
 import useTrimmedLocation from '@/hooks/useTrimmedLocation';
@@ -14,7 +15,9 @@ import Login from '@/Login/pages/Login.page';
 import RouteError from './Errors/pages/RouteError.page';
 import MessageContainer from './messages/MessageContainer';
 import { trim } from 'lodash';
+import classNames from 'classnames';
 import Dashboard from './Dashboard/pages/Dashboard.page';
+import '@/styles/components/App.scss';
 
 const App: React.FunctionComponent = () => {
     const { pathname } = useTrimmedLocation();
@@ -25,11 +28,18 @@ const App: React.FunctionComponent = () => {
     };
 
     function renderNavbarButton(path: string, icon: string) {
+
         return (
             <Navbar.Button
-                icon={<Icon 
-                    id={icon} 
-                    weight={currentPageId === trim(path, '/') ? 'solid' : 'light'} />} 
+                active={pathname.startsWith(path)}
+                icon={<>
+                    <span className="NavbarButton__icon NavbarButton--active__icon">
+                        <Icon id={icon} weight="solid" />
+                    </span>
+                    <span className="NavbarButton__icon NavbarButton--inactive__icon">
+                        <Icon id={icon} weight="light" />
+                    </span>
+                </>} 
                 to={path}
              />
         )
@@ -48,7 +58,7 @@ const App: React.FunctionComponent = () => {
                             <Button
                                 variant="secondary"
                                 to="/login"
-                                shape="square"
+                                square
                                 size="lg"
                                 aria-label="Visit the login page"
                             >
@@ -66,6 +76,9 @@ const App: React.FunctionComponent = () => {
                 {renderNavbarButton('/admin', 'wrench')}
             </Navbar>
             <Routes>
+                { /* REDIRECTS */ }
+                <Route path="/" element={ <Navigate to="/devices" /> }/>
+
                 <Route path="/dashboard" element={wrapRouteElement(<Dashboard />)} />
                 <Route path="/devices" element={wrapRouteElement(<Devices />)} />
                 <Route path="/login" element={wrapRouteElement(<Login />)} />

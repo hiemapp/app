@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "app.js",
     "scripts": {
-        "start": "set NODE_ENV=production&& node dist/app.js",
+        "start": "set NODE_ENV=production&& bash scripts/start.sh",
         "dev": "set NODE_ENV=development&& nodemon src/app.ts",
         "build": "tsc --project tsconfig.build.json && tsconfig-replace-paths --project tsconfig.build.json"
     },

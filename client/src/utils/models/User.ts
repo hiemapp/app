@@ -9,22 +9,22 @@ export default class User extends Model {
     return this.getProp('settings')[key];
   }
 
-  hasPermission(id: string) {
+  hasPermissionKey(key: string) {
     const permissions = this.getProp('permissions');
 
-    if (permissions[id] != undefined) return permissions[id] === true;
+    if (permissions[key] != undefined) return permissions[key] === true;
 
-    const parts = id.split('.');
+    const parts = key.split('.');
     for (let i = parts.length; i >= 0; i--) {
-      const idWithWildcard = trimStart(parts.slice(0, i).join('.') + '.*', '.');
+      const keyWithWildcard = trimStart(parts.slice(0, i).join('.') + '.*', '.');
 
-      if (permissions[idWithWildcard] != undefined) return permissions[idWithWildcard] === true;
+      if (permissions[keyWithWildcard] != undefined) return permissions[keyWithWildcard] === true;
     }
 
     return false;
   }
 
   isAuthenticated() {
-    return typeof this.id === 'number';
+    return this.props.username !== '__DEFAULT__';
   }
 }

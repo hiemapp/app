@@ -4,7 +4,6 @@ import queryClient from '@/utils/queryClient';
 import LanguageProvider from '@/providers/LanguageProvider';
 import SocketProvider from '@/providers/SocketProvider';
 import MessageProvider from './providers/MessageProvider';
-import SpriteProvider from './providers/SpriteProvider';
 import { trpc, trpcClient } from '@/utils/trpc';
 
 export interface IProvidersProps {
@@ -19,10 +18,8 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
                     <AuthProvider>
                         <LanguageProvider>
                             <SocketProvider>
-                                <SpriteProvider>
-                                    {children}
-                                </SpriteProvider>
-                                </SocketProvider>
+                                {children}
+                            </SocketProvider>
                         </LanguageProvider>
                     </AuthProvider>
                 </MessageProvider>

@@ -1,5 +1,6 @@
 import { router, publicProcedure } from '../trpc';
-import { GetPropsSerializedType, User } from 'zylax';
+import { User } from 'zylax';
+import { GetPropsSerializedType } from 'zylax/@types/helpers';
 import { z } from 'zod';
 
 export const userRouter = router({
@@ -13,7 +14,7 @@ export const userRouter = router({
             if(input.id === 'me') {
                 userId = ctx.user.getId();
             } else {
-                ctx.requirePermission(`users.read.${input.id}`);
+                ctx.requirePermissionKey(`user.${input.id}.read`);
                 userId = input.id;
             }
             

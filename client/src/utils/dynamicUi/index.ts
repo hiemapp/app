@@ -1,7 +1,7 @@
-import { SerializedElement } from 'zylax';
 import * as components from './components'
 import { forOwn } from 'lodash';
 import { createElement, Fragment } from 'react';
+import { SerializedElement } from 'zylax/dist/ui/types';
 
 export type EventHandler = (listenerId: string) => unknown;
 

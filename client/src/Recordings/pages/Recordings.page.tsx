@@ -1,6 +1,6 @@
 import { Page, Tile, Container, Box, Icon } from '@tjallingf/react-utils';
 import useQuery from '@/hooks/useQuery';
-import { DeviceProps } from 'zylax/types/devices/Device';
+import type { DeviceProps } from 'zylax';
 import RecordGraph from '../components/RecordGraph';
 
 // TODO: convert to tRPC

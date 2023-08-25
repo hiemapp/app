@@ -1,6 +1,5 @@
 import { router, publicProcedure } from '../trpc';
 import { FlowBlock, FlowBlockCategory, logger, Extension, ExtensionController } from 'zylax';
-import { type FlowBlockManifest } from 'zylax/types';
 import _ from 'lodash';
 
 export const flowEditorRouter = router({
@@ -8,13 +7,14 @@ export const flowEditorRouter = router({
         .query(({ ctx }) => {
             const flowBlocks = ExtensionController.findAllModulesOfType(FlowBlock);
 
-            const result: Array<{ type: string; manifest: FlowBlockManifest }> = [];
+            const result: any[] = [];
 
             _.forOwn(flowBlocks, (moduleClass, moduleSlug) => {
                 try {
                     result.push({
                         type: moduleSlug,
-                        manifest: moduleClass.prototype.getManifest(),
+                        manifest: moduleClass.manifest.toJSON(),
+                        layout: moduleClass.layout(),
                     });
                 } catch (err: any) {
                     logger.error(err);
@@ -36,7 +36,7 @@ export const flowEditorRouter = router({
                 try {
                     result.push({
                         id: moduleName,
-                        manifest: moduleClass.prototype.getManifest(),
+                        manifest: moduleClass.manifest.toJSON(),
                         extensionId: extensionId,
                     });
                 } catch (err: any) {

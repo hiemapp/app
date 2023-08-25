@@ -1,6 +1,7 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import { Language, type GetPropsSerializedType } from 'zylax';
+import { Language } from 'zylax';
+import type { GetPropsSerializedType } from 'zylax/@types/helpers'
 
 export const languageRouter = router({
     get: publicProcedure

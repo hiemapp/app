@@ -8,7 +8,7 @@ import './Device.scss';
 import DeviceDisplayTile from '../DeviceDisplayTile';
 import DeviceDisplayButtons from '../DeviceDisplayButtons';
 import DeviceStateDisplayRecording from '../DeviceStateDisplayRecording';
-import { type DevicePropsSerialized } from 'zylax/types/devices/Device';
+import type { DevicePropsSerialized } from 'zylax';
 const { textDark } = colors;
 
 export interface DeviceProps {
@@ -25,15 +25,15 @@ const Device: React.FunctionComponent<DeviceProps> = memo(({ data, handleInput }
     const stateDisplay = useMemo(() => {
         if (!state?.display) return null;
 
-        if (state.display.buttons?.length && user.hasPermission(`devices.${id}.input`)) {
+        if (state.display.buttons?.length && user.hasPermissionKey(`device.${id}.input`)) {
             return <DeviceDisplayButtons display={state.display} onChange={handleInput} deviceColor={color} />;
         }
 
-        if (state.display.tile && user.hasPermission(`devices.${id}.view`)) {
+        if (state.display.tile && user.hasPermissionKey(`device.${id}.view`)) {
             return <DeviceDisplayTile display={state.display} onChange={handleInput} deviceColor={color} />;
         }
 
-        if (state.display.recording && user.hasPermission(`devices.${id}.records.view`)) {
+        if (state.display.recording && user.hasPermissionKey(`device.${id}.records.view`)) {
             return <DeviceStateDisplayRecording display={state.display} deviceColor={color} id={id} />;
         }
     }, [ state.display ]);

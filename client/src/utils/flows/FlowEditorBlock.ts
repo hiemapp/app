@@ -1,5 +1,5 @@
 import { IntlShape } from 'react-intl';
-import type { FlowBlockManifestSerialized, FlowBlockManifestParameter, FlowBlockManifestParameterOption, FlowBlockManifestParameterShadowType } from 'zylax/@types/flows/FlowBlock';
+import type { FlowBlockManifestSerialized, FlowBlockLayoutParameter, FlowBlockLayoutParameterOption, FlowBlockLayoutParameterShadowType, FlowBlockLayoutSerialized } from 'zylax';
 import type { FlowBlockCategoryManifest } from 'zylax';
 
 export interface FlowEditorBlockOptions {
@@ -14,10 +14,12 @@ export default class FlowEditorBlock {
     blockName: string;
     options: FlowEditorBlockOptions;
     manifest: FlowBlockManifestSerialized;
+    layout: FlowBlockLayoutSerialized;
 
-    constructor(type: string, manifest: FlowBlockManifestSerialized, options: FlowEditorBlockOptions) {
+    constructor(type: string, manifest: FlowBlockManifestSerialized, layout: FlowBlockLayoutSerialized, options: FlowEditorBlockOptions) {
         this.type = type;
         this.manifest = manifest;
+        this.layout = layout;
         this.options = options;
 
         [this.extensionId, this.blockName] = type.split('.');
@@ -26,8 +28,8 @@ export default class FlowEditorBlock {
     getBlocklyToolboxDef() {
         let inputs: {[key: string]: any} = {};
         
-        if(this.manifest.parameters?.length) {
-            this.manifest.parameters.forEach((param: FlowBlockManifestParameter) => {
+        if(this.layout.parameters?.length) {
+            this.layout.parameters.forEach((param: FlowBlockLayoutParameter) => {
                 // Dropdown fields can't have a shadow block
                 if (param.options) return true;
 
@@ -56,9 +58,9 @@ export default class FlowEditorBlock {
         };
     }
 
-    getBlocklyParameterDefJSON(param: FlowBlockManifestParameter): Object | false {
+    getBlocklyParameterDefJSON(param: FlowBlockLayoutParameter): Object | false {
         if (param.options) {
-            const options = param.options.map((option: FlowBlockManifestParameterOption) => 
+            const options = param.options.map((option: FlowBlockLayoutParameterOption) => 
                 this.#formatOptionLabel(option, param));
 
             return {
@@ -77,8 +79,8 @@ export default class FlowEditorBlock {
         };
     }
 
-    getShadow(param: FlowBlockManifestParameter) {
-        let shadowType: FlowBlockManifestParameterShadowType = param.type;
+    getShadow(param: FlowBlockLayoutParameter) {
+        let shadowType: FlowBlockLayoutParameterShadowType = param.type;
 
         if (typeof param.shadow?.type === 'string') {
             shadowType = param.shadow.type;
@@ -89,14 +91,14 @@ export default class FlowEditorBlock {
                 return {
                     type: '@zylax/core.logic_boolean',
                     fields: {
-                        BOOLEAN: 'true',
+                        BOOLEAN: param.shadow?.value ?? true,
                     },
                 };
             case 'string':
                 return {
                     type: '__type_string__',
                     fields: {
-                        VALUE: 'true',
+                        VALUE: param.shadow?.value ?? '',
                     },
                 };
             case 'number':
@@ -143,7 +145,7 @@ export default class FlowEditorBlock {
                 //         originalThis.emit('move');
                 //         break;
                 //     case 'change':
-                //         const param = originalThis.manifest.parameters.find((p) => p.name === e.name);
+                //         const param = originalthis.layout.parameters.find((p) => p.name === e.name);
                 //         if (!param) return;
 
                 //         originalThis.#emitEvent('change', {
@@ -161,30 +163,30 @@ export default class FlowEditorBlock {
 
     getBlocklyBlockDefJSON() {
         // Connections enabled if the block has an output type, disabled otherwise.
-        const connectionsDefault = (typeof this.manifest.output?.type === 'undefined');
+        const connectionsDefault = (typeof this.layout.output?.type === 'undefined');
 
         const def: Record<string, any> = {
             type: this.type,
 
-            previousStatement: (this.manifest.connections?.top ?? connectionsDefault) === false ? undefined : null,
-            nextStatement: (this.manifest.connections?.bottom ?? connectionsDefault) === false ? undefined : null,
+            previousStatement: (this.layout.connections?.top ?? connectionsDefault) === false ? undefined : null,
+            nextStatement: (this.layout.connections?.bottom ?? connectionsDefault) === false ? undefined : null,
 
-            helpUrl: this.manifest.helpUrl,
+            helpUrl: this.layout.helpUrl,
 
             inputsInline: true,
-            output: this.manifest.output?.type,
+            output: this.layout.output?.type,
 
             style: `category_${this.manifest.category}_style`
         };
 
-        if(this.manifest.parameters?.length) {
-            def['args0'] = this.manifest.parameters.map((p) => this.getBlocklyParameterDefJSON(p));
+        if(this.layout.parameters?.length) {
+            def['args0'] = this.layout.parameters.map((p) => this.getBlocklyParameterDefJSON(p));
         }
 
-        def['message0'] = this.#formatMessage(this.manifest.parameters || []);
+        def['message0'] = this.#formatMessage(this.layout.parameters || []);
 
-        if(this.manifest.statements?.length) {
-            this.manifest.statements.forEach((statement, i) => {
+        if(this.layout.statements?.length) {
+            this.layout.statements.forEach((statement, i) => {
                 def[`args${i + 1}`] = [
                     {
                         name: statement.id,
@@ -212,7 +214,7 @@ export default class FlowEditorBlock {
         return def;
     }
 
-    #formatOptionLabel(option: FlowBlockManifestParameterOption, param: FlowBlockManifestParameter): [string, any] {
+    #formatOptionLabel(option: FlowBlockLayoutParameterOption, param: FlowBlockLayoutParameter): [string, any] {
         let { value, label, key } = option;
 
         // Force label and value to be a string
@@ -230,7 +232,7 @@ export default class FlowEditorBlock {
         return [label, value];
     }
 
-    #formatMessage(params: FlowBlockManifestParameter[]) {
+    #formatMessage(params: FlowBlockLayoutParameter[]) {
         let defaultMessage = params.map((_, i) => `%${i + 1}`).join(' ');
 
         let values: Record<string, string> = {};

@@ -1,0 +1,15 @@
+body {
+    --blockly-border: 2px solid var(--gray-1);
+    --blockly-background: var(--gray-0);
+    --blockly-toolbox-background: var(--gray-0);
+    --blockly-toolbox__item--selected-background: var(--gray-2);
+    --blockly-toolbox__item-border: 1px solid var(--gray-1);
+    --blockly-toolbox-flyout-fill: var(--gray-1);
+    --blockly-toolbox__item-accent: inherit;
+    --blockly-draggable-highlight-stroke: none;
+    --blockly-dropdown-background: var(--gray-2);
+    --blockly-dropdown-border: 2px solid var(--gray-2);
+    --blockly-dropdown-color: var(--text-primary);
+    --blockly-dropdown__item--active-background: var(--gray-1);
+    --blockly-dropdown__item--hover-background: var(--gray-1);
+}
