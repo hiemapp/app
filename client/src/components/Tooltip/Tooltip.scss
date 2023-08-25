@@ -1,0 +1,22 @@
+.Tooltip {
+    position: relative;
+
+    .Tooltip__message {
+        position: absolute;
+        top: 50%;
+        left: 90%;
+        z-index: 10;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-25%);
+        transition: 250ms opacity ease, 250ms transform ease;
+        background-color: var(--gray-1);
+        padding: 0.125rem 0.5rem;
+        border-radius: 999px;
+
+        &.Tooltip__message--show {
+            opacity: 1;
+            transform: translateY(-50%);
+        }
+    }
+}

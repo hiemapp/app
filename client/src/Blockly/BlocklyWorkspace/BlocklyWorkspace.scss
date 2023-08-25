@@ -7,7 +7,7 @@
     }
 
     .blocklySvg {
-        background: var(--BlocklyWorkspace-background);
+        background: var(--blockly-background);
         height: 100%;
         width: 100%;
     }
@@ -15,27 +15,37 @@
     .blocklyFlyout {
         padding-left: 10px;
         overflow: visible;
-        background: var(--BlocklyWorkspace-toolbox-flyout-fill);
+        background: var(--blockly-toolbox-flyout-background);
+        width: 100%;
+        backdrop-filter: blur(30px);
+        display: block !important;
+        opacity: 0;
+        transition: 500ms opacity;
+        pointer-events: none;
 
         .blocklyFlyoutBackground {
-            fill: var(--BlocklyWorkspace-toolbox-flyout-fill);
-            fill-opacity: 1;
+            display: none;
+        }
+
+        &[style*="display: block;"] {
+            opacity: 1;
+            pointer-events: all;
         }
     }
 
     .blocklySelected > .blocklyPath {
-        stroke: var(--BlocklyWorkspace-draggable-highlight-stroke) !important;
+        stroke: var(--blockly-draggable-highlight-stroke) !important;
     }
 
     /** Puzzle piece highlight on hover **/
     .blocklyHighlightedConnectionPath {
-        stroke: var(--BlocklyWorkspace-draggable-highlight-stroke) !important;
+        stroke: var(--blockly-draggable-highlight-stroke) !important;
     }
 
     .blocklyToolboxDiv {
         padding-top: 0.5rem;
-        background: var(--BlocklyWorkspace-toolbox-background);
-        border-right: var(--BlocklyWorkspace-border);
+        background: var(--blockly-toolbox-background);
+        border-right: var(--blockly-border);
 
         .blocklyToolboxCategory {
             padding: 0 0.5rem;
@@ -45,7 +55,7 @@
                 color: inherit;
                 
                 .Icon {
-                    color: var(--BlocklyWorkspace-toolbox__item-accent);
+                    color: var(--blockly-toolbox__item-accent);
                 }
             }
         }
@@ -58,9 +68,34 @@
                 color: inherit !important;
 
                 &.blocklyTreeSelected {
-                    background: var(--BlocklyWorkspace-toolbox__item--selected-background) !important;
+                    background: var(--blockly-toolbox__item--selected-background) !important;
                 }
             }
         }
+    }
+}
+
+/** Select dropdowns **/
+.blocklyDropDownDiv {
+    padding: 0;
+    background: var(--blockly-dropdown-background);
+    border: var(--blockly-dropdown-border);
+
+    .blocklyMenuItem {
+        color: var(--blockly-dropdown-color);
+        padding: 0.5rem;
+
+        &:hover {
+            background: var(--blockly-dropdown__item--hover-background);
+        }
+
+        &.blocklyMenuItemSelected {
+            background: var(--blockly-dropdown__item--active-background);
+            font-weight: 700;
+        }
+    }
+
+    .blocklyMenuItemCheckbox {
+        display: none;
     }
 }

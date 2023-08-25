@@ -12,7 +12,7 @@ const Devices: React.FunctionComponent = () => {
             ? deviceIndexQuery.data.map(({ id }) => t.device.get({ id }))
             : []
     ))
-    const deviceInputMutation = trpc.device.handleInput.useMutation();
+    const deviceInputMutation = trpc.device.performInput.useMutation();
 
     useSocketEvent('devices:change', ({ device }) => {
         deviceQueries.find(q => q.data?.id === device.id)?.refetch?.();

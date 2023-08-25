@@ -1,4 +1,4 @@
-import type { DashboardWidgetManifest, SerializedElement } from 'zylax';
+import type { DashboardWidgetManifest } from 'zylax';
 import { memo } from 'react';
 import { Icon } from '@tjallingf/react-utils';
 import { Tile, Box } from '@tjallingf/react-utils';
@@ -7,7 +7,7 @@ import { renderElement, type EventHandler } from '@/utils/dynamicUi';
 export interface DashboardWidgetProps {
     data: {
         manifest: DashboardWidgetManifest;
-        content?: SerializedElement;
+        content?: any;
     },
     dataUpdatedAt: number;
     eventHandler: EventHandler;

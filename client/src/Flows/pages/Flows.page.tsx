@@ -10,16 +10,18 @@ const Flows: React.FunctionComponent = () => {
     const flowIndexQuery = trpc.flow.index.useQuery();
     
     const flows = flowIndexQuery.data && flowIndexQuery.data.map(flow => (
-        <Button to={`/flows/${flow.id}/edit`} variant="unstyled" size="xs" stretch>
-            <Tile size="lg" className="w-100">
-                <Tile.Title>
-                    <Box gutterX={1}>
-                        <Icon id={flow.icon} size={20} />
-                        <span className="text-truncate ms-2">{flow.name}</span>
-                    </Box>
-                </Tile.Title>
-            </Tile>
-        </Button>
+        <ErrorBoundary key={flow.id}>
+            <Button to={`/flows/${flow.id}/edit`} variant="unstyled" size="xs" stretch>
+                <Tile size="lg" className="w-100">
+                    <Tile.Title>
+                        <Box gutterX={1}>
+                            <Icon id={flow.icon} size={20} />
+                            <span className="text-truncate ms-2">{flow.name}</span>
+                        </Box>
+                    </Tile.Title>
+                </Tile>
+            </Button>
+        </ErrorBoundary>
     ))
 
     return (

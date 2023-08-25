@@ -1,8 +1,7 @@
-import { useState, useEffect, FunctionComponent } from 'react';
+import { useState, FunctionComponent } from 'react';
 import { Container, Button, TextInput, PasswordInput, Box, Page } from '@tjallingf/react-utils';
 import FormField from '@/Forms/FormField';
 import Form from '@/Forms/Form';
-import fetchQuery from '@/utils/fetchQuery';
 import { FormattedMessage } from 'react-intl';
 import useAuth from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
@@ -36,16 +35,16 @@ const Login: FunctionComponent = () => {
             <Container>
                 <Form onSubmit={handleSubmit}>
                     <div className="mb-2">
-                        <FormField name="username" label="Username">
+                        <FormField name="username" label={<FormattedMessage id="@global.auth.username" />}>
                             <TextInput autoComplete="username" />
                         </FormField>
-                        <FormField name="password" label="Password">
+                        <FormField name="password" label={<FormattedMessage id="@global.auth.password" />}>
                             <PasswordInput autoComplete="current-password" revealable />
                         </FormField>
                     </div>
                     <Box align="center" gutterX={3}>
                         <Button size="lg" loading={isLoading}>
-                            <FormattedMessage id="@zylax/core.global.actions.login" />
+                            <FormattedMessage id="@global.actions.login" />
                         </Button>
                         <FormattedMessage id="@zylax/core.pages.login.forgotPasswordButton.label" />
                     </Box>

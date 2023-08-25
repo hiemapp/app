@@ -1,4 +1,5 @@
-import { User, UserController, type Constructor, type GetPropsSerializedType } from 'zylax';
+import { UserController } from 'zylax';
+import type { Constructor } from 'zylax/@types/helpers'
 import { type ModelWithProps } from 'zylax';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
@@ -12,11 +13,11 @@ interface Request extends ExRequest {
 export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
     const user = UserController.find(req.user?.id!) || UserController.findDefaultUser();
 
-    const requirePermission = (permission: string) => {
-        if(typeof permission === 'string' && !user.hasPermission(permission)) {
+    const requirePermissionKey = (key: string) => {
+        if(typeof key === 'string' && !user.hasPermissionKey(key)) {
             throw new TRPCError({
                 code: 'UNAUTHORIZED',
-                message: `Missing permission: '${permission}'.`
+                message: `Missing permission: '${key}'.`
             })
         }
 
@@ -24,7 +25,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
     }
 
     const getResourceOrThrow = async<T extends ModelWithProps<any, any>>(model: Constructor<T>, id: number | string): Promise<T> => {
-        const controller = model.prototype._getConfig().controller;
+        const controller = model.prototype.__modelConfig().controller;
         const resource = controller.find(id);
         
         if(!resource) {
@@ -37,9 +38,9 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         return resource;
     }
 
-    const getDocumentOrThrow = async <T extends ModelWithProps>(
+    const getDocumentOrThrow = async <T extends ModelWithProps<any, any>>(
         model: Constructor<T>, 
-        id: number
+        id: number | string
     ): Promise<ReturnType<T['serialize']>> => {
         const resource = await getResourceOrThrow(model, id);
         return await resource.serialize() as ReturnType<T['serialize']>;
@@ -49,7 +50,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         model: Constructor<T>, 
         hasPermission?: (document: T) => boolean
     ): Promise<T[]> => {
-        const controller = model.prototype._getConfig().controller;
+        const controller = model.prototype.__modelConfig().controller;
         let collection = controller.index();
 
         if(typeof hasPermission === 'function') {
@@ -82,7 +83,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         user,
         req,
         res,
-        requirePermission,
+        requirePermissionKey,
         getDocumentOrThrow,
         getResourceOrThrow,
         getCollection,

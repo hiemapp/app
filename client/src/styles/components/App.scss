@@ -1,0 +1,33 @@
+.NavbarButton__Icon-wrapper {
+    position: relative;
+}
+
+.NavbarButton__icon {
+    transition: 250ms opacity;
+    opacity: 0;
+}
+
+.NavbarButton--inactive__icon {
+    color: var(--Button-color);
+}
+
+.NavbarButton--active__icon {
+    color: var(--Button--active-color);
+}
+
+.NavbarButton {
+    &.Button--active .NavbarButton--active__icon {
+        opacity: 1;
+    }
+
+    &:not(.Button--active) .NavbarButton--inactive__icon {
+        opacity: 1;
+    }
+}
+
+
+.NavbarButton__icon:not(:first-child) {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

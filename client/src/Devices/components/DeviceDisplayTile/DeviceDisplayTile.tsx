@@ -1,7 +1,7 @@
 import { Tile, Box } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
 import './DeviceDisplayTile.scss';
-import { type DeviceStateDisplay } from 'zylax/types/devices/DeviceState';
+import { type DeviceStateDisplay } from 'zylax';
 
 export interface IDeviceDisplayTileProps {
     onChange?(name: string, value: any): void;

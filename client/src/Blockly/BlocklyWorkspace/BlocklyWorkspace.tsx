@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-// import * as Blockly from 'blockly';
 import Blockly from 'blockly/core';
 import classNames from 'classnames';
 import './BlocklyWorkspace.scss';
@@ -29,7 +28,7 @@ const BlocklyWorkspace: React.FunctionComponent<IBlocklyWorkspaceProps> = ({
         const workspace = Blockly.inject(ref.current, injectOptions);
         onInject?.(workspace);
     }, []);
-
+    
     return <div {...rest} ref={ref} className={classNames('BlocklyWorkspace', className)}></div>;
 };
 
