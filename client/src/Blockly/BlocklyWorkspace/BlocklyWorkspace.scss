@@ -17,6 +17,7 @@
         overflow: visible;
         background: var(--blockly-toolbox-flyout-background);
         width: 100%;
+        height: 100%;
         backdrop-filter: blur(30px);
         display: block !important;
         opacity: 0;
