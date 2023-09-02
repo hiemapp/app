@@ -35,4 +35,8 @@
     .blocklyFlyout {
         transform: translate(0px, 0px) !important;
     }
+
+    .blocklyText, .blocklyFlyoutText {
+        font-family: inherit !important;
+    }
 }

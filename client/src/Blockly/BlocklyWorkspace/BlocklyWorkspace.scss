@@ -100,3 +100,40 @@
         display: none;
     }
 }
+
+.blocklyReplaceable > path {
+    fill-opacity: 1 !important;
+    stroke-width: 2px !important;
+    stroke: yellow !important;
+}
+
+.blocklyHtmlInput {
+    background: #fff !important;
+    color: var(--text-primary-inverse) !important;
+}
+
+.blocklyEditableText {
+    > rect.blocklyDropdownRect {
+        fill: transparent !important;
+        stroke: rgba(0, 0, 0, 0.2) !important;
+        stroke-width: 1px !important;
+    }
+
+    > rect {
+        fill-opacity: 1 !important;
+    }
+
+    > text.blocklyDropdownText {
+        fill: #fff !important;
+    }
+
+    > text {
+        fill: var(--text-primary-inverse) !important;
+    }
+}
+
+.blocklyDropdownText  {
+    > tspan {
+        fill: inherit !important;
+    }
+}
