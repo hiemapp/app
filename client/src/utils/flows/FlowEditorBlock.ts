@@ -91,21 +91,28 @@ export default class FlowEditorBlock {
                 return {
                     type: '@zylax/core.logic_boolean',
                     fields: {
-                        BOOLEAN: param.shadow?.value ?? true,
+                        VALUE: param.shadow?.value ?? true
                     },
                 };
             case 'string':
                 return {
-                    type: '__type_string__',
+                    type: '@zylax/core.text_string',
                     fields: {
-                        VALUE: param.shadow?.value ?? '',
+                        VALUE: param.shadow?.value ?? 'Hello world!'
+                    },
+                };
+            case 'any':
+                return {
+                    type: '@zylax/core.text_string',
+                    fields: {
+                        VALUE: param.shadow?.value ?? 'Hello world!'
                     },
                 };
             case 'number':
                 return {
                     type: '@zylax/core.math_number',
                     fields: {
-                        NUMBER: param.shadow?.value ?? 3,
+                        VALUE: param.shadow?.value ?? 3
                     },
                 };
             case 'date.now':
@@ -162,7 +169,7 @@ export default class FlowEditorBlock {
     }
 
     getBlocklyBlockDefJSON() {
-        // Connections enabled if the block has an output type, disabled otherwise.
+        // If the block has an output type, connections are disabled by default.
         const connectionsDefault = (typeof this.layout.output?.type === 'undefined');
 
         const def: Record<string, any> = {
