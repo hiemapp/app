@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Page, Container } from '@tjallingf/react-utils';
 import Masonry from '@/Masonry';
 import DashboardWidget from '../components/DashboardWidget';
@@ -45,7 +46,7 @@ const Dashboard: React.FunctionComponent = () => {
 
 
     return (
-        <Page id="dashboard">
+        <Page id="Dashboard">
             <Container>
                 <Masonry
                     breakpointCols={{ default: 4, 1200: 3, 992: 2, 576: 1 }}

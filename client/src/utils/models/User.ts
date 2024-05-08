@@ -9,7 +9,7 @@ export default class User extends Model {
     return this.getProp('settings')[key];
   }
 
-  hasPermissionKey(key: string) {
+  hasPermission(key: string) {
     const permissions = this.getProp('permissions');
 
     if (permissions[key] != undefined) return permissions[key] === true;

@@ -22,3 +22,15 @@
     color: var(--text-primary);
     border: 1px solid var(--gray-0) !important;
 }
+
+h4, h5, h6 {
+    font-weight: 600;
+}
+
+img, .user-drag-none {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}

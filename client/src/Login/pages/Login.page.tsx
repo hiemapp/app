@@ -25,20 +25,19 @@ const Login: FunctionComponent = () => {
             },
             onError: (err: any) => {
                 setIsLoading(false);
-                alert(err);
             }
         });
     };
 
     return (
-        <Page id="login">
+        <Page id="Login">
             <Container>
                 <Form onSubmit={handleSubmit}>
                     <div className="mb-2">
-                        <FormField name="username" label={<FormattedMessage id="@global.auth.username" />}>
+                        <FormField name="username" label={<FormattedMessage id="@global.auth.username" />} optional>
                             <TextInput autoComplete="username" />
                         </FormField>
-                        <FormField name="password" label={<FormattedMessage id="@global.auth.password" />}>
+                        <FormField name="password" label={<FormattedMessage id="@global.auth.password" />} optional>
                             <PasswordInput autoComplete="current-password" revealable />
                         </FormField>
                     </div>
@@ -46,7 +45,7 @@ const Login: FunctionComponent = () => {
                         <Button size="lg" loading={isLoading}>
                             <FormattedMessage id="@global.actions.login" />
                         </Button>
-                        <FormattedMessage id="@zylax/core.pages.login.forgotPasswordButton.label" />
+                        <FormattedMessage id="login.page.forgotPasswordButton.label" />
                     </Box>
                 </Form>
             </Container>

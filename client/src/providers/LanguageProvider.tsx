@@ -8,13 +8,15 @@ export interface ILanguageProviderProps {
 
 const LanguageProvider: React.FunctionComponent<ILanguageProviderProps> = ({ children }) => {
     const { user } = useAuth();
-    const languageKey = user.getSetting('language').toLowerCase();
-    const language = trpc.language.get.useQuery({ key: languageKey });
+    const languageId = user.getSetting('language').toLowerCase().replace('-', '_');
+    const language = trpc.language.get.useQuery({ id: languageId });
 
     if (language.isLoading) return <span>Loading language...</span>;
 
     return (
-        <IntlProvider locale={languageKey} messages={language.data!.messages}>
+        <IntlProvider 
+            locale={languageId.replace('_', '-')} 
+            messages={(language.data as any).messages}>
             {children}
         </IntlProvider>
     );

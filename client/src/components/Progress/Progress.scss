@@ -1,0 +1,90 @@
+.Progress {
+    --Progress-thickness: 20px;
+    --Progress__track-thickness: 4px;
+    --Progress__thumb-thickness: 4px;
+    --Progress__handle-width: 8px;
+    --Progress__handle-height: 8px;
+    --Progress__handle--focus-width: 12px;
+    --Progress__handle--focus-height: 12px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:not(.Progress--show-handle) {
+        --Progress__handle-width: 0;
+        --Progress__handle-height: 0;
+    }
+
+    > * {
+        pointer-events: none;
+    }
+}
+
+.Progress--dragging {
+    --Progress__handle-height: var(--Progress__handle--focus-height);
+    --Progress__handle-width: var(--Progress__handle--focus-width);
+}
+
+.Progress__track {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: var(--Progress__track-bg, var(--gray-2));
+    border-radius: 99px;
+}
+
+.Progress__thumb {
+    position: absolute;
+    background-color: var(--Progress__thumb-bg, var(--blue-4));
+    border-radius: 99px;
+}
+
+.Progress__handle {
+    border-radius: 99px;
+    overflow: hidden;
+    background-color: var(--Progress__handle-bg, var(--blue-6));
+    position: absolute;
+}
+
+@mixin Progress--direction($direction) {
+    $left: left;
+    $width: width;
+    $height: height;
+    $flexDirection: row;
+
+    @if $direction == 'vertical' {
+        $left: bottom;
+        $width: height;
+        $height: width;
+        $flexDirection: column;
+    }
+
+    .Progress--direction-#{$direction} {
+        #{$width}: var(--Progress-length);
+        #{$height}: var(--Progress-thickness);
+        flex-direction: $flexDirection;
+
+        .Progress__thumb {
+            #{$left}: 0;
+            #{$width}: calc((var(--Progress-position)) * 1%);
+            #{$height}: var(--Progress__thumb-thickness);
+        }
+
+        .Progress__handle {
+            #{$height}: var(--Progress__handle-#{$height});
+            #{$width}: var(--Progress__handle-#{$width});
+        
+            #{$left}: calc(var(--Progress-position) * 1%);
+            margin-#{$left}: calc(-0.5 * var(--Progress__handle-width));
+            transition: 125ms $height, 125ms $width, 125ms margin-#{$left};
+        }
+
+        .Progress__track {
+            #{$height}: var(--Progress__track-thickness);
+        }
+    }
+}
+
+@include Progress--direction('horizontal');
+@include Progress--direction('vertical');

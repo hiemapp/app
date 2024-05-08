@@ -1,0 +1,86 @@
+.Notification {
+    --Notification-spacing: 0.5rem;
+    --Notification-distance: 0.75rem;
+    --Notification-animation-duration: 250ms;
+    --Notification-max-height: calc(1.5em + 2 * var(--Notification-spacing));
+    background: var(--gray-1);
+    border-radius: 1rem;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+    overflow: hidden;
+    align-items: center;
+    position: relative;
+    max-width: 100%;
+
+    .Notification__icon {
+        font-size: var(--font-size-md) !important;
+    }
+
+    .Notification__icon-wrapper {
+        padding-left: var(--Notification-spacing);
+        margin-right: calc(-0.5 * var(--Notification-spacing));
+    }
+
+    .Notification__message {
+        padding: var(--Notification-spacing);
+    }
+
+    @media(max-width: 767.98px) {
+        height: var(--Notification-max-height);
+        animation: 
+                   notification-enter-mobile ease-out forwards var(--Notification-animation-duration),
+                   notification-enter-mobile ease-in forwards reverse var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 1*var(--Notification-animation-duration));
+
+        .Notification__message {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: block;
+        }
+    }
+
+    @media(min-width: 768px) {
+        align-items: stretch;
+        margin-top: var(--Notification-distance);
+        animation: notification-enter-desktop ease-out forwards var(--Notification-animation-duration),
+                   notification-leave-desktop ease-in forwards var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 1*var(--Notification-animation-duration)),
+                   notification-unmount-desktop ease-in forwards var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 2*var(--Notification-animation-duration));
+    }
+}
+
+@keyframes notification-enter-mobile {
+    from { 
+        max-height: 0;
+        margin-bottom: 0;
+        opacity: 0; 
+        transform: translateY(-50px);
+    } 
+    
+    to { 
+        max-height: var(--Notification-max-height); 
+        margin-bottom: var(--Notification-distance);
+        opacity: 1; 
+        transform: translateY(0);
+    }
+}
+
+@keyframes notification-leave-mobile {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notification-enter-desktop {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+@keyframes notification-leave-desktop {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes notification-unmount-desktop {
+    from { max-height: var(--Notification-max-height); }
+    to { max-height: 0; margin-top: 0; }
+}

@@ -29,6 +29,7 @@ server/public
 # Userdata
 server/storage/**
 server/config/secret.json
+server/config/setup.json
 
 # Vite
 vite.config.ts.timestamp-*

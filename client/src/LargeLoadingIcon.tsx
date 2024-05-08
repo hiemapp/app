@@ -1,3 +1,4 @@
+import './styles/components/LargeLoadingIcon.scss';
 import { Box, LoadingIcon } from '@tjallingf/react-utils';
 
 export interface LargeLoadingIconProps extends React.PropsWithChildren {
@@ -5,7 +6,7 @@ export interface LargeLoadingIconProps extends React.PropsWithChildren {
 }
 
 // The loading icon element is stored outside of the component
-// to prevent 'jumps' in the animation when rerendering.
+// to prevent jumps in the animation when rerendering.
 const LoadingIconElement = <LoadingIcon size={28} animated />;
 
 const LargeLoadingIcon: React.FunctionComponent<LargeLoadingIconProps> = ({
@@ -16,7 +17,7 @@ const LargeLoadingIcon: React.FunctionComponent<LargeLoadingIconProps> = ({
             align="center" 
             justify="center" 
             direction="column" 
-            className="LargeLoadingIcon h-100 w-100">
+            className="LargeLoadingIcon">
             {LoadingIconElement}
             {label && <span className="mt-1">{label}</span>}
         </Box>

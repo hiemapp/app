@@ -1,0 +1,49 @@
+.Popup {
+    --Popup-spacing: 0.5rem;
+    position: relative;
+}
+
+@mixin Popup--connect($connect, $insetAnchor) {
+    $X: X;
+    $Y: Y;
+    $left: left;
+
+    @if $connect == 'left' or $connect == 'right' {
+        $X: Y;
+        $Y: X;
+        $left: top;
+    }
+
+    $mod: if($connect == 'top' or $connect == 'left', -1, 1);
+
+    .Popup--connect-#{$connect} {
+        .Popup__content {
+            transform: translate#{$Y}(#{50% * $mod}) translate#{$X}(-50%);
+            #{$left}: 50%;
+            #{$insetAnchor}: 0;
+        }
+
+        &.Popup--show > .Popup__content {
+            transform: translate#{$Y}(calc(#{100% * $mod} + #{$mod} * var(--Popup-spacing))) translate#{$X}(-50%);
+        }
+    }
+}
+
+.Popup__content {
+    opacity: 0;
+    pointer-events: none !important;
+    position: absolute;
+    transition: 250ms opacity ease, 250ms transform ease;
+    z-index: 10;
+}
+
+.Popup--show > .Popup__content {
+    opacity: 1;
+    pointer-events: all !important;
+    transform: translateY(0) scaleY(1);
+}
+
+@include Popup--connect('top', top);
+@include Popup--connect('right', right);
+@include Popup--connect('bottom', bottom);
+@include Popup--connect('left', left);

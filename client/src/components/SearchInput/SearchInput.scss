@@ -1,0 +1,28 @@
+.SearchInput .TextInput-wrapper:focus-within + .SearchInput__suggestions {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.SearchInput {
+    position: relative;
+    overflow: visible;
+}
+
+.SearchInput__suggestions {
+    opacity: 0;
+    transform: translateY(-10%);
+    pointer-events: none;
+    transition: 250ms opacity, 250ms transform;
+    min-width: 100%;
+    position: absolute;
+    top: 100%;
+    margin-top: 0.25rem;
+    z-index: 100;
+}
+
+.SearchInput__suggestion {
+    width: 100%;
+    margin: 0.25rem 0;
+    color: var(--text-primary) !important;
+}

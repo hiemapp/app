@@ -27,10 +27,9 @@ export default class FlowWorkspace {
         try {
             this.serializer.load(state, this.editor);
         } catch(err: any) {
-            const parts = err.message.split(': ');
+            const [ msg, blockType ] = err.message.split(': ');
 
-            if(parts[0] === 'Invalid block definition for type') {
-                const blockType = parts[1];
+            if(msg.startsWith('Invalid block definition')) {
                 this.addError({
                     type: 'INVALID_BLOCK_DEFINITION',
                     data: {

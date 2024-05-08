@@ -1,20 +1,19 @@
-import { UserController } from 'zylax';
 import type { Constructor } from 'zylax/@types/helpers'
-import { type ModelWithProps } from 'zylax';
+import { UserController, type ModelWithProps } from 'zylax';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
+import type { User } from 'zylax';
 
 interface Request extends ExRequest {
-    user?: {
-        id?: number
-    }
+    user: User
 }
 
-export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
-    const user = UserController.find(req.user?.id!) || UserController.findDefaultUser();
+export type SerializedPropsOf<M extends ModelWithProps<any>> = M extends ModelWithProps<infer T> ? T['serializedProps'] : never;
+export type PropsOf<M extends ModelWithProps<any>> = M extends ModelWithProps<infer T> ? T['props'] : never;
 
+export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
     const requirePermissionKey = (key: string) => {
-        if(typeof key === 'string' && !user.hasPermissionKey(key)) {
+        if(typeof key === 'string' && !req.user.hasPermission(key)) {
             throw new TRPCError({
                 code: 'UNAUTHORIZED',
                 message: `Missing permission: '${key}'.`
@@ -24,29 +23,29 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         return true;
     }
 
-    const getResourceOrThrow = async<T extends ModelWithProps<any, any>>(model: Constructor<T>, id: number | string): Promise<T> => {
+    const getResourceOrThrow = async<M extends ModelWithProps<any>>(model: Constructor<M>, id: number | string) => {
         const controller = model.prototype.__modelConfig().controller;
         const resource = controller.find(id);
         
         if(!resource) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `${model.name} ${id} not found.`
+                message: `Resource [${model.name} ${id}] not found.`
             })
         }
 
-        return resource;
+        return resource as M;
     }
 
-    const getDocumentOrThrow = async <T extends ModelWithProps<any, any>>(
-        model: Constructor<T>, 
+    const getDocumentOrThrow = async <M extends ModelWithProps<any>>(
+        model: Constructor<M>, 
         id: number | string
-    ): Promise<ReturnType<T['serialize']>> => {
+    ) => {
         const resource = await getResourceOrThrow(model, id);
-        return await resource.serialize() as ReturnType<T['serialize']>;
+        return await resource.getAllProps() as SerializedPropsOf<M>;
     }
 
-    const getCollection = async <T extends ModelWithProps<any, any>>(
+    const getCollection = async <T extends ModelWithProps<any>>(
         model: Constructor<T>, 
         hasPermission?: (document: T) => boolean
     ): Promise<T[]> => {
@@ -60,7 +59,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         return collection;
     }
 
-    const getIndex = async <T extends ModelWithProps<any, any>>(
+    const getIndex = async <T extends ModelWithProps<any>>(
         model: Constructor<T>,
         props: string[], 
         hasPermission?: (document: T) => boolean
@@ -68,7 +67,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         const collection = await getCollection(model, hasPermission);
 
         return collection.map(m => {
-            const data: Record<string, any> = { id: m.getId() };
+            const data: Record<string, any> = { id: m.id };
 
             props.forEach(name => {
                 data[name] = m.getProp(name);
@@ -78,9 +77,9 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         });
     }
 
+    req.user = req.user ?? UserController.findDefaultUser();
 
     return {
-        user,
         req,
         res,
         requirePermissionKey,

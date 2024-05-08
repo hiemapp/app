@@ -1,0 +1,21 @@
+.NotificationCenter {
+    --NotificationCenter-spacing: 0.75rem;
+    position: fixed;
+    pointer-events: none;
+    z-index: 3000;
+
+    @media(max-width: 767.98px) {
+        top: var(--NotificationCenter-spacing);
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 2 * var(--NotificationCenter-spacing));
+        align-items: center;
+    }
+
+    @media(min-width: 768px) {
+        bottom: var(--NotificationCenter-spacing);
+        right: var(--NotificationCenter-spacing);
+        width: max(500px, 35%);
+        align-items: end;
+    }
+}

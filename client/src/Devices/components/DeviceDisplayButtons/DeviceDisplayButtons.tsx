@@ -1,7 +1,8 @@
 import React, { MouseEvent, useRef } from 'react';
-import { Box, Button, Tile } from '@tjallingf/react-utils';
+import { Box, Button, Tile, getPalette } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
 import { type DeviceStateDisplay } from 'zylax';
+import './DeviceDisplayButtons.scss';
 
 export interface IDeviceDisplayButtonsProps {
     onChange?(name: string, value: any): void;
@@ -17,32 +18,33 @@ const DeviceDisplayButtons: React.FunctionComponent<IDeviceDisplayButtonsProps> 
     if (!display.buttons?.length) return null;
 
     const values = useRef<{ [key: string]: boolean }>(
-        Object.fromEntries(display.buttons.map((button) => [button.input, !!button.isActive])),
+        Object.fromEntries(display.buttons.map(button => [button.inputName, !!button.isActive])),
     );
 
-    const handleClick = (e: MouseEvent, input: string) => {
-        values.current[input] = !values.current[input];
-        onChange?.apply(null, [input, values.current[input]]);
+    const handleClick = (e: MouseEvent, inputName: string) => {
+        values.current[inputName] = !values.current[inputName];
+
+        if(typeof onChange === 'function') {
+            onChange.apply(null, [inputName, values.current[inputName]]);
+        }
     };
 
     const renderButtons = () => {
-        if(!display.buttons?.length) return [];
-        return display.buttons.map((button) => {
-            let { icon, color, isActive, input } = button;
-
-            if(typeof color !== 'string' || color === 'auto') {
-                color = deviceColor;
-            }
+        if (!display.buttons?.length) return null;
+        
+        return display.buttons.map(button => {
+            let { icon, color, isActive, inputName } = button;
+            const palette = getPalette(color, deviceColor);
 
             return (
                 <Button
-                    key={input}
+                    key={inputName}
                     variant="secondary"
                     square
                     size="sm"
                     active={isActive}
-                    primary={color}
-                    onClick={(e: MouseEvent) => handleClick(e, input)}
+                    accent={palette[4]}
+                    onClick={(e: MouseEvent) => handleClick(e, inputName)}
                 >
                     {icon && <Icon id={icon} weight={isActive ? 'solid' : 'light'} />}
                 </Button>
