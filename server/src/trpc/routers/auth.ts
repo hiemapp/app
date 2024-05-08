@@ -1,8 +1,8 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import passport from 'passport';
-import { UserController } from 'zylax';
+import { Notification, UserController } from 'zylax';
 import { TRPCError } from '@trpc/server';
+import { authenticate, generateToken, AUTH_COOKIE_NAME } from '@/auth';
 
 export const authRouter = router({
     login: publicProcedure
@@ -11,34 +11,39 @@ export const authRouter = router({
             password: z.string()
         }))
         .mutation(async ({ ctx, input }) => {
-            // This let's Passport.js access the username and password that were sent.
-            ctx.req.body = input;
+            const username = input.username.trim();
+            const password = input.password.trim();
 
-            await new Promise<void>((resolve, reject) => {
-                passport.authenticate('local', {
-                    failWithError: true
-                })(ctx.req, ctx.res, (err: any) => {
-                    if(err) return reject(err);
-                    resolve();
-                })
-            }).catch(err => {
-                if(err?.name === 'AuthenticationError') {
-                    throw new TRPCError({
-                        code: 'UNAUTHORIZED',
-                        message: 'Incorrect username or password.'
-                    })
+            let response = null;
+
+            await authenticate(username, password)
+            .then(user => {
+                const token = generateToken(user);
+
+                ctx.res.cookie(AUTH_COOKIE_NAME, token, { 
+                    maxAge: 365*24*60*60*1000,
+                    httpOnly: true
+                });
+
+                response = {
+                    userId: user.id
                 }
+            })
+            .catch(err => {
+                const user = UserController.findBy('username', username);
+
+                const errType = typeof err === 'string' ? err : 'generic';   
+                new Notification({ id: `login.errors.auth.${errType}`, ctx: { user }}, 'error')
+                    .addRecipients(ctx.req.socket)
+                    .send();
 
                 throw new TRPCError({
-                    code: 'INTERNAL_SERVER_ERROR',
-                    message: err
+                    code: 'UNAUTHORIZED',
+                    message: `Authentication failed.`,
+                    cause: err
                 })
             })
 
-            const user = UserController.findBy('username', input.username);
-            
-            return {
-                user: await user.serialize()
-            }
-        }),
+            return response;
+        })
 })

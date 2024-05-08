@@ -1,5 +1,5 @@
 import { IntlShape } from 'react-intl';
-import type { FlowBlockManifestSerialized, FlowBlockLayoutParameter, FlowBlockLayoutParameterOption, FlowBlockLayoutParameterShadowType, FlowBlockLayoutSerialized } from 'zylax';
+import type { FlowBlockManifestSerialized, FlowBlockParameterLayout, FlowBlockParameterLayoutOption, FlowBlockParameterLayoutShadowType, FlowBlockLayoutSerialized } from 'zylax';
 import type { FlowBlockCategoryManifest } from 'zylax';
 
 export interface FlowEditorBlockOptions {
@@ -29,7 +29,7 @@ export default class FlowEditorBlock {
         let inputs: {[key: string]: any} = {};
         
         if(this.layout.parameters?.length) {
-            this.layout.parameters.forEach((param: FlowBlockLayoutParameter) => {
+            this.layout.parameters.forEach((param: FlowBlockParameterLayout) => {
                 // Dropdown fields can't have a shadow block
                 if (param.options) return true;
 
@@ -58,9 +58,9 @@ export default class FlowEditorBlock {
         };
     }
 
-    getBlocklyParameterDefJSON(param: FlowBlockLayoutParameter): Object | false {
+    getBlocklyParameterDefJSON(param: FlowBlockParameterLayout): Object | false {
         if (param.options) {
-            const options = param.options.map((option: FlowBlockLayoutParameterOption) => 
+            const options = param.options.map((option: FlowBlockParameterLayoutOption) => 
                 this.#formatOptionLabel(option, param));
 
             return {
@@ -79,11 +79,13 @@ export default class FlowEditorBlock {
         };
     }
 
-    getShadow(param: FlowBlockLayoutParameter) {
-        let shadowType: FlowBlockLayoutParameterShadowType = param.type;
+    getShadow(param: FlowBlockParameterLayout) {
+        let shadowType: FlowBlockParameterLayoutShadowType = 'void';
 
         if (typeof param.shadow?.type === 'string') {
             shadowType = param.shadow.type;
+        } else if(typeof param?.type === 'string') {
+            shadowType = param.type;
         }
 
         switch (shadowType) {
@@ -115,11 +117,7 @@ export default class FlowEditorBlock {
                         VALUE: param.shadow?.value ?? 3
                     },
                 };
-            case 'date.now':
-                return {
-                    type: '@zylax/core.datetime_now'
-                };
-            case 'date.time':
+            case 'time':
                 return {
                     type: '@zylax/core.datetime_time'
                 };
@@ -221,7 +219,7 @@ export default class FlowEditorBlock {
         return def;
     }
 
-    #formatOptionLabel(option: FlowBlockLayoutParameterOption, param: FlowBlockLayoutParameter): [string, any] {
+    #formatOptionLabel(option: FlowBlockParameterLayoutOption, param: FlowBlockParameterLayout): [string, any] {
         let { value, label, key } = option;
 
         // Force label and value to be a string
@@ -239,7 +237,7 @@ export default class FlowEditorBlock {
         return [label, value];
     }
 
-    #formatMessage(params: FlowBlockLayoutParameter[]) {
+    #formatMessage(params: FlowBlockParameterLayout[]) {
         let defaultMessage = params.map((_, i) => `%${i + 1}`).join(' ');
 
         let values: Record<string, string> = {};

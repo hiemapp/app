@@ -1,15 +1,15 @@
 {
-    "include": ["src/"],
+    "include": ["src/", "@types/"],
     "compilerOptions": {
         "moduleResolution": "node",
-        "module": "es2022",
+        "module": "es2020",
         "esModuleInterop": true,
         "strict": true,
         "noImplicitReturns": false,
         "strictPropertyInitialization": false,
         "allowSyntheticDefaultImports": true,
         "types": ["vite/client"],
-        "target": "es2020",
+        "target": "es2021",
         "useDefineForClassFields": true,
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,

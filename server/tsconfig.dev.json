@@ -1,0 +1,23 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "module": "ES2022",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            // Use the source code for the core module
+            "zylax/*": [
+                "../../core/src/*"
+            ],
+            "~/*": [
+                "../../core/src/*"
+            ],
+        }
+    },
+    "ts-node": {
+        "esm": true
+    }
+}

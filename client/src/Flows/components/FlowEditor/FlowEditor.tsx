@@ -1,11 +1,10 @@
 import React, { memo, useMemo, useEffect, useState, useRef } from 'react';
-import { Button, Box } from '@tjallingf/react-utils';
+import { Button, Box, palettes } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
 import * as Blockly from 'blockly/core';
 import BlocklyWorkspace from '@/Blockly/BlocklyWorkspace';
 import FlowEditorBlock from '@/utils/flows/FlowEditorBlock';
 import { useIntl } from 'react-intl';
-import fieldBlocks from '../../../utils/flows/blockly/fieldBlocks';
 import { registerCustomTheme } from '@/Blockly/overrides/themes/CustomTheme';
 import './FlowEditor.scss';
 import { trpc } from '@/utils/trpc';
@@ -53,7 +52,6 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
     }
 
     function selectToolboxItem(index: number) {
-        
         return (workspace.current as any).editor.toolbox_.selectItemByPosition(index);
     }
 
@@ -134,9 +132,6 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
     }
 
     function registerBlocks() {
-        // TODO: remove field blocks (see @zylax/core.logic_boolean)
-        Blockly.defineBlocksWithJsonArray(fieldBlocks);
-
         blocks.forEach((block) => {
             if(!block.layout) {
                 console.error(`Invalid layout for block '${block.type}': ${block.layout}.`);
@@ -173,7 +168,7 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
             const containsBlocks = flowEditorBlocks.current.filter((b) => b.manifest.category === category.id);
             
             const formattedName = formatMessage({
-                id: `${category.extensionId}.flows.blockCategories.${category.id}.title`,
+                id: `${category.extensionId}.flows.block_categories.${category.id}.title`,
                 defaultMessage: category.id,
             });
 
@@ -185,9 +180,8 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
             });
         });
 
-        categories.sort((a, b) => a.priority > b.priority ? -1 : 1);
-
-        return categories;
+        const sortedCategories = categories.sort((a, b) => a.manifest.priority > b.manifest.priority ? -1 : 1);
+        return sortedCategories;
     }
 
     useEffect(() => {
@@ -202,7 +196,7 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
             <Box direction="column" className="FlowEditor__toolbox h-100" gutterY={1}>
                 {toolboxContents.map((category: any, index) => {
                     return (
-                        <Button 
+                        <Button key={category.name}
                             square
                             variant="secondary"
                             className="w-100" 
@@ -215,16 +209,17 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
             </Box>
         )
     }, [ toolboxContents ]);
-
-    console.log(renderedToolbox);
     
     if (!renderedToolbox) return null;
 
     return (
         <>
-            <Modal open={error?.title} buttons={error?.buttons}>
+            <Modal isOpen={!!error}>
                 <h1>{error?.title}</h1>
-                {error?.message}
+                <div className="mb-3">
+                    {error?.message}
+                </div>
+                {error?.buttons}
             </Modal>
             <Box direction="column" className="FlowEditor h-100 w-100">
                 <Box direction="row" className="FlowEditor__toolbar p-2 w-100" gutterX={1}>
@@ -239,11 +234,11 @@ const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ flowId, bl
                         </Button>
                     </Tooltip>
                     <div className="FlowEditor__toolbar-divider"></div>
-                    <Button square variant="secondary" onClick={() => doTestRun()} primary="green">
+                    <Button square variant="secondary" onClick={() => doTestRun()} accent={palettes.GREEN[4]}>
                         <Icon id="play" />
                     </Button>
-                    <Tooltip message="@zylax/core.pages.flows.editor.actions.upload">
-                        <Button square variant="secondary" onClick={() => pushEditsToServer()} primary="yellow">
+                    <Tooltip message="@global.actions.upload">
+                        <Button square variant="secondary" onClick={() => pushEditsToServer()} accent={palettes.GREEN[4]}>
                             <Icon id="arrow-up-from-bracket" />
                         </Button>
                     </Tooltip>

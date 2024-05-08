@@ -1,5 +1,5 @@
 import { router, publicProcedure } from '../trpc';
-import { User } from 'zylax';
+import { User, UserController } from 'zylax';
 import { GetPropsSerializedType } from 'zylax/@types/helpers';
 import { z } from 'zod';
 
@@ -8,16 +8,16 @@ export const userRouter = router({
         .input(z.object({
             id: z.union([ z.number(), z.literal('me') ])
         }))
-        .query(async ({ ctx, input }): Promise<GetPropsSerializedType<User>> => {
+        .query(async ({ ctx, input }) => {
             let userId: number;
             
             if(input.id === 'me') {
-                userId = ctx.user.getId();
+                userId = ctx.req.user.id;
             } else {
                 ctx.requirePermissionKey(`user.${input.id}.read`);
                 userId = input.id;
             }
             
-            return await ctx.getDocumentOrThrow(User, userId);
+            return ctx.getDocumentOrThrow(User, userId);
         })
 })

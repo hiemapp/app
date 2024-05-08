@@ -10,17 +10,14 @@ export const flowRouter = router({
         }))
         .mutation(async ({ ctx, input }) => {
             const flow = FlowController.find(input.id);
-
-            console.log('upload!')
-            flow.setProp('blocklyWorkspace', input.workspace);
-            flow.reload();
+            await flow.update(input.workspace);
         }),
 
 
     index: publicProcedure
         .query(async ({ ctx }) => {
             return await ctx.getIndex(Flow, ['name', 'icon', 'color'], (d) => {
-                return ctx.user.hasPermissionKey(`flow.${d.getId()}.read`);
+                return ctx.req.user.hasPermission(`flow.${d.id}.read`);
             });
         })
 })

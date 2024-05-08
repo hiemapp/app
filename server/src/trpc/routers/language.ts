@@ -6,9 +6,9 @@ import type { GetPropsSerializedType } from 'zylax/@types/helpers'
 export const languageRouter = router({
     get: publicProcedure
         .input(z.object({
-            key: z.string(),
+            id: z.string(),
         }))
         .query(async ({ ctx, input }): Promise<GetPropsSerializedType<Language>> => {    
-            return await ctx.getDocumentOrThrow(Language, input.key);
+            return await ctx.getDocumentOrThrow(Language, input.id);
         }),
 })

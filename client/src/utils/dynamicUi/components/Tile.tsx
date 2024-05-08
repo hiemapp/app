@@ -1,1 +1,0 @@
-export { Tile } from '@tjallingf/react-utils';

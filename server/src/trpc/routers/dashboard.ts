@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import _ from 'lodash';
 import { z } from 'zod';
-import { DashboardWidgetManager, ExtensionController, renderWidgetAndSerialize } from 'zylax';
+import { DashboardWidgetManager } from 'zylax';
 import { DashboardWidget } from 'zylax';
 
 const widgetSessions: Record<string, DashboardWidget> = {};
@@ -13,7 +13,7 @@ export const dashboardRouter = router({
             slug: z.string()
         }))
         .query(({ ctx, input }) => {
-            const sessionId = `${input.slug.trim()}#user${ctx.user.getId()}`;
+            const sessionId = `${input.slug.trim()}#user${ctx.req.user.id}`;
             const widget = DashboardWidgetManager.getOrCreateWidget(input.slug, sessionId);
 
             if(!widget) {
@@ -25,7 +25,7 @@ export const dashboardRouter = router({
 
             return {
                 sessionId: sessionId,
-                manifest: widget.getManifest(),
+                manifest: widget.getManifest(''),
                 content: widget.render()
             };
         }),

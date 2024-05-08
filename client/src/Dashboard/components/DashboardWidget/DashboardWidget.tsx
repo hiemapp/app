@@ -2,7 +2,7 @@ import type { DashboardWidgetManifest } from 'zylax';
 import { memo } from 'react';
 import { Icon } from '@tjallingf/react-utils';
 import { Tile, Box } from '@tjallingf/react-utils';
-import { renderElement, type EventHandler } from '@/utils/dynamicUi';
+import { renderElement, type EventHandler } from '@/utils/uilib/renderElement';
 
 export interface DashboardWidgetProps {
     data: {

@@ -1,8 +1,9 @@
 {
-    "legacyWatch": true,
     "ext": "ts,tsx,js,jsx,json",
-    "exec": "ts-node --esm -r tsconfig-paths/register",
-    "ignore": [
-        "storage/devices/**"
+    "exec": "tsx --tsconfig tsconfig.dev.json",
+    "watch": [
+        "src/",
+        "storage/extensions/",
+        "../../core/src/"
     ]
 }

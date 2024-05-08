@@ -4,5 +4,5 @@ import { createContext } from '@/trpc/context';
 
 export const trpcMiddleware = trpcExpress.createExpressMiddleware({
     router: appRouter,
-    createContext
+    createContext: createContext as any
 });

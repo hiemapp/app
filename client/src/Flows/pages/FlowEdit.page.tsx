@@ -6,22 +6,20 @@ import { trpc } from '@/utils/trpc';
 import LargeLoadingIcon from '@/LargeLoadingIcon';
 import './FlowEdit.page.scss';
 
-
 const FlowEditor = lazy(() => import('../components/FlowEditor'));
 
 const FlowEdit: React.FunctionComponent = () => {
     const { id } = useParams();
-    const [LoadingIconElement] = useState(<LargeLoadingIcon label="Loading editor..." />);
 
     const blocks = trpc.flowEditor.listBlocks.useQuery();
     const blockCategories = trpc.flowEditor.listBlockCategories.useQuery();
 
     const renderEditor = () => {
         if (blocks.isLoading || blockCategories.isLoading) 
-            return LoadingIconElement;
+            return <LargeLoadingIcon />;
 
         return (
-            <Suspense fallback={LoadingIconElement}>
+            <Suspense fallback={<LargeLoadingIcon />}>
                 <FlowEditor flowId={parseInt(id!)} blocks={blocks.data!} blockCategories={blockCategories.data!} />
             </Suspense>
         )

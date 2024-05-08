@@ -1,16 +1,33 @@
 .DeviceDisplayTile {
-  width: 100%;
+    width: 100%;
+    border-radius: var(--border-radius-md) !important;
 
-  .DeviceDisplayTile__thumbnail {
-    > img {
-      max-height: var(--Tile__thumbnail-img-size);
-      height: var(--Tile__thumbnail-img-size);
-      width: var(--Tile__thumbnail-img-size);
-      border-radius: var(--border-radius-sm);
+    .DeviceDisplayTile__thumbnail {
+        overflow: hidden;
+        border-radius: var(--border-radius-sm);
+        min-height: var(--Tile__thumbnail-img-size);
+        min-width: var(--Tile__thumbnail-img-size);
+
+        >img {
+            height: var(--Tile__thumbnail-img-size);
+            width: var(--Tile__thumbnail-img-size);
+        }
     }
-  }
 
-  .DeviceDisplayTile__content {
-    font-size: var(--font-size-sm);
-  }
+    .DeviceDisplayTile__content {
+        overflow: hidden;
+    }
+
+    .DeviceDisplayTile__title {
+        font-size: var(--font-size-sm);
+        margin-bottom: 0.125rem;
+    }
+
+    .DeviceDisplayTile__description {
+        font-size: calc(var(--font-size-sm) / 1.1);
+        color: var(--text-muted-alt);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 }

@@ -1,31 +1,61 @@
 .Device {
-  position: relative;
-  z-index: 1;
-  transition: 125ms color ease-out;
+    position: relative;
+    z-index: 1;
+    transition: 125ms color ease-out;
 
-  &::after {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: var(--Button-background-transition-duration) opacity ease-out;
-    background: linear-gradient(135deg, var(--Device--active-background-start), var(--Device--active-background-stop));
-  }
+    &::after {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--Button-transition-duration) opacity ease;
+        background: linear-gradient(135deg, var(--Device--active-background-start), var(--Device--active-background-stop));
+    }
+}
+
+.Device--with-menu {
+    cursor: pointer;
 }
 
 .Device--active {
-  color: var(--Device--active-color);
+    color: var(--Device--active-color);
 
-  &::after {
-    opacity: 1;
-  }
+    &::after {
+        opacity: 1;
+    }
+}
+
+// Icon active styles
+.Device--active .Device--active__icon,
+.Device:not(.Device--active) .Device--inactive__icon {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+}
+
+.Device__icon-wrapper {
+    position: relative;
+
+    .Device__icon-spacer {
+        opacity: 0;
+        position: relative;
+    }
+    
+    // Icon styles
+    .Device__icon {
+        transform: scale(0.5);
+        opacity: 0;
+        top: 0;
+        position: absolute;
+        transition: var(--Button-background-transition-duration) opacity ease-out,
+                    var(--Button-background-transition-duration) transform ease-out;
+    }
 }
 
 .Device__display {
-  width: 100%;
+    width: 100%;
 }

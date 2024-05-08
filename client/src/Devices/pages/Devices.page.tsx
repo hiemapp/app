@@ -4,6 +4,7 @@ import Device from '@/Devices/components/Device/Device';
 import ErrorBoundary from '@/ErrorBoundary';
 import { trpc } from '@/utils/trpc';
 import useSocketEvent from '@/hooks/useSocketEvent';
+import { useMemo } from 'react';
 
 const Devices: React.FunctionComponent = () => {
     const deviceIndexQuery = trpc.device.index.useQuery();
@@ -14,8 +15,8 @@ const Devices: React.FunctionComponent = () => {
     ))
     const deviceInputMutation = trpc.device.performInput.useMutation();
 
-    useSocketEvent('devices:change', ({ device }) => {
-        deviceQueries.find(q => q.data?.id === device.id)?.refetch?.();
+    useSocketEvent('device:update', data => {
+        deviceQueries.find(q => q.data?.id === data.deviceId)?.refetch?.();
     });
 
     function handleInput(id: number, name: string, value: any) {
@@ -25,7 +26,7 @@ const Devices: React.FunctionComponent = () => {
         });
     }
 
-    const devices = deviceQueries.map(query => {  
+    const devices = useMemo(() => deviceQueries.map(query => {  
         if(query.isLoading) {
             return null;
         }
@@ -43,10 +44,10 @@ const Devices: React.FunctionComponent = () => {
                     handleInput={(n, v) => handleInput(query.data.id, n, v)} />
             </ErrorBoundary>
         )
-    })
+    }), [ deviceQueries ]);
 
     return (
-        <Page id="devices">
+        <Page id="Devices">
             <Container>
                 <Masonry
                     breakpointCols={{ default: 6, 1200: 5, 992: 3, 768: 3, 576: 2, 575.98: 1 }}

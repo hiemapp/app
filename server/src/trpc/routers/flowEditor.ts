@@ -9,12 +9,12 @@ export const flowEditorRouter = router({
 
             const result: any[] = [];
 
-            _.forOwn(flowBlocks, (moduleClass, moduleSlug) => {
+            _.forOwn(flowBlocks, (moduleClass, moduleId) => {
                 try {
                     result.push({
-                        type: moduleSlug,
-                        manifest: moduleClass.manifest.toJSON(),
-                        layout: moduleClass.layout(),
+                        type: moduleId,
+                        manifest: moduleClass.getManifest().toJSON(),
+                        layout: moduleClass.getLayout().toJSON(),
                     });
                 } catch (err: any) {
                     logger.error(err);
@@ -30,13 +30,13 @@ export const flowEditorRouter = router({
             const flowBlockCategories = ExtensionController.findAllModulesOfType(FlowBlockCategory);
             const result: any[] = [];
 
-            _.forOwn(flowBlockCategories, (moduleClass, moduleSlug) => {
-                const [ extensionId, moduleName ] = Extension.parseModuleSlug(moduleSlug);
+            _.forOwn(flowBlockCategories, (moduleClass, moduleId) => {
+                const [ extensionId, moduleName ] = Extension.parseModuleId(moduleId);
                 
                 try {
                     result.push({
                         id: moduleName,
-                        manifest: moduleClass.manifest.toJSON(),
+                        manifest: moduleClass.getManifest().toJSON(),
                         extensionId: extensionId,
                     });
                 } catch (err: any) {
