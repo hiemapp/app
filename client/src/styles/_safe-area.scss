@@ -1,0 +1,22 @@
+:root {
+    // These properties will be overriden by the SafeArea capacitor plugin
+    --safe-area-inset-top: 0;
+    --safe-area-inset-right: 0;
+    --safe-area-inset-bottom: 0;
+    --safe-area-inset-left: 0;
+}
+
+#root {
+    --Topbar-height-safe: calc(var(--Topbar-height) + var(--safe-area-inset-top));
+    height: 100%;
+    width: 100%;
+
+    .Page {
+        --Topbar-height: var(--Topbar-height-safe);
+    }
+
+    // Increase padding on some elements to ensure safe area
+    .Topbar, .NotificationCenter {
+        padding-top: var(--safe-area-inset-top);
+    }
+}

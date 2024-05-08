@@ -1,8 +1,8 @@
-import InputGroup from '@/Forms/InputGroup';
+import InputGroup from '@/components/forms/InputGroup';
 import './SearchInput.scss';
 import { FormEvent, useRef } from 'react';
-import { Button, Icon, TextInput, Tile, palettes } from '@tjallingf/react-utils';
-import { throttle } from 'lodash';
+import { Button, Icon, TextInput, Tile } from '@tjallingf/react-utils';
+import throttle from 'lodash/throttle';
 import { TextInputProps } from '@tjallingf/react-utils/dist/TextInput/TextInput';
 
 export type SearchInputProps = TextInputProps & React.HTMLAttributes<HTMLInputElement> & {
@@ -44,7 +44,7 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
     return (
         <form onSubmit={handleSubmit} className="SearchInput">
             <InputGroup>
-                <TextInput {...rest} onInput={handleInput} forwardRef={inputRef} suffix={(
+                <TextInput {...rest} onInput={handleInput} ref={inputRef} suffix={(
                     <Button>
                         <Icon id="magnifying-glass" size={14} />
                     </Button>

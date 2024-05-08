@@ -1,0 +1,98 @@
+.Device {
+    --Device-color: var(--text-primary);
+    --Device-color-muted: var(--Device-color);
+    --Device-padding-x: 0.75rem;
+    --Device-padding-y: 1rem;
+    --Button-background: var(--gray-1);
+    --Button--hover-background: var(--gray-2);
+    --Button--active-background: var(--Device--active-background);
+    --Button--active-color: var(--Device-color);
+    position: relative;
+    z-index: 1;
+    min-height: 3rem;
+    padding: 0;
+    transition: 250ms ease-out;
+    opacity: 1 !important;
+    width: 100%;
+    text-align: left;
+    color: var(--Device-color) !important;
+
+    &.Button--active {
+        --Device-color: var(--Device--active-color);
+        
+        .Device__active-icon {
+            opacity: 1;
+        }
+    }
+
+    &:not(.Button--active) {
+        --Device-color-muted: var(--text-muted);
+
+        .Device__inactive-icon {
+            opacity: 1;
+        }
+    }
+
+    .Device__menu-indicator {
+        display: none !important;
+    }
+
+    &.Device--with-menu,
+    &.Device--with-records {
+        .Device__menu-indicator {
+            display: flex !important;
+        }
+    }
+
+    &.Button--focus {
+        background-color: var(--gray-2);
+
+        .Device__menu-indicator > .Icon {
+            padding-left: 4px;
+        }
+    }
+}
+
+.Device__menu-indicator > .Icon {
+    transition: 125ms ease-out;
+    color: var(--Device-color);
+}
+
+.Device__error-icon {
+    color: var(--Device-color-muted) !important;
+}
+
+.Device__body {
+    max-width: 100%;
+    padding: var(--Device-padding-y) var(--Device-padding-x);
+}
+
+.Device__name {
+    font-size: 1rem;
+    font-weight: 600;
+    transition: 250ms color ease-out;
+    color: var(--Device-color);
+}
+
+.Device__icon-wrapper {
+    position: relative;
+
+    .Device__icon-spacer {
+        opacity: 0;
+        position: relative;
+    }
+    
+    // Icon styles
+    .Device__icon {
+        top: 0;
+        position: absolute;
+        opacity: 0;
+        transition: 250ms ease-out;
+        color: var(--Device-color) !important;
+    }
+}
+
+.Device__display {
+    width: 100%;
+    height: 1.5em;
+}

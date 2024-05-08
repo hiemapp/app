@@ -1,5 +1,5 @@
-import * as Blockly from 'blockly/core';
-import type { FlowBlockCategoryManifest } from 'zylax';
+import * as Blockly from 'blockly';
+import type { FlowBlockCategoryManifest } from 'hiem';
 import { parseColor } from '@tjallingf/react-utils';
 import Color from 'color';
 
@@ -14,7 +14,7 @@ function CustomTheme(categories: FlowBlockCategory[]) {
     const blockStyles: Record<string, any> = {};
     
     categories.forEach(c => {
-        const primaryColor = Color(parseColor(c.manifest.color || '$blue', true)!);
+        const primaryColor = Color(parseColor(c.manifest.color || '$blue-4', true)!);
         
         const styleConfig = {
             colourPrimary: primaryColor.hex(),               // Primary
@@ -29,8 +29,6 @@ function CustomTheme(categories: FlowBlockCategory[]) {
     const fontStyle = {
         family: rootComputedStyle.getPropertyValue('font-family')
     };
-
-    console.log(fontStyle);
 
     return {
         name: 'CustomTheme',

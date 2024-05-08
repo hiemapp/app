@@ -1,15 +1,16 @@
 {
-    "include": ["src/", "@types/"],
+    "include": ["src/", "@types/", "vite.config.ts"],
     "compilerOptions": {
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "module": "es2020",
         "esModuleInterop": true,
         "strict": true,
         "noImplicitReturns": false,
         "strictPropertyInitialization": false,
         "allowSyntheticDefaultImports": true,
-        "types": ["vite/client"],
+        "types": ["vite/client", "node"],
         "target": "es2021",
+        "resolvePackageJsonImports": true,
         "useDefineForClassFields": true,
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,
@@ -22,9 +23,7 @@
         "baseUrl": "./",
         "rootDir": "../",
         "paths": {
-            "@/*": ["./src/*"],
-            "@/utils/trpc": ["./src/utils/trpc"]
+            "@/*": ["./src/*"]
         }
-    },
-    "references": [{ "path": "./tsconfig.node.json" }]
+    }
 }

@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import { Device, DeviceController, Notification } from 'zylax';
-import type { GetPropsSerializedType } from 'zylax/@types/helpers';
+import { Device, DeviceController, Notification } from 'hiem';
+import type { GetPropsSerializedType } from 'hiem/@types/helpers';
 
 export const deviceRouter = router({
     list: publicProcedure
@@ -24,33 +24,25 @@ export const deviceRouter = router({
             return await ctx.getDocumentOrThrow(Device, input.id);
         }),
 
-    performInput: publicProcedure
+    execute: publicProcedure
         .input(z.object({
-        id: z.number(),
-            values: z.array(
+            id: z.number(),
+            commands: z.array(
                 z.object({
                     name: z.string(),
-                    value: z.any()
+                    params: z.any()
                 })
             )
         }))
         .mutation(async ({ ctx, input }) => {
             ctx.requirePermissionKey(`device.${input.id}.input`);
 
-            const device = DeviceController.find(input.id);
-            await Promise.all(input.values.map(async ({ name, value }) => {
-                return await device.performInput(name, value, { user: ctx.req.user }).catch(err => {
-                    device.logger.error(err);
+            const device = await ctx.getResourceOrThrow(Device, input.id);
 
-                    new Notification({ id: '@zylax/core.devices.errors.input.generic', ctx: { device } }, 'error')
-                        .addRecipients(ctx.req.socket)
-                        .send();
-
-                    throw new TRPCError({
-                        message: err,
-                        code: 'INTERNAL_SERVER_ERROR'
-                    })
-                })
-            }))
+            const promises = input.commands.map(command => {
+                return device.execute(command.name, command.params, { user: ctx.req.user })
+            })
+            
+            await Promise.all(promises);
         })
 })

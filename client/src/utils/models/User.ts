@@ -1,5 +1,5 @@
 import Model from './Model';
-import { trimStart } from 'lodash';
+import trimStart from 'lodash/trimStart';
 
 export default class User extends Model {
   getSetting(key: string) {

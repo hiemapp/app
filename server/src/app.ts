@@ -1,12 +1,11 @@
-import { Database, Config, logger, DeviceController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, ScriptController, NotificationEmitter, User, Device, MutableRecord } from 'zylax';
+import { Database, Config, logger, DeviceController, ConnectorController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, NotificationEmitter, User, DashboardWidgetServer } from 'hiem';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import Webserver from './Webserver';
+import WebServer from './WebServer';
 import path from 'path';
 import crypto from 'crypto';
 import { Socket } from 'socket.io';
 import userMiddleware from './websocket/middleware/userMiddleware';
-import 'dotenv/config';
 
 // Check if the server has root privileges
 if (typeof process.getuid == 'function' && process.getuid() !== 0) {
@@ -53,36 +52,21 @@ dayjs.extend(customParseFormat);
     logger.debug('Initializing controllers...');
     await UserController.load();
     await ExtensionController.load();
+    await ConnectorController.load();
     await DeviceController.load();
     await FlowController.load();
     LanguageController.load();
 
     // Initialize the webserver
-    Webserver.init();
+    WebServer.init();
 
     // Add user middleware to websocket
-    Webserver.io.use(userMiddleware);
-
-    Webserver.io.on('connection', socket => {
-        socket.on('device:menuevent', (data: any) => {
-            const device = DeviceController.find(data.deviceId);
-            if(!device || !device.__stateMenuMemory) return;
-            
-            const callback = device.__stateMenuMemory.getChild(data.childIndex)?.callbacks?.[data.callbackId];  
-            try {
-                if(typeof callback === 'function') {
-                    callback(...data.args);
-                }
-            } catch(err) {
-                device.logger.error(err);
-            }
-        })
-    })
+    WebServer.io.use(userMiddleware);
     
     // Listen for notifications
     NotificationEmitter.on('notification', async e => {
         const props = await e.notification.getAllProps();
-        const sockets = await Webserver.io.fetchSockets();
+        const sockets = await WebServer.io.fetchSockets();
 
         e.notification.getRecipients().forEach(recipient => {
             sockets.forEach(socket => {
@@ -96,23 +80,22 @@ dayjs.extend(customParseFormat);
 
     // Add websocket event emitters
     DeviceController.index().forEach(device => {
-        device.on('update', () => {
-            Webserver.io.emit('device:update', {
-                deviceId: device.id
+        const eventHandler = () => {
+            WebServer.io.sockets.emit('device:update', {
+                device: { 
+                    id: device.id,
+                    state: device.getState(),
+                    display: device.getDisplay()
+                }
             });
-        })
-
-        device.on('update:menu', async e => {
-            const state = await device.getDynamicProp('state');
-
-            Webserver.io.emit('device:update:menu', {
-                deviceId: device.id,
-                menu: state.menu
-            })      
-        })
+        }
+        
+        device.on('state:update', eventHandler);
+        device.on('connection:update', eventHandler);
     })
-    
+
     // Start the webserver
-    logger.debug('Starting server...');
-    Webserver.start();
+    WebServer.start();
+
+    // DashboardWidgetServer.start();
 })();

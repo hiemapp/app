@@ -1,92 +1,77 @@
-// TODO: Add translations for aria-label (see Topbar Button[href="/login"])
-// TODO: Hide animated form labels when a value is present
-import { Navbar, Topbar, Box, Button, Container, Icon } from '@tjallingf/react-utils';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
-import useTrimmedLocation from '@/hooks/useTrimmedLocation';
-import { FormattedMessage } from 'react-intl';
+import { QueryClientProvider } from '@tanstack/react-query';
+import queryClient from '@/utils/queryClient';
+import { trpc, trpcClient } from '@/utils/trpc/trpc';
+import { Navigate, Route, Routes, matchPath, useLocation } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Devices from './pages/home/Devices.page';
+import SetupLayout from './layouts/SetupLayout';
 import ErrorBoundary from './ErrorBoundary';
-import FlowEdit from './Flows/pages/FlowEdit.page';
-import Flows from './Flows/pages/Flows.page';
-import Records from '@/Records/pages/Records.page';
-import Devices from '@/Devices/pages/Devices.page';
-import Login from '@/Login/pages/Login.page';
-import RouteError from './Errors/pages/RouteError.page';
-import Dashboard from './Dashboard/pages/Dashboard.page';
-import '@/styles/components/App.scss';
-// import Scripts from './Scripts/pages/Scripts.page';
-import NotificationCenter from './notifications/NotificationCenter';
+import RouteError from './pages/home/RouteError.page';
+import Dashboard from './pages/home/Dashboard.page';
+import Records from './pages/home/Records.page';
+import Login from './pages/home/Login.page';
+import Flows from './pages/home/Flows.page';
+import FlowEdit from './pages/home/FlowEdit.page';
+import Homes from './pages/setup/Homes.page';
+import HomeController from './utils/homes/HomeController';
+import MainRedirect from './pages/setup/MainRedirect.page';
+import NotificationsProvider from './providers/NotificationsProvider';
+import LanguageProvider from './providers/LanguageProvider';
+import AuthProvider from './providers/AuthProvider';
 
-const App: React.FunctionComponent = () => {
-    const { pathname } = useTrimmedLocation();
-    const currentPageId = pathname.split('/')[1]
+export interface IProvidersProps {
+    children?: React.ReactNode;
+}
 
-    const wrapRouteElement = (element: React.ReactNode) => {
+const App: React.FunctionComponent<IProvidersProps> = ({ children }) => {
+    const location = useLocation();
+    const addErrorBoundary = (element: React.ReactNode) => {
         return <ErrorBoundary fallback={<RouteError />}>{element}</ErrorBoundary>;
     };
+    
+    // Get homeId from url
+    const match = matchPath('/homes/:homeId/*', location.pathname);
 
-    function renderNavbarButton(path: string, icon: string) {
-        return (
-            <Navbar.Button
-                active={pathname.startsWith(path)}
-                icon={<>
-                    <span className="NavbarButton__icon NavbarButton--active__icon">
-                        <Icon id={icon} weight="solid" />
-                    </span>
-                    <span className="NavbarButton__icon NavbarButton--inactive__icon">
-                        <Icon id={icon} weight="light" />
-                    </span>
-                </>} 
-                href={path}
-             />
-        )
+    // Used by HomeController to detect the selected home
+    if(typeof match?.params?.homeId === 'string') {
+        window.__homeId = match.params.homeId;
     }
 
     return (
-        <>
-            <Topbar>
-                <Container>
-                    <Box direction="row" align="center">
-                        <h1 className="Topbar__title">
-                            <FormattedMessage id={`@zylax/core.${currentPageId || 'unknown'}.page.title`} />
-                        </h1>
-                        <div className="ms-auto">
-                            <Button
-                                variant="secondary"
-                                href="/login"
-                                square
-                                size="lg"
-                                aria-label="Visit the login page"
-                            >
-                                <Icon id="user" size={20} />
-                            </Button>
-                        </div>
-                    </Box>
-                </Container>
-            </Topbar>
-            <Routes>
-                { /* REDIRECTS */ }
-                <Route path="/" element={ <Navigate to="/devices" /> }/>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+            <QueryClientProvider client={queryClient}>
+                <NotificationsProvider>
+                    <AuthProvider>
+                        <LanguageProvider>
+                            <Routes>
+                                <Route element={<MainLayout />}> 
+                                    <Route path="/homes/:homeId/dashboard" element={addErrorBoundary(<Dashboard />)} />
+                                    <Route path="/homes/:homeId/devices" element={addErrorBoundary(<Devices />)} />
+                                    <Route path="/homes/:homeId/devices/:id/records" element={addErrorBoundary(<Records />)} />
+                                    <Route path="/homes/:homeId/login" element={addErrorBoundary(<Login />)} />
+                                    <Route path="/homes/:homeId/records" element={addErrorBoundary(<Records />)} />
+                                    <Route path="/homes/:homeId/flows" element={addErrorBoundary(<Flows />)} />
+                                    <Route path="/homes/:homeId/flows/:flowId/edit" element={addErrorBoundary(<FlowEdit />)} />
+                                    
+                                    {/* FALLBACK REDIRECT */}
+                                    <Route path="/homes/:homeId/*" element={<Navigate to="./devices" replace={true} />} />
+                                </Route>
 
-                <Route path="/dashboard" element={wrapRouteElement(<Dashboard />)} />
-                <Route path="/devices" element={wrapRouteElement(<Devices />)} />
-                <Route path="/login" element={wrapRouteElement(<Login />)} />
-                <Route path="/records" element={wrapRouteElement(<Records />)} />
-                <Route path="/flows" element={wrapRouteElement(<Flows />)} />
-                <Route path="/flows/:id/edit" element={wrapRouteElement(<FlowEdit />)} />
-                {/* <Route path="/scripts" element={wrapRouteElement(<Scripts />)} />
-                <Route path="/scripts/:id/edit" element={wrapRouteElement(<ScriptEdit />)} /> */}
-            </Routes>
-            <NotificationCenter />
-            <Navbar show={true}>
-                {renderNavbarButton('/dashboard', 'house')}
-                {renderNavbarButton('/devices', 'plug')}
-                {renderNavbarButton('/records', 'chart-simple')}
-                {renderNavbarButton('/flows', 'clock')}
-                {/* {renderNavbarButton('/scripts', 'shuffle')} */}
-                {renderNavbarButton('/admin', 'shield')}
-            </Navbar>
-        </>
+                                {/* NATIVE APP ROUTES */}
+                                {HomeController.isNativeApp() && (
+                                    <Route element={<SetupLayout />}>
+                                        <Route path="/setup/homes" element={<Homes />} />
+                                    </Route>
+                                )}
+
+                                {/* FALLBACK REDIRECT */}
+                                <Route path="*" element={<MainRedirect />} />
+                            </Routes>
+                        </LanguageProvider>
+                    </AuthProvider>
+                </NotificationsProvider>
+            </QueryClientProvider>
+        </trpc.Provider>
     );
 };
 

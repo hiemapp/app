@@ -3,7 +3,7 @@ import User from '@/utils/models/User';
 
 export interface IAuthContext {
     user: User;
-    refresh(): Promise<object>;
+    refetch(): Promise<object>;
 }
 
 const AuthContext = createContext({} as IAuthContext);

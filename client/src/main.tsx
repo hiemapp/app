@@ -4,20 +4,29 @@ import './assets/fontawesome/css/light.min.css';
 import './assets/fontawesome/css/solid.min.css';
 import '@tjallingf/react-utils/dist/style.css';
 
-import App from './App';
+import MainView from './layouts/MainLayout/MainLayout';
 import { createRoot } from 'react-dom/client';
-import Providers from './Providers';
-import { HashRouter } from 'react-router-dom';
 import Modal from 'react-modal';
+import App from './App';
+import { HashRouter } from 'react-router-dom';
+import * as capacitor from './capacitor/setup';
+import HomeController from './utils/homes/HomeController';
 
+// Setup capacitor
+capacitor.setup();
+
+// Initialize HomeController
+HomeController.init();
+
+// Set react-modal root element
 Modal.setAppElement('#root');
 
+// Render React app
 const root = createRoot(document.getElementById('root')!);
-
 root.render(
-  <Providers>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Providers>,
+  <HashRouter>
+    <App>
+      <MainView />
+    </App>
+  </HashRouter>
 );
