@@ -1,3 +1,13 @@
+@include max-breakpoint($breakpoint-phone) {
+    body {
+        --Topbar-height: 5rem !important;
+    }
+}
+
+.Topbar__container {
+    padding: 0.375rem 0 0 0 !important;
+}
+
 .ReactModalPortal {
     position: relative;
     z-index: 99999;
@@ -23,6 +33,11 @@
     border: 1px solid var(--gray-0) !important;
 }
 
+h5 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem !important;
+}
+
 h4, h5, h6 {
     font-weight: 600;
 }
@@ -33,4 +48,13 @@ img, .user-drag-none {
   -moz-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+#root, #root > * {
+    height: 100%;
+    width: 100%;
 }

@@ -1,0 +1,5 @@
+@mixin color-scheme($color-scheme) {
+    body[data-color-scheme="#{$color-scheme}"] & {
+        @content;
+    }
+}

@@ -13,6 +13,7 @@
         "esModuleInterop": true,
         "jsx": "react",
         "jsxFactory": "zylax.ui.jsx.h",
+        "jsxFragmentFactory": "zylax.ui.jsx.h",
         "strict": true,
         "noImplicitReturns": false,
         "strictPropertyInitialization": false,

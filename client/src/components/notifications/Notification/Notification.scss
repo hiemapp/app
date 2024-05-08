@@ -1,0 +1,95 @@
+.Notification {
+    --Notification-padding-x: 0.75rem;
+    --Notification-padding-y: 0.5rem;
+    --Notification-distance: 0.75rem;
+    --Notification-animation-duration: 250ms;
+    color: var(--text-primary);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.015);
+    border-radius: 1rem;
+    pointer-events: auto;
+    overflow: hidden;
+    align-items: center;
+    position: relative;
+    max-width: 100%;
+    pointer-events: none;
+
+    .Notification__background {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: var(--gray-3);
+        opacity: 0.9;
+        z-index: -1;
+    }
+
+    .Notification__icon {
+        font-size: var(--font-size-md) !important;
+        color: var(--Notification-accent) !important;
+    }
+
+    .Notification__icon-wrapper {
+        padding-left: var(--Notification-padding-x);
+    }
+
+    .Notification__message {
+        padding: var(--Notification-padding-y) var(--Notification-padding-x);
+    }
+
+    @include max-breakpoint($breakpoint-tablet) {
+        transform-origin: top center;
+        animation: 
+                   notification-enter-mobile ease-out forwards var(--Notification-animation-duration),
+                   notification-enter-mobile ease-in forwards reverse var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 1*var(--Notification-animation-duration));
+
+        .Notification__message {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: block;
+        }
+    }
+
+    @media(min-width: 768px) {
+        align-items: stretch;
+        margin-top: var(--Notification-distance);
+        animation: notification-enter-desktop ease-out forwards var(--Notification-animation-duration),
+                   notification-leave-desktop ease-in forwards var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 1*var(--Notification-animation-duration)),
+                   notification-unmount-desktop ease-in forwards var(--Notification-animation-duration) calc(var(--Notification-show-duration) + 2*var(--Notification-animation-duration));
+    }
+}
+
+@keyframes notification-enter-mobile {
+    from { 
+        margin-bottom: 0;
+        opacity: 0; 
+        transform: translateY(-50px) scaleY(0.6);
+    } 
+    
+    to { 
+        margin-bottom: var(--Notification-distance);
+        opacity: 1; 
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+@keyframes notification-leave-mobile {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notification-enter-desktop {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+@keyframes notification-leave-desktop {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes notification-unmount-desktop {
+    from {}
+    to { margin-top: 0; }
+}

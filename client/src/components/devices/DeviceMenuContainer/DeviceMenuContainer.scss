@@ -1,0 +1,36 @@
+.DeviceMenuContainer {
+    .DeviceMenuContainer__title {
+        margin-bottom: 1rem;
+    }
+
+    .DeviceMenuContainer__content {
+        height: 100%;
+    }
+
+    .ButtonGroup--size-lg {
+        > .Button {
+            font-weight: 600;
+            --Button--active-background: var(--DeviceMenuContainer-accent-1);
+            --Button--active-color: var(--DeviceMenuContainer-accent-7);
+        }
+    }
+
+    .Button--variant-secondary {
+        --Button-background: var(--gray-0);
+        --Button--focus-background: var(--gray-2);
+        --Button--hover-background: var(--gray-2);
+        --Button--hover-color: var(--Button-color);
+        --Button--focus-color: var(--ButtonGroup-accent);
+        --Button--active-background: var(--ButtonGroup-accent);
+    }
+
+    @media(hover: none) {
+        .Button {
+            transition: 75ms transform ease, var(--Button-transition-duration) ease;
+
+            &.Button--focus {
+                transform: scale(0.97);
+            }
+        }
+    }
+}

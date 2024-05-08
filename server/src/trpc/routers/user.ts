@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc';
-import { User, UserController } from 'zylax';
-import { GetPropsSerializedType } from 'zylax/@types/helpers';
+import { User, UserController } from 'hiem';
+import { GetPropsSerializedType } from 'hiem/@types/helpers';
 import { z } from 'zod';
 
 export const userRouter = router({

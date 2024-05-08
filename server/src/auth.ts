@@ -1,45 +1,50 @@
-import { Config, Database, User, UserController } from 'zylax';
+import { Config, User, UserController, errors } from 'hiem';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
-import { IncomingHttpHeaders, IncomingMessage } from 'http';
-import { parse as parseCookie } from 'cookie';
-
-export const AUTH_COOKIE_NAME = 'zylax_authtoken';
 
 export const authenticate = async (username: any, password: any) => {
     return new Promise<User>(async (resolve, reject) => {
-        if(typeof username !== 'string' || !username) return reject('usernameEmpty');
-        if(typeof password !== 'string' || !password) return reject('passwordEmpty');
-
-        const user = UserController.findBy('username', username);
-
-        if(user) {
-            const promise = user.verifyPasswordTimeSafe(password).catch(err => reject(err));
-            
-            if(await promise === true) {
-                return resolve(user);
+        try {
+            if(typeof username !== 'string' || !username) {
+                throw new errors.AuthEmptyUsernameError();
             }
-        }
 
-        return reject('incorrectUsernameOrPassword');
+            if(typeof password !== 'string' || !password) {
+                throw new errors.AuthEmptyPasswordError();
+            }
+
+            const user = UserController.findBy('username', username);
+
+            if(user) {
+                const promise = user.verifyPasswordTimeSafe(password).catch(err => reject(err));
+                
+                if(await promise === true) {
+                    return resolve(user);
+                }
+            }
+
+            throw new errors.AuthIncorrectCredentialsError();
+        } catch(err: any) {
+            reject(err);
+        }
     })
 }
 
-export const getUserFromCookies = (cookies: Record<string, string>) => {
+export const getUserFromToken = (token: any) => {
     let user = UserController.findDefaultUser();
-    const token = cookies[AUTH_COOKIE_NAME];
 
-    if(typeof token === 'string') {
-        const payload: any = jwt.verify(token, Config.get('secret.jwtSecret'));
+    try {
+        if(typeof token === 'string') {
+            const payload: any = jwt.verify(token, Config.get('secret.jwtSecret'));
 
-        if(payload && typeof payload.userId === 'number') {
-            user = UserController.find(payload.userId);
+            if(payload && typeof payload.userId === 'number') {
+                user = UserController.find(payload.userId);
+            }
         }
-    }
+    } catch(err) {}
 
     return user;
 }
-
 
 export const generateToken = (user: User) => {
     if(!(user instanceof User)) {

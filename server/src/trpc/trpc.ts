@@ -1,9 +1,11 @@
 import { initTRPC } from '@trpc/server';
 import SuperJSON from 'superjson';
 import { Context } from './context';
+import errorFormatter from '@/trpc/errorFormatter';
 
 const t = initTRPC.context<Context>().create({
-    transformer: SuperJSON
+    transformer: SuperJSON,
+    errorFormatter: errorFormatter
 });
 
 export const router = t.router;

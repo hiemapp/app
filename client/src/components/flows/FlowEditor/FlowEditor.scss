@@ -1,0 +1,49 @@
+.FlowEditor {
+    --blockly-toolbox-flyout-background: var(--gray-0);
+    --blockly-toolbx-flyout-border: 2px solid var(--gray-0);
+
+    @supports(background: color-mix(in srgb, white, white)) {
+        --blockly-toolbox-flyout-background: color-mix(in srgb, 25% transparent, var(--gray-0));
+    }
+
+    .FlowEditor__toolbar {
+        background: var(--gray-0);
+        border-bottom: var(--blockly-border);
+
+        .Button {
+            margin: 0.5rem 0;
+        }
+    }
+
+    .FlowEditor__toolbar-divider {
+        display: inline-block;
+        height: 100%;
+        border-left: var(--blockly-border);
+        margin: 0 0.5rem;
+    }
+
+    .FlowEditor__toolbox {
+        padding: 0.75rem;
+        background-color: var(--gray-0);
+        border-right: 2px solid var(--gray-1);
+
+        .Button {
+            --Button--hover-background: var(--gray-1);
+            color: var(--text-light) !important;
+            margin-right: 2rem;
+        }
+    }
+   
+    // An external toolbox is used, disable the integrated one
+    .blocklyToolboxDiv {
+        display: none !important;
+    }
+
+    .blocklyFlyout {
+        transform: translate(0px, 0px) !important;
+    }
+
+    .blocklyText, .blocklyFlyoutText {
+        font-family: inherit !important;
+    }
+}

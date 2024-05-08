@@ -1,0 +1,68 @@
+{
+    "@setup": {
+        "homes": {
+            "page.title": "Manage homes",
+            "noHomes.message": "You've not added any homes yet.",
+            "actions": {
+                "connect.label": "Connect"
+            },
+            "addHome": {
+                "link": "Add a new home...",
+                "title": "Add a new home",
+                "form": {
+                    "serverUrl": {
+                        "label": "Server URL",
+                        "placeholder": "192.168.0.0:4300"
+                    },
+                    "submit": {
+                        "label": "Add"
+                    }
+                },
+                "connectionError.message": "Could not reach server ''{baseUrl}''. Please verify that the url is correct and the server is online."
+            }
+        }
+    },
+    "@main": {
+        "actions": {
+            "edit.label": "Edit",
+            "confirm.label": "Confirm",
+            "undo.label": "Undo",
+            "redo.label": "Redo",
+            "upload.label": "Upload"
+        },
+        "generic": {
+            "status.on.label": "On",
+            "status.off.label": "Off",
+            "status.open.label": "Open",
+            "status.closed.label": "Closed"
+        },
+        "devices": {
+            "page.title": "Devices"
+        },
+        "dashboard": {
+            "page.title": "Dashboard"
+        },
+        "admin": {
+            "page.title": "Admin"
+        },
+        "login": {
+            "page.title": "Sign in",
+            "form": {
+                "username.label": "Username",
+                "password.label": "Password",
+                "submit.label": "Sign in"
+            },
+            "home": {
+                "currentHome.message": "Connected to {displayName}.",
+                "changeHome.link": "Change home..."
+            },
+            "resetPassword.link": "Forgot password?"
+        },
+        "records": {
+            "page.title": "Records"
+        },
+        "flows": {
+            "page.title": "Flows"
+        }
+    }
+}

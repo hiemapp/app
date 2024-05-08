@@ -1,0 +1,22 @@
+$breakpoint-xs: 480px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakponit-xl: 1200px;
+
+// Aliases
+$breakpoint-phone: $breakpoint-sm;
+$breakpoint-tablet: $breakpoint-md;
+$breakpoint-desktop: $breakpoint-lg;
+
+@mixin min-breakpoint($breakpoint) {
+    @media(min-width: $breakpoint) {
+        @content;
+    }  
+}
+
+@mixin max-breakpoint($breakpoint) {
+    @media(max-width: #{$breakpoint - 0.02px}) {
+        @content;
+    }  
+}

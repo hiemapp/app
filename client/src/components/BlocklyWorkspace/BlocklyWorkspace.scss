@@ -1,0 +1,139 @@
+.BlocklyWorkspace {
+    height: 100%;
+    width: 100%;
+
+    .blocklyMainBackground {
+        stroke: none;
+    }
+
+    .blocklySvg {
+        background: var(--blockly-background);
+        height: 100%;
+        width: 100%;
+    }
+
+    .blocklyFlyout {
+        padding-left: 10px;
+        overflow: visible;
+        background: var(--blockly-toolbox-flyout-background);
+        width: 100%;
+        height: 100%;
+        // backdrop-filter: blur(30px);
+        display: block !important;
+        opacity: 0;
+        transition: 250ms opacity;
+        pointer-events: none;
+
+        .blocklyFlyoutBackground {
+            display: none;
+        }
+
+        &[style*="display: block;"] {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+
+    .blocklySelected > .blocklyPath {
+        stroke: var(--blockly-draggable-highlight-stroke) !important;
+    }
+
+    /** Puzzle piece highlight on hover **/
+    .blocklyHighlightedConnectionPath {
+        stroke: var(--blockly-draggable-highlight-stroke) !important;
+    }
+
+    .blocklyToolboxDiv {
+        padding-top: 0.5rem;
+        background: var(--blockly-toolbox-background);
+        border-right: var(--blockly-border);
+
+        .blocklyToolboxCategory {
+            padding: 0 0.5rem;
+            margin-bottom: 0.5rem;
+
+            .Button {
+                color: inherit;
+                
+                .Icon {
+                    color: var(--blockly-toolbox__item-accent);
+                }
+            }
+        }
+
+        .blocklyToolboxCategory {
+            .blocklyTreeRow {
+                height: auto;
+                margin-bottom: 0;
+                cursor: pointer;
+                color: inherit !important;
+
+                &.blocklyTreeSelected {
+                    background: var(--blockly-toolbox__item--selected-background) !important;
+                }
+            }
+        }
+    }
+}
+
+/** Select dropdowns **/
+.blocklyDropDownDiv {
+    padding: 0;
+    background: var(--blockly-dropdown-background);
+    border: var(--blockly-dropdown-border);
+
+    .blocklyMenuItem {
+        color: var(--blockly-dropdown-color);
+        padding: 0.5rem;
+
+        &:hover {
+            background: var(--blockly-dropdown__item--hover-background);
+        }
+
+        &.blocklyMenuItemSelected {
+            background: var(--blockly-dropdown__item--active-background);
+            font-weight: 700;
+        }
+    }
+
+    .blocklyMenuItemCheckbox {
+        display: none;
+    }
+}
+
+.blocklyReplaceable > path {
+    fill-opacity: 1 !important;
+    stroke-width: 2px !important;
+    stroke: yellow !important;
+}
+
+.blocklyHtmlInput {
+    background: #fff !important;
+    color: var(--text-primary-inverse) !important;
+}
+
+.blocklyEditableText {
+    > rect.blocklyDropdownRect {
+        fill: transparent !important;
+        stroke: rgba(0, 0, 0, 0.2) !important;
+        stroke-width: 1px !important;
+    }
+
+    > rect {
+        fill-opacity: 1 !important;
+    }
+
+    > text.blocklyDropdownText {
+        fill: #fff !important;
+    }
+
+    > text {
+        fill: var(--text-primary-inverse) !important;
+    }
+}
+
+.blocklyDropdownText  {
+    > tspan {
+        fill: inherit !important;
+    }
+}

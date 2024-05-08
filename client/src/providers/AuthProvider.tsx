@@ -1,42 +1,48 @@
 import { useState, useEffect } from 'react';
 import AuthContext, { IAuthContext } from '@/contexts/AuthContext';
 import User from '@/utils/models/User';
-import { trpc } from '@/utils/trpc';
-import app from '@/utils/app';
-import LargeLoadingIcon from '@/LargeLoadingIcon';
+import { trpc } from '@/utils/trpc/trpc';
+import appState from '@/utils/appState';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { getColorValue } from '@tjallingf/react-utils';
 
 export interface IAuthProviderProps {
     children?: React.ReactNode;
 }
 
 const AuthProvider: React.FunctionComponent<IAuthProviderProps> = ({ children }) => {
-    const [ value, setValue ] = useState({} as IAuthContext);
     const userQuery = trpc.user.get.useQuery({ id: 'me' });
+    const [ user, setUser ] = useState<User|null>(null);
 
     useEffect(() => {
         if(!userQuery.data) return;
 
-        setValue({
-            user: new User(userQuery.data),
-            refresh: userQuery.refetch
-        })
+        setUser(new User(userQuery.data));
     }, [ userQuery.data ]);
 
     useEffect(() => {
-        if(!value.user) return;
-        
-        app().currentUser = value.user;
+        appState.currentUser = user;
 
-        document.body.dataset.colorScheme = app().currentColorScheme();
-    }, [ value.user ]);
+        // Get app color scheme
+        const colorScheme = appState.getColorScheme();
 
-    if (!value.user) {
-        return (
-            <LargeLoadingIcon label="Loading user..." />
-        )
-    }
+        // Update body attribute
+        document.body.dataset.colorScheme = colorScheme;
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+        // Update localStorage
+        localStorage.setItem('user.settings.colorScheme', colorScheme);
+
+        // Update status bar color
+        StatusBar.setStyle({ style: colorScheme === 'dark' ? Style.Dark : Style.Light }).catch(() => {});
+        StatusBar.setBackgroundColor({ color: getColorValue('gray-0')! }).catch(() => {});
+    }, [ user ]);
+
+    return <AuthContext.Provider 
+        value={{ 
+            user: user!, 
+            refetch: userQuery.refetch
+        }}>
+        {children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

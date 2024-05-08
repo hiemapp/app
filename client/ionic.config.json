@@ -1,0 +1,7 @@
+{
+  "name": "Hiem",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

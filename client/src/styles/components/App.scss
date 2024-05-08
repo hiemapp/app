@@ -7,20 +7,12 @@
     opacity: 0;
 }
 
-.NavbarButton--inactive__icon {
-    color: var(--Button-color);
-}
-
-.NavbarButton--active__icon {
-    color: var(--Button--active-color);
-}
-
 .NavbarButton {
-    &.Button--active .NavbarButton--active__icon {
+    &.Button--active .NavbarButton__icon--active {
         opacity: 1;
     }
 
-    &:not(.Button--active) .NavbarButton--inactive__icon {
+    &:not(.Button--active) .NavbarButton__icon--inactive {
         opacity: 1;
     }
 }

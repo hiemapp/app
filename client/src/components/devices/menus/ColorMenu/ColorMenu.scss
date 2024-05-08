@@ -1,0 +1,51 @@
+.ColorMenu__section {
+    width: 100%;
+}
+
+.ColorMenu__button-list {
+    --buttons-per-row: 6;
+    --button-size: 2.5rem;
+    width: calc(var(--buttons-per-row) * var(--button-size) + (var(--buttons-per-row) - 1) * var(--bs-gutter-x));
+
+    > .Button {
+        height: var(--button-size);
+        width: var(--button-size);
+        justify-content: center;
+    }
+
+    @include min-breakpoint($breakpoint-xs) {
+        --button-size: 3rem;
+    }
+}
+
+.ColorMenu__swatch {
+    --ColorMenu__swatch-color: var(--_hex);
+    background: var(--ColorMenu__swatch-color) !important;
+    position: relative;
+    transition: 75ms transform ease, var(--Button-animation-duration) ease;
+
+    .ColorMenu__swatch-indicator {
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 33%;
+        width: 33%;
+        background: var(--text-light);
+        border-radius: 999px;
+        transform: translate(-50%, -50%) scale(0);
+        transition: 250ms ease-out;
+    }
+
+    &:hover, &.Button--focus, &.Button--active {
+        transform: scale(1.1);
+
+        .ColorMenu__swatch-indicator {
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+}
+
+.ColorMenu__picker-trigger {
+    --Button-background: transparent !important;
+}

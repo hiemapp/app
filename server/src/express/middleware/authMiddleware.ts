@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from 'express';
-import { getUserFromCookies } from '@/auth';
+import { getUserFromToken } from '@/auth';
 
 // The auth middleware adds the req.user property
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    req.user = getUserFromCookies(req.cookies);
+    req.user = getUserFromToken(req.headers['x-auth-token']);
     
     next();
 }

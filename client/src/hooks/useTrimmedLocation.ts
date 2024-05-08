@@ -1,5 +1,5 @@
 import { useLocation, Location } from 'react-router';
-import { trim } from 'lodash';
+import trim from 'lodash/trim';
 
 function useTrimmedLocation(): Location {
   const location = useLocation();

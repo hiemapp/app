@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ZYLAX</title>
+        <title>Hiem</title>
 
         <!-- Bootstrap -->
         <link
@@ -35,6 +35,14 @@
         />
     </head>
     <body>
+        <script>
+            try {
+                const colorScheme = localStorage.getItem('user.settings.colorScheme');
+                if(typeof colorScheme === 'string') {
+                    document.body.setAttribute('data-color-scheme', colorScheme);
+                }
+            } catch(err) {}
+        </script>
         <div id="root"></div>
 
         <script>

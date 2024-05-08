@@ -1,6 +1,9 @@
 const { CORE_PACKAGE_JSON } = require('./lib/constants');
 const editJsonFile = require('edit-json-file');
-require('dotenv').config();
+
+if(process.env.NODE_ENV !== 'development') {
+    process.env.NODE_ENV = 'production';
+}
 
 async function main() {
     const file = editJsonFile(CORE_PACKAGE_JSON);

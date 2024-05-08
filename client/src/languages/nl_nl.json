@@ -1,0 +1,62 @@
+{
+    "@setup": {
+        "homes": {
+            "page.title": "Jouw woningen",
+            "noHomes.message": "Je hebt nog geen woningen toegevoegd.",
+            "actions": {
+                "connect.label": "Verbinden"
+            },
+            "addHome": {
+                "link": "Woning toevoegen...",
+                "title": "Woning toevoegen",
+                "form": {
+                    "serverUrl": {
+                        "label": "Server url",
+                        "placeholder": "192.168.0.0:4300"
+                    },
+                    "submit": {
+                        "label": "Toevoegen"
+                    }
+                },
+                "connectionError.message": "De server ''{baseUrl}'' kan niet worden bereikt. Controleer of de url correct is en of de server online is."
+            }
+        }
+    },
+    "@main": {
+        "actions": {
+            "edit.label": "Bewerken",
+            "confirm.label": "Bevestigen",
+            "undo.label": "Bewerking ongedaan maken",
+            "redo.label": "Bewerking opnieuw uitvoeren",
+            "upload.label": "Uploaden"
+        },
+        "devices": {
+            "page.title": "Apparaten"
+        },
+        "dashboard": {
+            "page.title": "Dashboard"
+        },
+        "admin": {
+            "page.title": "Admin"
+        },
+        "login": {
+            "page.title": "Inloggen",
+            "form": {
+                "username.label": "Gebruikersnaam",
+                "password.label": "Wachtwoord",
+                "submit.label": "Inloggen"
+            },
+            "home": {
+                "currentHome.message": "Verbonden met {displayName}.",
+                "changeHome.link": "Wijzigen..."
+            },
+            "resetPassword.link": "Wachtwoord vergeten?"
+        },
+        "records": {
+            "page.title": "Metingen"
+        },
+        "flows": {
+            "page.title": "Flows"
+        }
+    }
+}

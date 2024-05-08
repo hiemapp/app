@@ -1,77 +1,195 @@
-.ReactModalPortal {
-    position: relative;
-    z-index: 99999;
+@mixin Modal--after-open {
+    &.ReactModal__Content--after-open:not(.ReactModal__Content--before-close) {
+        @content;
+    }
 }
 
-div.ReactModal__Overlay {
-    background-color: rgb(0, 0, 0, 0.75) !important;
+@mixin Modal--before-close {
+    &.ReactModal__Content--before-close {
+        @content;
+    }
+}
+
+// Allow clicking through the overlay when it's closing  
+.ReactModal__Overlay--before-close {
+    pointer-events: none !important;
+}
+
+.Modal {
+    --Modal-padding-x: 1rem;
+    --Modal-padding-y: 0.75rem;
+    --Modal-transform-y: 100%;
+    --Modal-transform-x: -50%;
+    --Modal-origin-x: 50%;
+    --Modal-origin-y: 50%;
+    --Modal-dragging-position: 0;
+    --Modal-scale: 1;
+    --Modal-opacity: 1;
+    border-radius: var(--border-radius-md);
+    position: absolute;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    background-color: var(--gray-1);
+    color: var(--text-primary);
+    border: 1px solid var(--gray-0);
+    outline: none !important;
+    transition: 300ms ease-out, 200ms opacity 100ms ease-out;
+    transform: translate(var(--Modal-transform-x), var(--Modal-transform-y)) scale(var(--Modal-scale)) !important;
+    transform-origin: 50% 50%;
+    opacity: var(--Modal-opacity);
+    max-height: 100%;
+
+    &.Modal--dragging {
+        transition: none !important;
+        transform: translate(var(--Modal-transform-x), var(--Modal-dragging-position)) !important;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+
+        .Modal__handle {
+            cursor: grabbing;
+        }
+    }
+
+    @include max-breakpoint($breakpoint-phone) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        --Modal-transform-x: 0 !important;
+
+        @include Modal--after-open {
+            --Modal-transform-y: 0;
+        }
+    }
+
+    // Desktop
+    @include min-breakpoint($breakpoint-phone) {
+        --Modal-padding-y: 1.5rem;
+        --Modal-padding-x: 1.5rem;
+        --Modal-transform-x: -50%;
+        right: auto !important;
+        bottom: auto !important;
+
+        .Modal__title {
+            margin-right: 1.5em;
+        }
+
+        &.Modal--origin-dynamic {
+            --Modal-scale: 0.2;
+            --Modal-opacity: 0;
+            --Modal-transform-y: -50%;
+            top: var(--Modal-origin-y) !important;
+            left: var(--Modal-origin-x) !important;
+            
+            @include Modal--after-open {
+                top: 50% !important;
+                left: 50% !important;
+            }
+        }
+
+        &.Modal--origin-center {
+            --Modal-transform-y: 5%;
+            top: 100% !important;
+            left: 50% !important;
+
+            @include Modal--after-open {
+                top: 50% !important;
+                --Modal-transform-y: -50%;
+            }
+        }
+
+        @include Modal--after-open() {
+            --Modal-scale: 1;
+            --Modal-opacity: 1;
+        }
+
+        .Modal__close-button {
+            display: block !important;
+        }
+    }
+}
+
+.Modal__handle-target {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 99;
+}
+
+.Modal__handle {
+    position: relative;
+    cursor: grab;
+    padding-top: var(--Modal-padding-y);
+    margin-bottom: calc(0.5 * var(--Modal-padding-y));
+    width: 100%;
+
+    @include min-breakpoint($breakpoint-phone) {
+        display: none !important;
+    }
+}
+
+.Modal__header {
+    padding: var(--Modal-padding-y) var(--Modal-padding-x);
+    border-bottom: 1px solid var(--gray-3);
+    width: 100%;
+}
+
+.Modal__title {
+    font-size: 1.5rem;
+    text-align: center;
+
+    @include min-breakpoint($breakpoint-phone) {
+        text-align: left;
+    }
+}
+
+.Modal__close-button {
+    --Button-color: var(--gray-10);
+    --Button--hover-color: var(--text-primary);
+    --Button--focus-color: var(--text-primary);
+    display: none !important;
+
+    @include min-breakpoint($breakpoint-phone) {
+        display: block !important;
+    }
+}
+
+.Modal__body {
+    padding: var(--Modal-padding-y) var(--Modal-padding-x);
+    overflow: auto;
+    width: 100%;
+}
+
+.Modal__handle-indicator {
+    position: relative;
+    width: 40px;
+    height: 4px;
+    background: var(--gray-5);
+    border-radius: 99px;
+}
+
+/* ReactModal */
+.ReactModalPortal {
+    position: relative;
+    z-index: 2500;
+}
+
+.ReactModal__Overlay {
+    background-color: transparent !important;
     backdrop-filter: none !important;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    transition: background-color 250ms ease-in-out;
 }
 
-.ReactModal__Overlay {
-    opacity: 0;
-    transition: opacity 250ms ease-in-out;
-}
-
-.ReactModal__Overlay--after-open {
-    opacity: 1;
-}
-
-.ReactModal__Overlay--before-close {
-    opacity: 0;
-}
-
-@media(min-width: 480px) {
-    .ReactModal__Content {
-        transform: translate(-50%, 0%) !important;
-        transition: transform 250ms ease-out;
-    }
-
-    .ReactModal__Content--after-open {
-        transform: translate(-50%, -50%) !important;
-    }
-
-    .ReactModal__Content--before-close {
-        transform: translate(-50%, 0%) !important;
-    }
-}
-
-@media(max-width: 479.98px) {
-    .ReactModal__Overlay>.ReactModal__Content {
-        top: unset !important;
-        left: 0 !important;
-        bottom: 0 !important;
-        right: 0 !important;
-        transform: translate(0, 50%);
-        transition: transform 250ms ease-out;
-        border-bottom-right-radius: 0 !important;
-        border-bottom-left-radius: 0 !important;
-    }
-
-    .ReactModal__Overlay>.ReactModal__Content--after-open {
-        transform: translate(0, 0) !important;
-    }
-
-    .ReactModal__Overlay>.ReactModal__Content--before-close {
-        transform: translate(0, 50%) !important;
-    }
+.ReactModal__Overlay--after-open:not(.ReactModal__Overlay--before-close) {
+    background-color: rgb(0, 0, 0, 0.5) !important;
 }
 
 
 
-.ReactModal__Content {
-    padding: 1rem;
-    border-radius: var(--border-radius-md);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--gray-1);
-    color: var(--text-primary);
-    border: 1px solid var(--gray-0);
-    outline: none !important;
-}

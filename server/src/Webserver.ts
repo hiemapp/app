@@ -1,54 +1,62 @@
-import express from 'express';
+import express, { Express } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { Config, logger, utils } from 'zylax';
+import { Config, utils, Logger } from 'hiem';
 import { trpcMiddleware } from './express/middleware/trpcMiddleware';
 import authMiddleware from './express/middleware/authMiddleware';
-import http from 'http';
 import { Server } from 'socket.io';
+import http from 'http';
 
-export default class Webserver {
-   static server: http.Server;
-   static io: Server;
-   static logger = logger.child({ label: 'Webserver' });
+export default class WebServer {
+     static app: Express;
+     static logger: Logger;
+     static server: http.Server;
+     static io: Server;
 
-   static init() {
-        const app = express();
+     static init(ssl = true) {
+          this.app = express()
+          this.logger = new Logger({ label: this.name });
+          
+          // Parse cookies
+          this.app.use(cookieParser());
 
-        // Parse cookies
-        app.use(cookieParser());
+          // Setup static directory
+          // @ts-ignore
+          this.app.use(express.static(utils.dirs().PUBLIC));
 
-        // Setup static directory
-        // @ts-ignore
-        app.use(express.static(utils.dirs().PUBLIC));
+          // Allow CORS
+          this.app.use(cors());
 
-        // Allow CORS
-        app.use(cors());
-        
-        app.use(authMiddleware);
+          this.app.use(authMiddleware);
 
-        // Disable 'X-Powered-By' header
-        app.disable('x-powered-by');
+          // Disable 'X-Powered-By' header
+          this.app.disable('x-powered-by');
 
-        // Setup session middleware
-        this.logger.debug('Setting up session middleware...');
+          // Route that returns basic information about the server
+          this.app.get('/api/metadata', (req, res) => {
+               res.json({
+                    home: Config.get('home')
+               })
+          });
 
-        // Add tRPC middleware
-        this.logger.debug('Setting up tRPC middleware...');
-        app.use('/trpc', trpcMiddleware);
+          // Add tRPC middleware
+          this.app.use('/trpc', trpcMiddleware);
 
-        // Create websocket
-        this.server = http.createServer(app);
-        this.io = new Server(this.server);
-   }
+          // Create websocket
+          this.server = http.createServer(this.app);
+          this.io = new Server(this.server, {
+               cors: {
+                    origin: '*'
+               }
+          });
+     }
 
-   static start() {
-        // Get webserver port
-        const port = Config.get('system.server.port');
+     static start() {
+          // Get webserver port
+          const port = Config.get('system.server.port');
 
-        this.logger.debug(`Starting server on port ${port}...`);
-        this.server.listen(port, () => {
-            this.logger.info(`Listening at http://localhost:${port}.`);
-        });
-   }
+          this.server.listen(port, () => {
+               this.logger.info(`Listening at http://localhost:${port}.`);
+          });
+     }
 }

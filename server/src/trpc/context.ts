@@ -1,8 +1,8 @@
-import type { Constructor } from 'zylax/@types/helpers'
-import { UserController, type ModelWithProps } from 'zylax';
+import type { Constructor } from 'hiem/@types/helpers'
+import { UserController, type ModelWithProps } from 'hiem';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
-import type { User } from 'zylax';
+import type { User } from 'hiem';
 
 interface Request extends ExRequest {
     user: User

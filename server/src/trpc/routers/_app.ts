@@ -5,10 +5,9 @@ import { flowRouter } from './flow';
 import { authRouter } from './auth';
 import { flowEditorRouter } from './flowEditor';
 import { router } from '../trpc';
-import { dashboardRouter } from './dashboard';
-import { recordingRouter } from './recording';
-import { scriptRouter } from './script';
-import { scriptEditorRouter } from './scriptEditor';
+import { recordRouter } from './record';
+import { homeRouter } from './home';
+
 
 export const appRouter = router({
     user: userRouter,
@@ -17,10 +16,8 @@ export const appRouter = router({
     auth: authRouter,
     flowEditor: flowEditorRouter,
     flow: flowRouter,
-    dashboard: dashboardRouter,
-    script: scriptRouter,
-    scriptEditor: scriptEditorRouter,
-    recording: recordingRouter
+    record: recordRouter,
+    home: homeRouter
 });
 
 export type AppRouter = typeof appRouter;
