@@ -4,7 +4,7 @@ import { Icon, Box, getPalette, Button } from '@tjallingf/react-utils';
 import classNames from 'classnames';
 import './Device.scss';
 import DeviceDisplayRecord from '../DeviceDisplayRecord';
-import DeviceDisplayText from '../DeviceDisplayText/DeviceDisplayText';
+import DeviceDisplayTextList from '../DeviceDisplayTextList';
 import type { DeviceType } from 'hiem';
 import Modal from '@/components/Modal';
 import useSocket from '@/hooks/useSocket';
@@ -24,10 +24,10 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
     const palette = getPalette(color);
     const buttonRef = useRef<HTMLButtonElement>(null);
     
-    const hasMenu = hasTrait(traits, trait => trait.config.menu === true);
+    const hasMenu = hasTrait(traits, trait => trait.config.menu && !trait.options.sensor);
     const hasRecords = (options?.recording?.enabled === true);
     const primaryAction = findTraitOption(traits, 'primaryAction');
-    const passive = findTraitOption(traits, 'passive');
+    const sensor = findTraitOption(traits, 'sensor');
 
     const { user } = useAuth();
     const [ menuVisible, setMenuVisible ] = useState(false);
@@ -62,7 +62,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
             return;
         }
         
-        if(typeof primaryAction?.command === 'string' && passive !== true) {
+        if(typeof primaryAction?.command === 'string' && sensor !== true) {
             execute(primaryAction.command, primaryAction.params);
             return;
         }
@@ -79,7 +79,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
             return <DeviceDisplayRecord content={display.content} deviceColor={color} id={id} />;
         }
 
-        return <DeviceDisplayText content={display.content} />;
+        return <DeviceDisplayTextList content={display.content} />;
     };
 
     // const renderMenu = () => {
@@ -123,12 +123,12 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
                 onClick={handleClick}
                 variant="secondary" 
                 active={display.isActive}
-                disabled={passive}
+                disabled={sensor}
                 ref={buttonRef}
                 className={classNames('Device', { 
                         'Device--with-menu': hasMenu,
                         'Device--with-records': hasRecords,
-                        'Device--sensor': passive,
+                        'Device--sensor': sensor,
                         'Device--error': !!error
                     })}
                 style={{

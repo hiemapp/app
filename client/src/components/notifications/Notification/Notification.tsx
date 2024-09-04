@@ -32,8 +32,6 @@ const Notification: React.FunctionComponent<NotificationProps> = ({
             return data.message;
         }
 
-        console.log(data.message);
-
         if (typeof data.message === 'object') {
             if('id' in data.message && typeof data.message.id === 'string') {
                 return <FormattedMessage id={data.message.id} values={data.message.values} />
