@@ -41,10 +41,10 @@ const ColorMenu: React.FunctionComponent<DeviceMenuProps> = ({
                 onChange={handleStatusChange}
                 value={device.state.status ? 'on' : 'off'}>
                 <Button value="on" variant="secondary">
-                    <FormattedMessage id="@global.generic.status.on.label" />
+                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.on.label" />
                 </Button>
                 <Button value="off" variant="secondary">
-                    <FormattedMessage id="@client.generic.status.off.label" />
+                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.off.label" />
                 </Button>
             </ButtonGroup>
         </div>
