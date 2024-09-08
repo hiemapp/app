@@ -40,7 +40,7 @@ export const deviceRouter = router({
             const device = await ctx.getResourceOrThrow(Device, input.id);
 
             const promises = input.commands.map(command => {
-                return device.execute(command.name, command.params, { user: ctx.req.user })
+                return device.execute(command.name, command.params, ctx.req.user)
             })
             
             await Promise.all(promises);

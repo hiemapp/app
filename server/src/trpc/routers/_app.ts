@@ -7,6 +7,8 @@ import { flowEditorRouter } from './flowEditor';
 import { router } from '../trpc';
 import { recordRouter } from './record';
 import { homeRouter } from './home';
+import { scriptRouter } from './script';
+import { scriptEditorRouter } from './scriptEditor';
 
 
 export const appRouter = router({
@@ -17,7 +19,9 @@ export const appRouter = router({
     flowEditor: flowEditorRouter,
     flow: flowRouter,
     record: recordRouter,
-    home: homeRouter
+    home: homeRouter,
+    script: scriptRouter,
+    scriptEditor: scriptEditorRouter
 });
 
 export type AppRouter = typeof appRouter;

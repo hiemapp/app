@@ -1,4 +1,4 @@
-.SearchInput .TextInput-wrapper:focus-within + .SearchInput__suggestions {
+.SearchInput .TextInput-wrapper:focus-within + .SearchInput__items {
     opacity: 1;
     transform: translateY(0);
     pointer-events: all;
@@ -9,7 +9,7 @@
     overflow: visible;
 }
 
-.SearchInput__suggestions {
+.SearchInput__items {
     opacity: 0;
     transform: translateY(-10%);
     pointer-events: none;
@@ -19,9 +19,10 @@
     top: 100%;
     margin-top: 0.25rem;
     z-index: 100;
+    background: var(--gray-2);
 }
 
-.SearchInput__suggestion {
+.SearchInput__item {
     width: 100%;
     margin: 0.25rem 0;
     color: var(--text-primary) !important;

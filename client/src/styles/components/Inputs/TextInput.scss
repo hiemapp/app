@@ -1,5 +1,5 @@
 .TextInput {
-    background: var(--TextInput-background);
+    background: var(--TextInput-background) !important;
     color: var(--TextInput-color) !important;
     border-radius: var(--border-radius-md);
     outline: none;
@@ -8,13 +8,13 @@
     position: relative;
     z-index: 1;
 
-    &:focus {
-        box-shadow: 0 0 1px 1px var(--blue-5);
-    }
-
     &::placeholder {
         color: var(--text-muted);
     }
+}
+
+.TextInput:focus {
+    box-shadow: 0 0 1px 1px var(--blue-5);
 }
 
 .TextInput-wrapper {

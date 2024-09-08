@@ -63,43 +63,17 @@ const MainLayout: React.FunctionComponent = () => {
         <div className="MainLayout">
             <SocketProvider>
                 <ViewGrid>
-                    <Topbar>
-                        <Container>
-                            <Box direction="row" align="center">
-                                <div className="Topbar__title">
-                                    <h1 className="Topbar__page-title"><FormattedMessage id={`@main.${pageId}.page.title`} defaultMessage={" "} /></h1>
-                                    {/* <div className="Topbar__home-title">
-                                        <Dropdown renderLabel={i => <h1>{i.props.title}</h1>}>
-                                            <DropdownItem value="test" title="Hallo wereld"></DropdownItem>
-                                        </Dropdown>
-                                    </div> */}
-                                </div>
-                                {/* <h1 className="Topbar__title">
-                                    {home.metadata.displayName}
-                                </h1> */}
-                                <div className="ms-auto">
-                                    <Button
-                                        variant="secondary"
-                                        href={currentHome.scopePath('/login')}
-                                        square
-                                        size="lg"
-                                        aria-label="Visit the login page"
-                                    >
-                                        <Icon id="user" size={20} />
-                                    </Button>
-                                </div>
-                            </Box>
-                        </Container>
-                    </Topbar>
                     <Outlet />
                     <NotificationCenter />
                     <Navbar show={true}>
                         {renderNavbarButton(currentHome.scopePath('/dashboard'), 'house')}
                         {renderNavbarButton(currentHome.scopePath('/devices'), 'plug')}
                         {renderNavbarButton(currentHome.scopePath('/records'), 'chart-simple')}
-                        {renderNavbarButton(currentHome.scopePath('/flows'), 'clock')}
-                        {/* {renderNavbarButton(home.scopePath('/scripts'), 'shuffle')} */}
+                        {/* {renderNavbarButton(currentHome.scopePath('/flows'), 'clock')} */}
+                        {renderNavbarButton(currentHome.scopePath('/scripts/1/edit'), 'shuffle')}
                         {renderNavbarButton(currentHome.scopePath('/admin'), 'shield')}
+                        <Navbar.Divider align="end" visible={false} />
+                        {renderNavbarButton(currentHome.scopePath('/login'), 'user')}
                     </Navbar>
                 </ViewGrid>
             </SocketProvider>

@@ -1,4 +1,5 @@
-import { Page, Container, Tile, Box, Icon, colors, Button } from '@tjallingf/react-utils';
+import { Container, Tile, Box, Icon, Button } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import ErrorBoundary from '@/ErrorBoundary';
 import { trpc } from '@/utils/trpc/trpc';
 import HomeController from '@/utils/homes/HomeController';
@@ -10,7 +11,7 @@ const Flows: React.FunctionComponent = () => {
     if (!flowIndexQuery.data) return null;
 
     return (
-        <Page id="Flows">
+        <Page id="flows">
             <Container>
                 <Box direction="column" gutterY={2}>
                     {flowIndexQuery.data && flowIndexQuery.data.map(flow => (

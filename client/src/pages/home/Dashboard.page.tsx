@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { Page, Container } from '@tjallingf/react-utils';
+import { Container } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import Masonry from '@/Views';
 import DashboardWidget from '../../components/dashboard/DashboardWidget';
 import { trpc } from '@/utils/trpc/trpc';
@@ -46,7 +47,7 @@ const Dashboard: React.FunctionComponent = () => {
 
 
     return (
-        <Page id="Dashboard">
+        <Page id="dashboard">
             <Container>
                 <Masonry
                     breakpointCols={{ default: 4, 1200: 3, 992: 2, 576: 1 }}

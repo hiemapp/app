@@ -1,0 +1,29 @@
+@import '../../styles/components/Inputs/TextInput.scss';
+
+.Select {
+    z-index: 99;
+}
+
+.Select__control, .Select__value-container {
+    overflow: visible !important;
+}
+
+.Select__control {
+    @extend .TextInput;
+    z-index: 99;
+}
+
+.Select__control--is-focused {
+    @extend .TextInput, :focus;
+}
+
+.Select__option {
+    --Button--hover-background: var(--blue-4) !important;
+    --Button--active-background: var(--blue-4) !important;
+    cursor: pointer !important;
+}
+
+.Select__menu {
+    background: var(--gray-2);
+    padding: 0.25rem;
+}

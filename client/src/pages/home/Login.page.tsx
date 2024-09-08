@@ -1,5 +1,6 @@
 import { useState, FunctionComponent } from 'react';
-import { Container, Button, TextInput, PasswordInput, Box, Page } from '@tjallingf/react-utils';
+import { Container, Button, TextInput, PasswordInput, Box } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import FormField from '@/components/forms/FormField';
 import Form from '@/components/forms/Form';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -38,7 +39,7 @@ const Login: FunctionComponent = () => {
     };
 
     return (
-        <Page id="Login">
+        <Page id="login">
             <Container>
                 {HomeController.isNativeApp() && (
                     <p>

@@ -1,4 +1,5 @@
-import { Page, Container } from '@tjallingf/react-utils';
+import { Container } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import React from 'react';
 
 export interface IRouteErrorProps {}
