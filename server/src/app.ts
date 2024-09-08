@@ -1,4 +1,4 @@
-import { Database, Config, logger, DeviceController, ConnectorController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, NotificationEmitter, User, DashboardWidgetServer } from 'hiem';
+import { Database, Config, logger, DeviceController, ConnectorController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, NotificationEmitter, User, DashboardWidgetServer, ScriptController, ScriptLibManager } from 'hiem';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import WebServer from './WebServer';
@@ -55,7 +55,11 @@ dayjs.extend(customParseFormat);
     await ConnectorController.load();
     await DeviceController.load();
     await FlowController.load();
+    await ScriptController.load();
     LanguageController.load();
+
+    // Load scripting libs
+    await ScriptLibManager.load();
 
     // Initialize the webserver
     WebServer.init();
@@ -97,5 +101,5 @@ dayjs.extend(customParseFormat);
     // Start the webserver
     WebServer.start();
 
-    // DashboardWidgetServer.start();
+    ScriptController.find(1).reload();
 })();

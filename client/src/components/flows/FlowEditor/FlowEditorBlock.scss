@@ -1,0 +1,25 @@
+.FlowEditorBlock__head {
+    color: var(--FlowEditorBlock__head-color);
+    background-color: var(--FlowEditorBlock__head-background);
+    width: 3.5rem;
+    height: 3.5rem;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    transition: 150ms ease-out;
+
+    .Icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.FlowEditorBlock {
+    background-color: transparent;
+
+    &:hover .FlowEditorBlock__head {
+        color: var(--FlowEditorBlock__head-background);
+        background-color: var(--FlowEditorBlock__head-color);
+    }
+}

@@ -22,24 +22,31 @@ const Tooltip: FunctionComponent<TooltipProps> = ({
   let timer = useRef<any>(null);
   const [ show, setShow ] = useState(false);
   
-  function handleMouseEnter() {
+  function showTooltip() {
     timer.current = setTimeout(() => {
       setShow(true);
     }, delay);
   }
-
-  function handleMouseLeave() {
+  
+  function hideTooltip() {
     if(timer.current) {
       setShow(false);
       clearTimeout(timer.current);
     }
   }
+
+  // Prevent the tooltip from being shown if the user has
+  // already clicked on the element.
+  function preventTooltip() {
+    if(!show) hideTooltip();
+  }
   
   return (
     <Element {...rest} 
       className={classNames('Tooltip', className)} 
-      onMouseEnter={handleMouseEnter} 
-      onMouseLeave={handleMouseLeave}>
+      onMouseDown={preventTooltip}
+      onMouseEnter={showTooltip} 
+      onMouseLeave={hideTooltip}>
         <span 
           className={classNames('Tooltip__message', { 'Tooltip__message--show': show })}>
             <FormattedMessage id={message} />

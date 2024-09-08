@@ -1,218 +1,133 @@
 import React, { memo, useMemo, useEffect, useState, useRef } from 'react';
-import { Button, Box, palettes } from '@tjallingf/react-utils';
+import { Button, Box, palettes, Tile, colors } from '@tjallingf/react-utils';
 import { Icon } from '@tjallingf/react-utils';
-import BlocklyWorkspace from '@/components/BlocklyWorkspace';
-import FlowEditorBlock from '@/utils/flows/editor/FlowEditorBlock';
-import { useIntl } from 'react-intl';
-import { registerCustomTheme } from '@/blockly/overrides/themes/CustomTheme';
 import './FlowEditor.scss';
 import { trpc } from '@/utils/trpc/trpc';
-import Tooltip from '@/components/Tooltip';
+import { FlowBlockCategoryManifest, FlowProps, IFlowBlockLayoutSerialized, IFlowBlockManifest } from 'hiem';
+import LargeLoadingIcon from '@/LargeLoadingIcon';
+import { FormattedMessage, useIntl } from 'react-intl';
 import Modal from '@/components/Modal';
-import type { IFlowBlockManifest, IFlowBlockLayoutSerialized, FlowBlockCategoryManifest } from 'hiem';
-import * as Blockly from 'blockly';
+import FlowEditorToolbox from './FlowEditorToolbox';
+import List from '@/components/List';
+import FlowBlockHelper from '@/utils/flows/editor/FlowBlockHelper';
+import FlowEditorBlock from './FlowEditorBlock';
+import FlowBlockCategoryHelper from '@/utils/flows/editor/FlowBlockCategoryHelper';
+import ListItem from '@/components/List/ListItem';
+import FlowEditorModal from './FlowEditorModal';
 
-// Register custom fields
-import '@/blockly/overrides/fields/field_dropdown_async';
-import '@/blockly/overrides/fields/field_dropdown_no_trim';
-
-export interface IFlowEditorData {
-    initialized: boolean;
-    serializer: Blockly.serialization.blocks.BlockSerializer;
-    workspace: Blockly.WorkspaceSvg;
-    blocks: any[];
+export interface FlowEditorProps {
+    flowData: any;
+    blockData: any[],
+    blockCategoryData: any[]
 }
 
-export interface IFlowEditorProps {
-    flowId: number;
-    blocks: Array<{
-        type: string;
-        manifest: IFlowBlockManifest;
-        layout: IFlowBlockLayoutSerialized;
-    }>;
-    blockCategories: Array<{
-        extensionId: string;
-        id: string;
-        manifest: FlowBlockCategoryManifest;
-    }>;
-}
-
-const editor: IFlowEditorData = {
-    initialized: false,
-    serializer: new Blockly.serialization.blocks.BlockSerializer(),
-    blocks: []
-} as any;
-
-const FlowEditor: React.FunctionComponent<IFlowEditorProps> = memo(({ 
-    flowId, 
-    blocks, 
-    blockCategories
+const FlowEditor: React.FunctionComponent<FlowEditorProps> = ({ 
+    flowData,
+    blockData,
+    blockCategoryData
 }) => {
-    const { formatMessage } = useIntl();
-    const [toolboxContents, setToolboxContents] = useState<any[]>([]);
-    const [renderedToolbox, setRenderedToolbox] = useState<any>();
-    const editFlow = trpc.flow.edit.useMutation();
-    const flow = trpc.flow.get.useQuery({ id: flowId });
-    const [ error, setError ] = useState<{title?: any; message?: any; buttons?: any} | null>(null);
+    const FIELDS: Array<keyof FlowProps['workspace']['json']['fields']> = ['trigger', 'condition', 'action'];
 
-    useEffect(() => {
-        if(!editor.initialized) {
-            editor.initialized = true;
-            registerBlocks();
-        }
+    const [ toolboxField, setToolboxField] = useState<keyof FlowProps['workspace']['json']['fields']|null>(null);
+    const [ toolboxOpen, setToolboxOpen ] = useState(false);
+    const [ workspace, setWorkspace ] = useState<FlowProps['workspace']>(flowData.workspace);
+    const [ editorOpen, setEditorOpen ] = useState(false);
+    const [ targetBlock, setTargetBlock ] = useState<FlowBlockHelper>();
 
-        const toolboxContents = getToolboxContents();
-        const renderedToolbox = renderToolbox(toolboxContents);
+    // Create FlowBlockHelpers from blockData
+    const blocks: FlowBlockHelper[] = useMemo(() => 
+        blockData.map(i => new FlowBlockHelper(i.type, i.manifest, i.format)), 
+    [ blockData ]);
+
+    // Create FlowBlockCategoryHelpers from blockCategoryData
+    const blockCategories = useMemo(() => 
+        blockCategoryData.map(i => {
+            const category = new FlowBlockCategoryHelper(i.id, i.manifest, i.extensionId)
+            
+            blocks.forEach(block => {
+                if(block.manifest.category === category.id) {
+                    category.addBlock(block);
+                }
+            })
+            
+            return category;
+        }), 
+    [ blockCategoryData ]);
+
+    function handleBlockEdit(block: FlowBlockHelper) {       
+        setTargetBlock(block);
+        setEditorOpen(true);
+    }
+
+    function handleToolboxBlockSelect(block: FlowBlockHelper) {
+        setWorkspace(workspace => {
+            workspace.json.fields[toolboxField!].blocks ??= [];
+            workspace.json.fields[toolboxField!].blocks.push(block.getDefaultDef());
+
+            return {...workspace};
+        })
+
+        setToolboxOpen(false);
+    }
+
+    function renderBlocks(field: keyof FlowProps['workspace']['json']['fields']) {
+        const fieldBlocks = workspace.json.fields[field].blocks;
         
-        setToolboxContents(toolboxContents);
-        setRenderedToolbox(renderedToolbox);
-    }, []);
+        return fieldBlocks.map((def: any) => {
+            const block = blocks.find(block => block.type === def.type)!;
 
-    function loadState(state: any) {
-        if(!editor.workspace || !state?.blocks?.length) return;
-        try {
-            editor.serializer.load(state, editor.workspace);
-        } catch(err) {
-            console.error(err);
-            editor.serializer.load({ languageVersion: 0, blocks: [] }, editor.workspace);
-        }
-    }
+            let onClick: any = undefined;
+            if(block.format?.inputs.length) {
+                onClick = () => handleBlockEdit(block);
+            }
 
-    function handleInject(workspaceSvg: Blockly.WorkspaceSvg) {
-        editor.workspace = workspaceSvg;
-        editor.workspace.addChangeListener(handleChange);
-        loadState(flow.data!.state);
-    }
-
-    function handleChange(e: any) {
-        if (['move', 'delete', 'change'].includes(e.type)) {
-            // autoSaveWorkspace();
-        }
-    }
-
-    function selectToolboxItem(index: number) {
-        return (editor.workspace as any).toolbox_.selectItemByPosition(index);
-    }
-
-    function pushEditsToServer() {
-        if(!editor.workspace) return;
-        const state = editor.serializer.save(editor.workspace);
-
-        editFlow.mutate({
-            id: flowId,
-            state: state
+            return (
+                <FlowEditorBlock 
+                    block={block}
+                    onClick={onClick} />
+            )
         })
     }
 
-    function registerBlocks() {
-        blocks.forEach(block => {
-            const editorBlock: FlowEditorBlock = new FlowEditorBlock(
-                block.type,
-                block.manifest,
-                block.layout,
-                { formatMessage, flowId },
-            );
-
-            Blockly.Blocks[block.type] = editorBlock.getBlocklyDefinition();
-            editor.blocks.push(editorBlock);
-        });
-    }
-
-    function getToolboxContents(): any {
-        // Build the toolbox
-        const categories: any[] = [];
-
-        // Register the custom theme
-        registerCustomTheme(blockCategories);
-
-        blockCategories.forEach(category => {
-            const containsBlocks = editor.blocks.filter((b) => b.manifest.category === category.id);
-            
-            const formattedName = formatMessage({
-                id: `${category.extensionId}.flows.block_categories.${category.id}.title`,
-                defaultMessage: category.id,
-            });
-
-            categories.push({
-                kind: 'category',
-                manifest: category.manifest,
-                name: formattedName,
-                contents: containsBlocks.map((b) => b.getBlocklyToolboxDefinition()),
-            });
-        });
-
-        const sortedCategories = categories.sort((a, b) => a.manifest.priority > b.manifest.priority ? -1 : 1);
-        return sortedCategories;
-    }
-
-    function renderToolbox(toolboxContents: any[]) {       
-        return (
-            <Box direction="column" className="FlowEditor__toolbox h-100" gutterY={1}>
-                {toolboxContents.map((category: any, index) => {
-                    return (
-                        <Button key={category.name}
-                            square
-                            variant="secondary"
-                            className="w-100" 
-                            onClick={() => selectToolboxItem(index)}>
-                            <Icon color={category.manifest.color} id={category.manifest.icon} />
-                            <span>{category.name}</span>
-                        </Button>
-                    )
-                })}
-            </Box>
-        )
-    }
-    
-    if (!toolboxContents.length) return null;
-    if(!flow.data) return null;
-
     return (
         <>
-            <Modal isOpen={!!error}>
-                <h1>{error?.title}</h1>
-                <div className="mb-3">
-                    {error?.message}
+            <div className="FlowEditor">
+                <div className="d-flex flex-column">
+                    {FIELDS.map(field => (
+                        <div className="FlowEditor-field mb-4">
+                            <h2 className="mb-3">
+                                <FormattedMessage id={`@main.flow_edit.editor.fields.${field}.title`} />
+                            </h2>
+                            <div className="FlowEditor-field__blocks">
+                                <List>
+                                    {renderBlocks(field)}
+                                </List>
+                            </div>
+                            <div className="FlowEditor-field__footer">
+                                <List>
+                                    <ListItem 
+                                        onClick={() => { setToolboxField(field); setToolboxOpen(true) }} 
+                                        title="Add a block" 
+                                        description="to this field" />
+                                </List>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                {error?.buttons}
-            </Modal>
-            <Box direction="column" className="FlowEditor h-100 w-100">
-                <Box direction="row" className="FlowEditor__toolbar px-2 w-100" gutterX={1}>
-                    <Tooltip message="@main.actions.undo.label">
-                        <Button square variant="secondary" onClick={() => editor.workspace.undo(false)}>
-                            <Icon id="arrow-rotate-left" />
-                        </Button>
-                    </Tooltip>
-                    <Tooltip message="@main.actions.redo.label">
-                        <Button square variant="secondary" onClick={() => editor.workspace.undo(true)}>
-                            <Icon id="arrow-rotate-right" />
-                        </Button>
-                    </Tooltip>
-                    <div className="FlowEditor__toolbar-divider"></div>
-                    <Button square variant="secondary" accent={palettes.GREEN[4]}>
-                        <Icon id="play" />
-                    </Button>
-                    <Tooltip message="@main.actions.upload.label">
-                        <Button square variant="secondary" onClick={() => pushEditsToServer()} accent={palettes.GREEN[4]}>
-                            <Icon id="arrow-up-from-bracket" />
-                        </Button>
-                    </Tooltip>
-                </Box>
-                <Box direction="row" wrap={false} className="h-100 w-100">
-                    {renderedToolbox}
-                    <BlocklyWorkspace
-                        onInject={handleInject}
-                        injectOptions={{
-                            toolbox: { kind: 'categoryToolbox', contents: toolboxContents },
-                            theme: 'custom',
-                            renderer: 'thrasos',
-                            sounds: false
-                        }}
-                    />
-                </Box>
-            </Box>
+            </div>
+            <FlowEditorToolbox 
+                blocks={blocks}
+                blockCategories={blockCategories}
+                field={toolboxField} 
+                isOpen={toolboxOpen}
+                onRequestClose={() => setToolboxOpen(false)}
+                onSelect={handleToolboxBlockSelect} />
+            <FlowEditorModal 
+                block={targetBlock}
+                isOpen={editorOpen}
+                onRequestClose={() => setEditorOpen(false)} />
         </>
-    );
-});
+    )
+};
 
 export default FlowEditor;

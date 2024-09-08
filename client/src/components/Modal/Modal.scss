@@ -39,7 +39,7 @@
     transform: translate(var(--Modal-transform-x), var(--Modal-transform-y)) scale(var(--Modal-scale)) !important;
     transform-origin: 50% 50%;
     opacity: var(--Modal-opacity);
-    max-height: 100%;
+    max-height: 95%;
 
     &.Modal--dragging {
         transition: none !important;

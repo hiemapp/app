@@ -1,4 +1,5 @@
-import { Page, Container } from '@tjallingf/react-utils';
+import { Container } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import Masonry from '@/Views';
 import Device from '@/components/devices/Device';
 import ErrorBoundary from '@/ErrorBoundary';
@@ -50,7 +51,7 @@ const Devices: React.FunctionComponent = () => {
     }), [ deviceQueries ]);
 
     return (
-        <Page id="Devices">
+        <Page id="devices">
             <Container>
                 <Masonry
                     breakpointCols={{ default: 5, 1200: 4, 900: 3, 550: 2 }}

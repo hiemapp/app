@@ -15,7 +15,7 @@ export const flowEditorRouter = router({
                     result.push({
                         type: extModule.$module.id,
                         manifest: extModule.getManifest().toJSON(),
-                        layout: extModule.$module.methods.getLayout().serialize(),
+                        format: extModule.$module.methods.getFormat(),
                     });
                 } catch (err: any) {
                     logger.error(err);

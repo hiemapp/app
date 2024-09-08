@@ -28,7 +28,8 @@
             "confirm.label": "Bevestigen",
             "undo.label": "Bewerking ongedaan maken",
             "redo.label": "Bewerking opnieuw uitvoeren",
-            "upload.label": "Uploaden"
+            "upload.label": "Uploaden",
+            "save.label": "Opslaan"
         },
         "devices": {
             "page.title": "Apparaten"
@@ -57,6 +58,34 @@
         },
         "flows": {
             "page.title": "Flows"
+        },
+        "flow_edit": {
+            "page.title": "Bewerk ''{flowName}''",
+            "editor": {
+                "fields": {
+                    "trigger": {
+                        "title": "Wanneer"
+                    },
+                    "condition": {
+                        "title": "als"
+                    },
+                    "action": {
+                        "title": "dan"
+                    }
+                },
+                "block_picker": {
+                    "title": "Kies een blok"
+                }
+            }
+        },
+        "scripts": {
+            "page.title": "Scripts"
+        },
+        "script_edit": {
+            "page.title": "Teksteditor"
+        },
+        "textEditor": {
+            "title": "{filename} (Teksteditor)"
         }
     }
 }

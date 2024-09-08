@@ -57,14 +57,12 @@ const Modal: React.FunctionComponent<ModalProps> = ({
         window.addEventListener('touchend', onHandleBlur);
         window.addEventListener('mousemove', onHandleMove);
         window.addEventListener('touchmove', onHandleMove, { passive: false });
-        window.addEventListener('resize', onWindowResize);
 
         return () => {
             window.removeEventListener('mouseup', onHandleBlur);
             window.removeEventListener('touchend', onHandleBlur);
             window.removeEventListener('mousemove', onHandleMove);
             window.removeEventListener('touchmove', onHandleMove);
-            window.removeEventListener('resize', onWindowResize);
         }
     });
 
@@ -78,13 +76,10 @@ const Modal: React.FunctionComponent<ModalProps> = ({
         ])
     }
 
-    function onWindowResize(e: any) {
-        console.log('AAA');
-        updateOriginPos();
-    }
-
     function onHandleFocus(e: any) {
         if(!handleRef.current || !modalRef.current?.portal?.content) return;
+
+        updateOriginPos();
 
         const { pageY } = getPointer(e);
         setIsDragging(true);

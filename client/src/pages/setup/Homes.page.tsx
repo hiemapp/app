@@ -1,4 +1,5 @@
-import { Box, Button, Page, TextInput, Tile } from '@tjallingf/react-utils';
+import { Box, Button, TextInput, Tile } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import { useState } from 'react';
 import Modal from '@/components/Modal';
 import Form from '@/components/forms/Form';
@@ -63,7 +64,7 @@ const Homes: React.FunctionComponent = () => {
     const homes = HomeController.index().filter(home => home.id !== 'local');
 
     return (
-        <Page id="Homes">
+        <Page id="homes">
             <Box direction="column" align="center" justify="center" className="h-100 w-100" gutterY={3}>
                 <h1><FormattedMessage id="@setup.homes.page.title"/></h1>
                 <Tile className="p-4">

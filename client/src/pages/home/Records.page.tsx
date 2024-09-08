@@ -1,4 +1,5 @@
-import { Box, Container, Icon, LoadingIcon, Page } from '@tjallingf/react-utils';
+import { Box, Container, Icon } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import { Suspense, lazy } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
 import LargeLoadingIcon from '@/LargeLoadingIcon';
@@ -48,7 +49,7 @@ const Records: React.FunctionComponent = () => {
 
 
     return (
-        <Page id="Records">
+        <Page id="records">
             <Container>
                 <Box gutterX={1} align="center" className="mb-3">
                     <h2>Vandaag</h2>   

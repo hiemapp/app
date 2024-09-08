@@ -1,4 +1,5 @@
-import { Page } from '@tjallingf/react-utils';
+import { Container } from '@tjallingf/react-utils';
+import Page from '@/components/Page';
 import { useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
@@ -8,10 +9,12 @@ const FlowEditor = lazy(() => import('../../components/flows/FlowEditor'));
 
 const FlowEdit: React.FunctionComponent = () => {
     const { flowId } = useParams();
-    console.log(flowId);
 
+    const flow = trpc.flow.get.useQuery({ id: parseInt(flowId!) });
     const blocks = trpc.flowEditor.listBlocks.useQuery();
     const blockCategories = trpc.flowEditor.listBlockCategories.useQuery();
+
+    if(flow.isLoading) return null;
 
     const renderEditor = () => {
         if (blocks.isLoading || blockCategories.isLoading) 
@@ -20,17 +23,18 @@ const FlowEdit: React.FunctionComponent = () => {
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
                 <FlowEditor 
-                    flowId={parseInt(flowId!)} 
-                    blocks={blocks.data!} 
-                    blockCategories={blockCategories.data!} />
+                    flowData={flow.data!} 
+                    blockData={blocks.data!} 
+                    blockCategoryData={blockCategories.data!} />
             </Suspense>
         )
     }
 
-
     return (
-        <Page id="FlowEdit">
-            {renderEditor()}
+        <Page id="flow_edit" titleValues={{ flowName: flow.data!.name }}>
+            <Container>
+                {renderEditor()}
+            </Container>
         </Page>
     );
 };
