@@ -19,6 +19,7 @@ import NotificationsProvider from './providers/NotificationsProvider';
 import LanguageProvider from './providers/LanguageProvider';
 import AuthProvider from './providers/AuthProvider';
 import ScriptEdit from './pages/home/ScriptEdit.page';
+import Scripts from './pages/home/Scripts.page';
 
 export interface IProvidersProps {
     children?: React.ReactNode;
@@ -53,7 +54,7 @@ const App: React.FunctionComponent<IProvidersProps> = ({ children }) => {
                                     <Route path="/homes/:homeId/records" element={addErrorBoundary(<Records />)} />
                                     <Route path="/homes/:homeId/flows" element={addErrorBoundary(<Flows />)} />
                                     <Route path="/homes/:homeId/flows/:flowId/edit" element={addErrorBoundary(<FlowEdit />)} />
-                                    {/* <Route path="/homes/:homeId/scripts" element={addErrorBoundary(<Scripts />)} /> */}
+                                    <Route path="/homes/:homeId/scripts" element={addErrorBoundary(<Scripts />)} />
                                     <Route path="/homes/:homeId/scripts/:scriptId/edit" element={addErrorBoundary(<ScriptEdit />)} />
                                     
                                     {/* FALLBACK REDIRECT */}
