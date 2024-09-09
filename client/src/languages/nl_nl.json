@@ -1,5 +1,5 @@
 {
-    "@setup": {
+    "$setup": {
         "homes": {
             "page.title": "Jouw woningen",
             "noHomes.message": "Je hebt nog geen woningen toegevoegd.",
@@ -22,7 +22,7 @@
             }
         }
     },
-    "@main": {
+    "$main": {
         "actions": {
             "edit.label": "Bewerken",
             "confirm.label": "Bevestigen",
@@ -31,17 +31,28 @@
             "upload.label": "Uploaden",
             "save.label": "Opslaan"
         },
+        "textEditor": {
+            "title": "{filename} (Teksteditor)"
+        },
+        "errors": {
+            "auth": {
+                "emptyUsernameError": "Gebruikersnaam mag niet leeg zijn."
+            }
+        }
+    },
+    "$page": {
         "devices": {
-            "page.title": "Apparaten"
+            "title": "Apparaten"
         },
         "dashboard": {
-            "page.title": "Dashboard"
+            "title": "Dashboard"
         },
         "admin": {
-            "page.title": "Admin"
+            "title": "Admin"
         },
         "login": {
-            "page.title": "Inloggen",
+            "title": "Inloggen",
+            "hint": "Ga naar de inlogpagina...",
             "form": {
                 "username.label": "Gebruikersnaam",
                 "password.label": "Wachtwoord",
@@ -51,16 +62,17 @@
                 "currentHome.message": "Verbonden met {displayName}.",
                 "changeHome.link": "Wijzigen..."
             },
-            "resetPassword.link": "Wachtwoord vergeten?"
+            "resetPassword.link": "Wachtwoord vergeten?",
+            "notSignedIn.message": "Je bent niet ingelogd."
         },
         "records": {
-            "page.title": "Metingen"
+            "title": "Metingen"
         },
         "flows": {
-            "page.title": "Flows"
+            "title": "Flows"
         },
         "flow_edit": {
-            "page.title": "Bewerk ''{flowName}''",
+            "title": "Bewerk ''{flowName}''",
             "editor": {
                 "fields": {
                     "trigger": {
@@ -79,13 +91,11 @@
             }
         },
         "scripts": {
-            "page.title": "Scripts"
+            "title": "Scripts",
+            "noData.message": "Geen scripts gevonden."
         },
         "script_edit": {
-            "page.title": "Teksteditor"
-        },
-        "textEditor": {
-            "title": "{filename} (Teksteditor)"
+            "title": "Teksteditor"
         }
     }
 }

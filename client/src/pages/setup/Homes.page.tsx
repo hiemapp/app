@@ -51,7 +51,7 @@ const Homes: React.FunctionComponent = () => {
             .catch(err => {
                 notifications.show({
                     message: {
-                        id: '@setup.homes.addHome.connectionError.message',
+                        id: '$setup.homes.addHome.connectionError.message',
                         values: {
                             baseUrl: home.baseUrl
                         }
@@ -66,7 +66,7 @@ const Homes: React.FunctionComponent = () => {
     return (
         <Page id="homes">
             <Box direction="column" align="center" justify="center" className="h-100 w-100" gutterY={3}>
-                <h1><FormattedMessage id="@setup.homes.page.title"/></h1>
+                <h1><FormattedMessage id="$setup.homes.page.title"/></h1>
                 <Tile className="p-4">
                     <Box direction="column" align="center">
                         <Box direction="column">
@@ -80,7 +80,7 @@ const Homes: React.FunctionComponent = () => {
                                                     <span className="text-muted">{home.baseUrl}</span>
                                                 </Box>
                                                 <Button className="ms-auto" onClick={() => handleConnect(home)}>
-                                                    <FormattedMessage id="@setup.homes.actions.connect.label" />
+                                                    <FormattedMessage id="$setup.homes.actions.connect.label" />
                                                 </Button>
                                             </Box>
                                         ))}
@@ -88,7 +88,7 @@ const Homes: React.FunctionComponent = () => {
                                 )
                                 : (
                                     <p className="my-2">
-                                        <FormattedMessage id="@setup.homes.noHomes.message" />
+                                        <FormattedMessage id="$setup.homes.noHomes.message" />
                                     </p>
                                 )
                             }               
@@ -96,22 +96,22 @@ const Homes: React.FunctionComponent = () => {
                     </Box>     
                 </Tile>
                 <Link to={null!} onClick={() => setModalVisible(true)}>
-                    <FormattedMessage id="@setup.homes.addHome.link"/>
+                    <FormattedMessage id="$setup.homes.addHome.link"/>
                 </Link>
             </Box>
             <Modal 
                 isOpen={modalVisible} 
-                title={formatMessage({ id: "@setup.homes.addHome.title" })}
+                title={formatMessage({ id: "$setup.homes.addHome.title" })}
                 onRequestClose={() => setModalVisible(false)} 
                 align="stretch">
                 <Form onSubmit={addHome}>
                     <Box direction="column" gutterY={3}>
                         <div className="w-100">
                             <p className="mb-1">
-                                <FormattedMessage id="@setup.homes.addHome.form.serverUrl.label" />
+                                <FormattedMessage id="$setup.homes.addHome.form.serverUrl.label" />
                             </p>
                             <TextInput 
-                                placeholder={formatMessage({ id:"@setup.homes.addHome.form.serverUrl.placeholder" })} 
+                                placeholder={formatMessage({ id:"$setup.homes.addHome.form.serverUrl.placeholder" })} 
                                 name="baseUrl" 
                                 autoComplete="off" 
                                 autoCorrect="off" 
@@ -121,7 +121,7 @@ const Homes: React.FunctionComponent = () => {
                         </div>
                         <div>
                             <Button loading={isLoading}>
-                                <FormattedMessage id="@setup.homes.addHome.form.submit.label" />
+                                <FormattedMessage id="$setup.homes.addHome.form.submit.label" />
                             </Button>
                         </div>
                     </Box>

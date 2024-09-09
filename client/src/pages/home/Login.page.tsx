@@ -43,28 +43,28 @@ const Login: FunctionComponent = () => {
             <Container>
                 {HomeController.isNativeApp() && (
                     <p>
-                        <FormattedMessage id="@main.login.home.currentHome.message" values={home.metadata as any} tagName="span" />
+                        <FormattedMessage id="$page.login.home.currentHome.message" values={home.metadata as any} tagName="span" />
                         <span> </span> 
                         <Link to="/setup/homes">
-                            <FormattedMessage id="@main.login.home.changeHome.link" values={home.metadata as any} tagName="span" />
+                            <FormattedMessage id="$page.login.home.changeHome.link" values={home.metadata as any} tagName="span" />
                         </Link>
                     </p>
                 )}
                 <Form onSubmit={handleSubmit}>
                     <div className="mb-2">
-                        <FormField name="username" label={<FormattedMessage id="@main.login.form.username.label" />} optional>
+                        <FormField name="username" label={<FormattedMessage id="$page.login.form.username.label" />} optional>
                             <TextInput autoComplete="username" />
                         </FormField>
-                        <FormField name="password" label={<FormattedMessage id="@main.login.form.password.label" />} optional>
+                        <FormField name="password" label={<FormattedMessage id="$page.login.form.password.label" />} optional>
                             <PasswordInput autoComplete="current-password" revealable />
                         </FormField>
                     </div>
                     <Box align="center" gutterX={3}>
                         <Button size="lg" loading={isLoading}>
-                            <FormattedMessage id="@main.login.form.submit.label" />
+                            <FormattedMessage id="$page.login.form.submit.label" />
                         </Button>
                         <Link to={home.scopePath('/login/reset-password')}>
-                            <FormattedMessage id="@main.login.resetPassword.link" />
+                            <FormattedMessage id="$page.login.resetPassword.link" />
                         </Link>
                     </Box>
                 </Form>

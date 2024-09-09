@@ -19,7 +19,7 @@ const Page = forwardRef<HTMLDivElement, PageProps>(({
         <div className="Page d-flex flex-column h-100" id={id}>
             <Container className="my-4 mt-md-3">
                 <h1 className="Page__title">
-                    <FormattedMessage id={`@main.${id}.page.title`} defaultMessage={" "} values={titleValues} />
+                    <FormattedMessage id={`$page.${id}.title`} defaultMessage={" "} values={titleValues} />
                 </h1>
             </Container>
             <main className="Page__content h-100">

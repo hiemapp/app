@@ -27,7 +27,7 @@ const FlowEditorToolbox: React.FunctionComponent<FlowEditorToolboxProps> = ({
 
     return (
         <Modal {...rest}
-            title={formatMessage({ id: '@main.flow_edit.editor.block_picker.title' })}>
+            title={formatMessage({ id: '$main.flow_edit.editor.block_picker.title' })}>
             <div className="FlowEditorToolbox w-100">
                 {blockCategories.map(category => {
                     const filteredBlocks = category.getBlocks().filter(b => b.manifest.fieldType === field);

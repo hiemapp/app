@@ -59,22 +59,22 @@ const ScriptEditor: React.FunctionComponent<ScriptEditorProps> = ({
 
     return (
         <Modal 
-            title={formatMessage({ id: '@main.textEditor.title' }, { filename })} 
+            title={formatMessage({ id: '$main.textEditor.title' }, { filename })} 
             {...rest}>
             <div className="ScriptEditor overflow-hidden rounded-1">
                 <div className="ScriptEditor__toolbar d-flex flex-row align-items-center p-2">
-                    <Tooltip message="@main.actions.undo.label">
+                    <Tooltip message="$main.actions.undo.label">
                         <Button variant="link" accent="$blue-4" square onClick={handleUndo}>
                             <Icon id="undo" />
                         </Button>
                     </Tooltip>
-                    <Tooltip message="@main.actions.redo.label">
+                    <Tooltip message="$main.actions.redo.label">
                         <Button variant="link" accent="$blue-4" square onClick={handleRedo}>
                             <Icon id="redo" />
                         </Button>
                     </Tooltip>
                     <div className="ScriptEditor__toolbar-divider"></div>
-                    <Tooltip message="@main.actions.upload.label">
+                    <Tooltip message="$main.actions.upload.label">
                         <Button variant="link" accent="$green-4" square onClick={handleSave}>
                             <Icon id="cloud-arrow-up" />
                         </Button>
