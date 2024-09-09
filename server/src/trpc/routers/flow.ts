@@ -16,8 +16,8 @@ export const flowRouter = router({
 
     index: publicProcedure
         .query(async ({ ctx }) => {
-            return await ctx.getIndex(Flow, ['name', 'icon', 'color'], (d) => {
-                return ctx.req.user.hasPermission(`flow.${d.id}.read`);
+            return await ctx.getIndex(Flow, ['name', 'icon', 'color'], flow => {
+                return ctx.req.user.hasPermission(flow, 'view');
             });
         }),
 
