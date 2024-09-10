@@ -1,3 +1,15 @@
 .Page__content {
     min-height: 0px; // Prevent overflow-y
 }
+
+.Page__no-data-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 6rem;
+    
+    .Page__no-data-message__svg {
+        width: 15rem;
+        height: auto;
+        margin-bottom: 3rem;
+    }
+}

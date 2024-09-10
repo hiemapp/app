@@ -51,7 +51,7 @@ const Devices: React.FunctionComponent = () => {
     }), [ deviceQueries ]);
 
     return (
-        <Page id="devices">
+        <Page id="devices" query={deviceIndexQuery}>
             <Container>
                 <Masonry
                     breakpointCols={{ default: 5, 1200: 4, 900: 3, 550: 2 }}

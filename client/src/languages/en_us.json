@@ -42,8 +42,14 @@
         }
     },
     "$page": {
+        "generic": {
+            "noData.title": "Whoops!",
+            "notSignedIn.message": "You're not signed in right now. {signInLink}",
+            "signIn.link": "Sign in..."
+        },
         "devices": {
-            "title": "Devices"
+            "title": "Devices",
+            "noData.message": "No devices were found."
         },
         "dashboard": {
             "title": "Dashboard"
@@ -53,7 +59,6 @@
         },
         "login": {
             "title": "Sign in",
-            "hint": "Sign in...",
             "form": {
                 "username.label": "Username",
                 "password.label": "Password",
@@ -63,8 +68,7 @@
                 "currentHome.message": "Connected to {displayName}.",
                 "changeHome.link": "Change home..."
             },
-            "resetPassword.link": "Forgot password?",
-            "notSignedIn.message": "You're not signed in."
+            "resetPassword.link": "Forgot password?"
         },
         "records": {
             "title": "Records"

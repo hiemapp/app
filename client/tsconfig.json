@@ -8,7 +8,7 @@
         "noImplicitReturns": false,
         "strictPropertyInitialization": false,
         "allowSyntheticDefaultImports": true,
-        "types": ["vite/client", "node"],
+        "types": ["vite/client", "node", "vite-plugin-svgr/client"],
         "target": "es2021",
         "resolvePackageJsonImports": true,
         "useDefineForClassFields": true,

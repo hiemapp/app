@@ -41,6 +41,11 @@
         }
     },
     "$page": {
+        "generic": {
+            "noData.title": "Oeps!",
+            "notSignedIn.message": "Je bent niet ingelogd. {signInLink} om in te loggen.",
+            "signIn.link": "Klik hier"
+        },
         "devices": {
             "title": "Apparaten"
         },
@@ -92,7 +97,7 @@
         },
         "scripts": {
             "title": "Scripts",
-            "noData.message": "Geen scripts gevonden."
+            "noData.message": "Er zijn geen scripts gevonden."
         },
         "script_edit": {
             "title": "Teksteditor"
