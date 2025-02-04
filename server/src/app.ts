@@ -85,8 +85,9 @@ dayjs.extend(customParseFormat);
     // Add websocket listeners for device events
     DeviceController.index().forEach(device => {
         ['state:update', 'connection:update'].forEach((event: any) => {
-            device.on(event, () => {
-                WebServer.getSockets().map(socket => {
+            device.on(event, async () => {
+                const sockets = await WebServer.io.fetchSockets();
+                sockets.map(socket => {
                     const user = socket.data.user;
 
                     WebServer.io.sockets.emit('device:update', {
