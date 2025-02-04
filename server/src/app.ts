@@ -13,7 +13,7 @@ if (typeof process.getuid == 'function' && process.getuid() !== 0) {
 }
 
 // Force NODE_ENV to be either 'development' or 'production'
-if(process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV !== 'development') {
     process.env.NODE_ENV = 'production';
 }
 
@@ -43,11 +43,11 @@ dayjs.extend(customParseFormat);
     await Taskrunner.start();
 
     // Generate JWT secret if it doen't exist
-    if(typeof Config.getOrFail('secret.jwtSecret') !== 'string') {
+    if (typeof Config.getOrFail('secret.jwtSecret') !== 'string') {
         logger.debug('Generating new JWT secret...');
         Config.update('secret.jwtSecret', crypto.randomBytes(256).toString('base64'));
     }
-    
+
     // Load controllers
     logger.debug('Initializing controllers...');
     await UserController.load();
@@ -66,7 +66,7 @@ dayjs.extend(customParseFormat);
 
     // Add user middleware to websocket
     WebServer.io.use(userMiddleware);
-    
+
     // Listen for notifications
     NotificationEmitter.on('notification', async e => {
         const props = await e.notification.getAllProps();
@@ -74,28 +74,32 @@ dayjs.extend(customParseFormat);
 
         e.notification.getRecipients().forEach(recipient => {
             sockets.forEach(socket => {
-                if(recipient instanceof User && socket.data.user.id !== recipient.id) return;
-                if(recipient instanceof Socket && socket.id === recipient.id) return;
+                if (recipient instanceof User && socket.data.user.id !== recipient.id) return;
+                if (recipient instanceof Socket && socket.id === recipient.id) return;
 
                 socket.emit('notification', props);
             })
         })
     })
 
-    // Add websocket event emitters
+    // Add websocket listeners for device events
     DeviceController.index().forEach(device => {
-        const eventHandler = () => {
-            WebServer.io.sockets.emit('device:update', {
-                device: { 
-                    id: device.id,
-                    state: device.getState(),
-                    display: device.getDisplay()
-                }
-            });
-        }
-        
-        device.on('state:update', eventHandler);
-        device.on('connection:update', eventHandler);
+        ['state:update', 'connection:update'].forEach((event: any) => {
+            device.on(event, () => {
+                WebServer.getSockets().map(socket => {
+                    const user = socket.data.user;
+
+                    WebServer.io.sockets.emit('device:update', {
+                        device: {
+                            id: device.id,
+                            state: device.getState(),
+                            display: device.getDisplay(user)
+                        }
+                    });
+                })
+
+            })
+        })
     })
 
     // Start the webserver

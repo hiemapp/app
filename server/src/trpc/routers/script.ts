@@ -1,7 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
 import { ScriptController, Script } from 'hiem';
-import { TRPCError } from '@trpc/server';
 
 export const scriptRouter = router({
     code: publicProcedure
@@ -11,12 +10,7 @@ export const scriptRouter = router({
         }))
         .mutation(async ({ ctx, input }) => {
             const script = ScriptController.find(input.id);
-            await script.updateCode(input.code).catch(err => {
-                throw new TRPCError({
-                    code: 'INTERNAL_SERVER_ERROR',
-                    message: err
-                })
-            })
+            await script.updateCode(input.code, ctx.req.user)
         }),
 
     get: publicProcedure

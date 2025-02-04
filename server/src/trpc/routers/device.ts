@@ -43,6 +43,8 @@ export const deviceRouter = router({
                 return device.execute(command.name, command.params, ctx.req.user)
             })
             
-            await Promise.all(promises);
+            await Promise.all(promises).finally(() => {
+                console.log('all done!');
+            });
         })
 })
