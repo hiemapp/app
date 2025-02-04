@@ -1,5 +1,6 @@
 import { ReactNode, FunctionComponent } from 'react';
 import ReactMasonry from 'react-masonry-css';
+import classNames from 'classnames';
 import '@/styles/components/Masonry.scss';
 
 export interface MasonryProps {
@@ -9,9 +10,9 @@ export interface MasonryProps {
   columnClassName?: string;
 }
 
-const Masonry: FunctionComponent<MasonryProps> = ({ children, ...rest }) => {
+const Masonry: FunctionComponent<MasonryProps> = ({ children, className, ...rest }) => {
   return (
-    <ReactMasonry {...rest} className="Masonry row g-2" columnClassName="Masonry__column">
+    <ReactMasonry {...rest} className={classNames('Masonry row g-2', className)} columnClassName="Masonry__column">
       {children}
     </ReactMasonry>
   );

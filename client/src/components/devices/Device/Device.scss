@@ -1,4 +1,5 @@
 .Device {
+    --Device-height: 4.675rem;
     --Device-color: var(--text-primary);
     --Device-color-muted: var(--Device-color);
     --Device-padding-x: 0.75rem;
@@ -9,11 +10,11 @@
     --Button--active-color: var(--Device-color);
     position: relative;
     z-index: 1;
-    min-height: 3rem;
     padding: 0;
     transition: 250ms ease-out;
     opacity: 1 !important;
     width: 100%;
+    height: var(--Device-height);
     text-align: left;
     color: var(--Device-color) !important;
 
@@ -44,6 +45,10 @@
         }
     }
 
+    &.Device--with-rich-display {
+        height: calc(2 * var(--Device-height) + var(--bs-gutter-y));
+    }
+
     &.Button--focus {
         background-color: var(--gray-2);
 
@@ -64,6 +69,7 @@
 
 .Device__body {
     max-width: 100%;
+    height: var(--Device-height);
     padding: var(--Device-padding-y) var(--Device-padding-x);
 }
 

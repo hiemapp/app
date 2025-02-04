@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Container } from '@tjallingf/react-utils';
 import Page from '@/components/Page';
-import Masonry from '@/Views';
+import Masonry from '@/Masonry';
 import DashboardWidget from '../../components/dashboard/DashboardWidget';
 import { trpc } from '@/utils/trpc/trpc';
 import appState from '@/utils/appState';

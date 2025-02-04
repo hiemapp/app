@@ -1,0 +1,12 @@
+.DeviceRichDisplay {
+    padding: 0 var(--Device-padding-x) var(--Device-padding-x) var(--Device-padding-x);
+    height: 100%;
+    width: 100%;
+}
+
+.DeviceRichDisplay-inner {
+    background: var(--gray-0);
+    border-radius: var(--border-radius-sm);
+    height: 100%;
+    width: 100%;
+}
