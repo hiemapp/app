@@ -1,10 +1,15 @@
 .DeviceMenuContainer {
+    @include min-breakpoint($breakpoint-phone) {
+        min-width: 24rem;
+    }
+
     .DeviceMenuContainer__title {
         margin-bottom: 1rem;
     }
 
     .DeviceMenuContainer__content {
         height: 100%;
+        margin: 0 auto;
     }
 
     .ButtonGroup--size-lg {

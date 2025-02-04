@@ -1,18 +1,18 @@
 .DeviceMenuButton {
     --DeviceMenuButton-border-radius: 0.75rem;
-    --Button-color: var(--DeviceMenuContainer-accent-5);
+    --Button-color: var(--DeviceMenuContainer-accent-4);
     --Button-background: var(--gray-2);
-    --Button--hover-color: var(--DeviceMenuContainer-accent-5);
+    --Button--hover-color: var(--DeviceMenuContainer-accent-4);
     --Button--hover-background: var(--gray-2);
-    --Button--focus-color: var(--DeviceMenuContainer-accent-5);
+    --Button--focus-color: var(--DeviceMenuContainer-accent-4);
     --Button--focus-background: var(--gray-3);
     border-radius: 0;
     width: 100%;
     height: 100%;
-
+    padding: 2rem;
+    
     &:not(:last-child) {
-        border: 1px solid var(--gray-2);
-        margin-bottom: 2px;
+        border-bottom: 0.25rem solid var(--gray-1);
     }
 
     @each $y in top, bottom {

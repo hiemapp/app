@@ -40,9 +40,16 @@ const DeviceMenuContainer: React.FunctionComponent<DeviceMenuContainerProps> = (
             className="DeviceMenuContainer" 
             direction="column"
             style={{
-                '--DeviceMenuContainer-accent-7': palette[7],
+                '--DeviceMenuContainer-accent-0': palette[0],
+                '--DeviceMenuContainer-accent-1': palette[1],
+                '--DeviceMenuContainer-accent-2': palette[2],
+                '--DeviceMenuContainer-accent-3': palette[3],
+                '--DeviceMenuContainer-accent-4': palette[4],
                 '--DeviceMenuContainer-accent-5': palette[5],
-                '--DeviceMenuContainer-accent-1': palette[1]
+                '--DeviceMenuContainer-accent-6': palette[6],
+                '--DeviceMenuContainer-accent-7': palette[7],
+                '--DeviceMenuContainer-accent-8': palette[8],
+                '--DeviceMenuContainer-accent-9': palette[9]
             } as React.CSSProperties}>
             <div className="DeviceMenuContainer__content">
                 {renderMenu()}
