@@ -59,15 +59,4 @@ export default class WebServer {
                this.logger.info(`Listening at http://localhost:${port}.`);
           });
      }
-
-     static getSockets() {
-          const sockets = [];
-
-          for(const socketId in this.io.sockets.sockets) {
-               // @ts-ignore
-               sockets.push(this.io.sockets[socketId]);
-          }
-
-          return sockets;
-     }
 }
