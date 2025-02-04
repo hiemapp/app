@@ -7,22 +7,17 @@ const OpenCloseMenu: React.FunctionComponent<DeviceMenuProps> = ({
 }) => {
     return (
         <div className="OpenCloseMenu">
-            <div className="OpenCloseMenu__box">
+            <DeviceMenuButton 
+                onClick={() => execute('open', {})}
+                icon="arrow-up" />
+            {options.stoppable && (
                 <DeviceMenuButton 
-                    rounded="top"
-                    onClick={() => execute('open', {})}
-                    icon="arrow-up" />
-                {options.stoppable && (
-                    <DeviceMenuButton 
-                        rounded="none"
-                        onClick={() => execute('stop', {})}
-                        icon="stop" />
-                )}
-                <DeviceMenuButton 
-                    rounded="bottom"
-                    onClick={() => execute('close', {})}
-                    icon="arrow-down" />
-            </div>
+                    onClick={() => execute('stop', {})}
+                    icon="stop" />
+            )}
+            <DeviceMenuButton 
+                onClick={() => execute('close', {})}
+                icon="arrow-down" />
         </div>
     )
 }
