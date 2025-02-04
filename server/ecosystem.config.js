@@ -1,6 +1,5 @@
 module.exports = {
     apps: [{
-        name: 'hiemapp',
-        script: 'yarn start'
+        script: './dist/app.js'
     }]
 };
