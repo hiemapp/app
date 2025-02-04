@@ -17,7 +17,7 @@ const DeviceMenuButton: React.FunctionComponent<DeviceMenuButtonProps> = ({
         <Button 
             className={classNames('DeviceMenuButton', `DeviceMenuButton--rounded-${rounded}`)}
             onClick={onClick}>
-            <Icon id={icon} size={48} />
+            <Icon id={icon} size={36} />
         </Button>
     )
 }
