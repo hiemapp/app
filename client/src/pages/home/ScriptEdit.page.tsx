@@ -1,11 +1,8 @@
 import { Container } from '@tjallingf/react-utils';
 import Page from '@/components/Page';
 import { useParams } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
-import LargeLoadingIcon from '@/LargeLoadingIcon';
-
-const ScriptEditor = lazy(() => import('../../scripts/ScriptEditor'));
+import ScriptEditor from '@/scripts/ScriptEditor';
 
 const ScriptEdit: React.FunctionComponent = () => {
     const { scriptId } = useParams();
@@ -23,13 +20,11 @@ const ScriptEdit: React.FunctionComponent = () => {
     return (
         <Page id="script_edit">
             <Container className="h-100">
-                <Suspense fallback={<LargeLoadingIcon />}>
-                    <ScriptEditor 
-                        filename={script.data!.name} 
-                        isOpen={true} 
-                        onSave={onEditorSave} 
-                        defaultValue={script.data!.code} />
-                </Suspense>
+                <ScriptEditor 
+                    filename={script.data!.name} 
+                    isOpen={true} 
+                    onSave={onEditorSave} 
+                    defaultValue={script.data!.code} />
             </Container>
         </Page>
     );

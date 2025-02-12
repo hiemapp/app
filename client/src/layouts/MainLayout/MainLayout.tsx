@@ -70,7 +70,7 @@ const MainLayout: React.FunctionComponent = () => {
                         {renderNavbarButton(currentHome.scopePath('/devices'), 'plug')}
                         {renderNavbarButton(currentHome.scopePath('/records'), 'chart-simple')}
                         {/* {renderNavbarButton(currentHome.scopePath('/flows'), 'clock')} */}
-                        {renderNavbarButton(currentHome.scopePath('/scripts/1/edit'), 'shuffle')}
+                        {renderNavbarButton(currentHome.scopePath('/scripts'), 'shuffle')}
                         {renderNavbarButton(currentHome.scopePath('/admin'), 'shield')}
                         <Navbar.Divider align="end" visible={false} />
                         {renderNavbarButton(currentHome.scopePath('/login'), 'user')}

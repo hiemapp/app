@@ -72,6 +72,7 @@
         "eslint": "^8.39.0",
         "typescript": "^5.4.3",
         "vite": "^5.2.6",
+        "vite-plugin-svgr": "^4.2.0",
         "vite-tsconfig-paths": "^4.3.2"
     },
     "main": "index.js",

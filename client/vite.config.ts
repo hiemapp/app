@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import svgr from 'vite-plugin-svgr';
 import { dependencies } from './package.json';
 
 const vendorDeps = ['react', 'react-router-dom', 'react-dom', 'react-router'];
@@ -25,7 +26,8 @@ function renderChunks(deps: Record<string, string>) {
 export default defineConfig({
   plugins: [
     react(),
-    tsconfigPaths()
+    tsconfigPaths(),
+    svgr()
   ],
   build: {
     outDir: '../server/public',

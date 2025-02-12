@@ -96,7 +96,7 @@ const FlowEditor: React.FunctionComponent<FlowEditorProps> = ({
                     {FIELDS.map(field => (
                         <div className="FlowEditor-field mb-4">
                             <h2 className="mb-3">
-                                <FormattedMessage id={`@main.flow_edit.editor.fields.${field}.title`} />
+                                <FormattedMessage id={`$page.flow_edit.editor.fields.${field}.title`} />
                             </h2>
                             <div className="FlowEditor-field__blocks">
                                 <List>

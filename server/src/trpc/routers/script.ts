@@ -13,6 +13,13 @@ export const scriptRouter = router({
             await script.updateCode(input.code, ctx.req.user)
         }),
 
+    index: publicProcedure
+        .query(async ({ ctx }) => {
+            return await ctx.getIndex(Script, ['name', 'icon'], script => {
+                return ctx.req.user.hasPermission(script, 'view');
+            });
+        }),
+
     get: publicProcedure
         .input(z.object({
             id: z.number(),
