@@ -1,4 +1,4 @@
-import { Box, Icon, getPalette } from '@tjallingf/react-utils';
+import { Box, Button, Icon, getPalette } from '@tjallingf/react-utils';
 import './Notification.scss';
 import { FormattedMessage } from 'react-intl';
 
@@ -10,7 +10,9 @@ export interface NotificationData {
     message?: { 
         id: string;
         values?: Record<string, any>;
-    } | string | number | boolean | undefined | null | any[]
+    } | string | number | boolean | undefined | null | any[],
+    body?: string,
+    isHTML?: boolean
 }
 
 export interface NotificationProps extends React.PropsWithChildren {
@@ -43,14 +45,20 @@ const Notification: React.FunctionComponent<NotificationProps> = ({
         }
 
         return null;
-    }   
+    }
+
+    function renderBody() {
+        if(typeof data.body !== 'string') return;
+
+        if(data.isHTML) {
+            return <div className="Notification__html" dangerouslySetInnerHTML={{ __html: data.body} }></div>
+        }
+
+        return <>{data}</>;
+    }
 
     return (
-        <Box 
-        direction="row" 
-        className="Notification" 
-        align={null!} 
-        justify={null!} 
+        <div className="Notification" 
         style={{
             '--Notification-show-duration': `${showDuration}ms`,
             '--Notification-accent': palette[4].value()
@@ -61,8 +69,11 @@ const Notification: React.FunctionComponent<NotificationProps> = ({
             <span className="Notification__message">
                 {renderMessage()}
             </span>
+            <Box direction="row" className="Notification__body">
+                {renderBody()}
+            </Box>
             <div className="Notification__background"></div>
-        </Box>
+        </div>
     )
 }
 

@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import useNotifications from '@/hooks/useNotifications';
 import { useEffect } from 'react';
 
-const NOTIFICATION_SHOW_DURATION = 5000;
+const NOTIFICATION_SHOW_DURATION = 5000*1000000000000;
 
 const NotificationCenter: React.FunctionComponent = () => {
     let { notifications, setNotifications } = useNotifications(handleReceive);

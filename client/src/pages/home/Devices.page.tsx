@@ -1,6 +1,6 @@
 import { Container } from '@tjallingf/react-utils';
 import Page from '@/components/Page';
-import Masonry from '@/Views';
+import Masonry from '@/Masonry';
 import Device from '@/components/devices/Device';
 import ErrorBoundary from '@/ErrorBoundary';
 import { trpc } from '@/utils/trpc/trpc';
@@ -54,8 +54,7 @@ const Devices: React.FunctionComponent = () => {
         <Page id="devices" query={deviceIndexQuery}>
             <Container>
                 <Masonry
-                    breakpointCols={{ default: 5, 1200: 4, 900: 3, 550: 2 }}
-                    className="flex-row align-items-start">
+                    breakpointCols={{ default: 5, 1199.99: 4, 991.99: 3, 767.99: 2 }}>
                     {devices}
                 </Masonry>
             </Container>

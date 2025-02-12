@@ -6,12 +6,14 @@
     color: var(--text-primary);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.015);
     border-radius: 1rem;
-    pointer-events: auto;
     overflow: hidden;
     align-items: center;
     position: relative;
     max-width: 100%;
-    pointer-events: none;
+    pointer-events: auto !important;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr auto;
 
     .Notification__background {
         position: absolute;
@@ -31,10 +33,25 @@
 
     .Notification__icon-wrapper {
         padding-left: var(--Notification-padding-x);
+        grid-row: 1;
+        grid-column: 1;
     }
 
     .Notification__message {
         padding: var(--Notification-padding-y) var(--Notification-padding-x);
+        grid-row: 1;
+        grid-column: 2;
+    }
+
+    .Notification__body {
+        padding: 0 var(--Notification-padding-x) var(--Notification-padding-y) var(--Notification-padding-x);
+        grid-row: 2;
+        grid-column: 2;
+        overflow: auto;
+
+        * {
+            margin: 0 !important;
+        }
     }
 
     @include max-breakpoint($breakpoint-tablet) {

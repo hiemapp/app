@@ -41,10 +41,10 @@ const ColorMenu: React.FunctionComponent<DeviceMenuProps> = ({
                 onChange={handleStatusChange}
                 value={device.state.status ? 'on' : 'off'}>
                 <Button value="on" variant="secondary">
-                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.on.label" />
+                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.on.label" defaultMessage="On" />
                 </Button>
                 <Button value="off" variant="secondary">
-                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.off.label" />
+                    <FormattedMessage id="@hiem/core.devices.traits.switchTrait.status.off.label" defaultMessage="Off" />
                 </Button>
             </ButtonGroup>
         </div>
@@ -52,7 +52,6 @@ const ColorMenu: React.FunctionComponent<DeviceMenuProps> = ({
 
     const renderSwatches = () => (
         <div className="ColorMenu__swatches ColorMenu__section">
-            {/* <h5>Colors</h5> */}
             <Box className="ColorMenu__button-list" direction="row" gutterX={2} gutterY={2} wrap>
                 {options.colors.map((hex: string) => {
                     if (typeof hex !== 'string' || !/#[0-9A-Fa-f]{6}/g.test(hex)) return;
