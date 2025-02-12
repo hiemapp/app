@@ -8,18 +8,17 @@ import { useIntl } from 'react-intl';
 const RecordsGraph = lazy(() => import('../../components/records/RecordsGraph'));
 
 const Records: React.FunctionComponent = () => {
-    const id = 16;
+    const id = 7;
 
     const { formatMessage } = useIntl();
 
     const deviceQuery = trpc.device.get.useQuery({ id });
     const recordQuery = trpc.record.listLatest.useQuery({
         id: id,
-        top: 600,
-        skip: 0
+        top: 600
     })
 
-    const getDataSetLabel = (alias: string) => {
+    const getDatasetLabel = (alias: string) => {
         if(!recordQuery.data?.fields || !deviceQuery.data) return null;
 
         const field = recordQuery.data.fields.find((field: any) => field.alias === alias);
@@ -36,13 +35,13 @@ const Records: React.FunctionComponent = () => {
     }
 
     const renderGraph = () => {
-        if(!recordQuery.data?.dataSets|| deviceQuery.isLoading) {
+        if(!recordQuery.data?.datasets|| deviceQuery.isLoading) {
             return <LargeLoadingIcon />
         }
 
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
-                <RecordsGraph deviceId={id} dataSets={recordQuery.data.dataSets} getDataSetLabel={getDataSetLabel} />
+                <RecordsGraph deviceId={id} datasets={recordQuery.data.datasets} getDatasetLabel={getDatasetLabel} />
             </Suspense>
         )
     }

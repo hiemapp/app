@@ -4,6 +4,7 @@
     "watch": [
         "src/",
         "storage/extensions/",
+        "config/",
         "../../core/src/"
     ]
 }

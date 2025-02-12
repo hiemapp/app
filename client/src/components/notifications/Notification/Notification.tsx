@@ -48,14 +48,16 @@ const Notification: React.FunctionComponent<NotificationProps> = ({
     }
 
     function renderBody() {
-        if(typeof data.body !== 'string') return;
+        if(typeof data.body !== 'string' || !data.body.length) return null;
 
         if(data.isHTML) {
             return <div className="Notification__html" dangerouslySetInnerHTML={{ __html: data.body} }></div>
         }
 
-        return <>{data}</>;
+        return <>{data.body}</>;
     }
+
+    const body = renderBody();
 
     return (
         <div className="Notification" 
@@ -69,9 +71,7 @@ const Notification: React.FunctionComponent<NotificationProps> = ({
             <span className="Notification__message">
                 {renderMessage()}
             </span>
-            <Box direction="row" className="Notification__body">
-                {renderBody()}
-            </Box>
+            {body && <Box direction="row" className="Notification__body">{body}</Box>}
             <div className="Notification__background"></div>
         </div>
     )

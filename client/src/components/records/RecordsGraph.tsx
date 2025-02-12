@@ -3,18 +3,18 @@ import Chart from '@/Chart';
 import { getColorValue } from '@tjallingf/react-utils';
 
 export interface IRecordsGraphProps {
-    dataSets: any[];
+    datasets: any[];
     deviceId: number;
-    getDataSetLabel: (id: string) => unknown
+    getDatasetLabel: (id: string) => unknown
 }
 
 // TODO: convert to tRPC
-const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ deviceId, dataSets, getDataSetLabel }) => {
+const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ deviceId, datasets, getDatasetLabel }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [ data, setData ] = useState({});
-    
-    dataSets = [ dataSets.find(d => d.id === 'F' ) ];
 
+    datasets = datasets.filter(d => d.id === 'powerConsuming');
+    
     useEffect(() => {
         setData({
             datasets: getFormattedDataSets()
@@ -27,22 +27,22 @@ const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ deviceId, d
         const ctx = canvasRef.current.getContext('2d');
         if(!ctx) return null;
 
-        return dataSets.map(dataSet => {
-            const label = getDataSetLabel(dataSet.id);
-            const data = dataSet.values.map(([ x, y ]: any[]) => {
+        return datasets.map(dataset => {
+            const label = getDatasetLabel(dataset.id);
+            const data = dataset.values.map(([ x, y ]: any[]) => {
                 return { x, y };
             })
 
             var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, getColorValue('blue-3')!);
-            gradient.addColorStop(1, getColorValue('blue-0')!);
+            gradient.addColorStop(0, getColorValue('$blue-3')!);
+            gradient.addColorStop(1, getColorValue('$blue-0')!);
 
             return { 
                 label, 
                 data,
                 backgroundColor: gradient,
                 borderWidth: 1,
-                borderColor: getColorValue('blue-4'),
+                borderColor: getColorValue('$blue-4'),
                 fill: true,
                 pointRadius: 0
             };

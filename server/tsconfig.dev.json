@@ -8,13 +8,10 @@
             "@/*": [
                 "src/*"
             ],
-            // Use the source code for the core module
-            "zylax/*": [
-                "../../core/src/*"
-            ],
+            // Used when running in dev mode
             "~/*": [
                 "../../core/src/*"
-            ],
+            ]
         }
     },
     "ts-node": {

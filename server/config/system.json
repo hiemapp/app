@@ -15,6 +15,11 @@
     "flows": {
         "interval": 60
     },
+    "devices": {
+        "recording": {
+            "memorySize": -1
+        }
+    },
     "logs": {
         "printLevels": ["error", "info", "debug", "warn"]
     }

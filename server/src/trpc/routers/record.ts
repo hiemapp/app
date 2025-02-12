@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { record, z } from 'zod';
-import { Device, RecordSet } from 'hiem';
+import { Device, RecordSampler } from 'hiem';
 
 export const recordRouter = router({
     index: publicProcedure
@@ -10,23 +10,18 @@ export const recordRouter = router({
 
     listLatest: publicProcedure.input(z.object({
         id: z.number(),
-        top: z.number(),
-        skip: z.number()
+        top: z.number()
     })).query(async ({ ctx, input }) => {
         const device = await ctx.getResourceOrThrow(Device, input.id);
-        const recordSet = await device.records.readLatest(input.top, input.skip, false);
-        // console.log(recordSet.getRecords().length);
 
-        let records = recordSet.getRecords();
-        const keepInterval = Math.round(records.length / 500);
-        if(keepInterval > 1) {
-            records = records.filter((r, i) => i % keepInterval === 0);
-        }
+        const records = await device.records.readLatest(500);
+        const sampler = new RecordSampler(records);
+        const datasets = sampler.downsample(10);
 
-        const dataSets = new RecordSet(records).getDataSets();
+        console.log(datasets.length, records.length);
 
         return {
-            dataSets: dataSets,
+            datasets: datasets,
             fields: device.records.fields
         }
     }),

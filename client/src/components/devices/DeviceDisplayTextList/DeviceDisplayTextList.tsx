@@ -1,6 +1,7 @@
 import './DeviceDisplayTextList.scss';
 import { type DeviceDisplay } from 'hiem';
 import { FormattedMessage } from 'react-intl';
+import striptags from 'striptags';
 
 export interface IDeviceDisplayTextListProps {
     content: DeviceDisplay['content'];
@@ -16,22 +17,28 @@ const DeviceDisplayTextList: React.FunctionComponent<IDeviceDisplayTextListProps
             return <FormattedMessage id={text.message} defaultMessage={text.text} />
         }
 
-        return text.text;
+        if(typeof text.html === 'string') {
+            const safeHtml = striptags(text.html, ['b', 'i', 'u', 'em', 'strong', 'span', 'sup', 'sub'])
+            return <span dangerouslySetInnerHTML={{__html: safeHtml}}></span>
+        }
+
+        if(typeof text.text === 'string') {
+            return text.text;
+        }
+
+        return null;
     }
     
     const renderContent = () => {
-        if(!content.textList?.length) return null;
+        if(!Array.isArray(content.textList)) return null;
 
-        const items: any[] = [];
-
-        content.textList.forEach((text, i) => {
-            items.push(renderText(text));
-            if(i < content.textList!.length-1) {
-                items.push(TEXT_LIST_SEPERATOR);
-            }
-        })
-
-        return items;
+        return content.textList
+            // render items
+            .map(t => renderText(t))
+             // remove items that are null
+            .filter(t => t !== null)
+            // add seperators in between items
+            .flatMap((t, i, arr) => i < arr.length-1 ? [t, TEXT_LIST_SEPERATOR] : [t])
     }
 
     return (

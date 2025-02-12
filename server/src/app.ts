@@ -1,4 +1,4 @@
-import { Database, Config, logger, DeviceController, ConnectorController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, NotificationEmitter, User, DashboardWidgetServer, ScriptController, ScriptLibManager } from 'hiem';
+import { Database, Config, logger, DeviceController, FlowController, UserController, ExtensionController, LanguageController, Taskrunner, NotificationEmitter, User, ConnectorController, ScriptController, ScriptLibManager } from 'hiem';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import WebServer from './WebServer';
