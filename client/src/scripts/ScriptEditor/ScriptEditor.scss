@@ -29,3 +29,11 @@
     --vscode-editorGutter-background: var(--gray-0) !important;
     --vscode-editor-background: var(--gray-0) !important;
 }
+
+.ScriptEditor__fallback {
+    height: 9999px;
+}
+
+.ScriptEditor--loading .ScriptEditor__editor {
+    display: none !important;;
+}

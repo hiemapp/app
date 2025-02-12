@@ -2,13 +2,28 @@ import { Container, Tile, Box, Icon, Button } from '@tjallingf/react-utils';
 import Page from '@/components/Page';
 import ErrorBoundary from '@/ErrorBoundary';
 import { trpc } from '@/utils/trpc/trpc';
-import HomeController from '@/utils/homes/HomeController';
+import { useEffect, useState } from 'react';
+import LargeLoadingIcon from '@/LargeLoadingIcon';
+import ScriptEditor from '@/scripts/ScriptEditor/ScriptEditor';
 
 const Scripts: React.FunctionComponent = () => {
+    const [ scriptId, setScriptId ] = useState<number|null>(null);
+    const [ editorValue, setEditorValue ] = useState('');
+    
     const scriptIndexQuery = trpc.script.index.useQuery();
-    const home = HomeController.findCurrent();
+    const scriptQuery = trpc.script.get.useQuery({ id: scriptId! }, { enabled: false });
 
-    if (!scriptIndexQuery.data) return null;
+    useEffect(() => {
+        if(!scriptQuery.data) return;
+
+        setEditorValue(scriptQuery.data.code);
+    }, [ scriptQuery.data ]);
+
+    function openEditor(scriptId: number) {
+        setScriptId(scriptId);
+    }
+
+    if (!scriptIndexQuery.data) return <LargeLoadingIcon />;
 
     return (
         <Page id="scripts">
@@ -16,7 +31,7 @@ const Scripts: React.FunctionComponent = () => {
                 <Box direction="column" gutterY={2}>
                     {scriptIndexQuery.data && scriptIndexQuery.data.map(script => (
                         <ErrorBoundary key={script.id}>
-                            <Button href={home.scopePath(`/scripts/${script.id}/edit`)} variant="unstyled" size="xs" stretch>
+                            <Button onClick={() => openEditor(script.id)} variant="unstyled" size="xs" stretch>
                                 <Tile size="lg" className="w-100">
                                     <Tile.Title>
                                         <Box gutterX={1} align="center">
@@ -28,6 +43,11 @@ const Scripts: React.FunctionComponent = () => {
                             </Button>
                         </ErrorBoundary>
                     ))}
+                    <ScriptEditor 
+                        defaultValue={editorValue} 
+                        isOpen={typeof scriptId === 'number'}
+                        filename={scriptQuery.data?.name!}
+                        onRequestClose={() => setScriptId(null)} />
                 </Box>
             </Container>
         </Page>

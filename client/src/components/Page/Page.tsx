@@ -33,8 +33,8 @@ const Page: React.FunctionComponent<PageProps> = ({
                     <h4 className="mb-1"><FormattedMessage id="$page.generic.noData.title" /></h4>
                     <p>
                         <FormattedMessage id={`$page.${id}.noData.message`} />
-                        <br/>
-                        <br />
+                    </p>
+                    <p className="text-muted">
                         <FormattedMessage id="$page.generic.notSignedIn.message" values={{
                             signInLink: (
                                 <Link to={currentHome.scopePath('/login')}>
