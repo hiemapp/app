@@ -5,16 +5,10 @@
         "moduleResolution": "node",
         "module": "ES2022",
         "paths": {
-            "@/*": [
-                "src/*"
-            ],
-            // Used when running in dev mode
-            "~/*": [
-                "../../core/src/*"
-            ]
+            "@/*": ["src/*"],
+            
+            // adapted from core/tsconfig.json
+            "~/*": ["../../core/src/*"]
         }
-    },
-    "ts-node": {
-        "esm": true
     }
 }
