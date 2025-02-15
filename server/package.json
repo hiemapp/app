@@ -6,7 +6,7 @@
         "start": "node dist/app.js",
         "dev": "cross-env NODE_ENV=development yarn dev:start",
         "dev:start": "nodemon src/app.ts",
-        "build": "tsc --project tsconfig.build.json && tsconfig-replace-paths --project tsconfig.build.json"
+        "build": "tsc && tsconfig-replace-paths"
     },
     "dependencies": {
         "@swc/core": "^1.4.8",

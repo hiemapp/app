@@ -9,6 +9,7 @@
         "lib": ["es2021"],
         "outDir": "dist/",
         "module": "commonjs",
+        "skipDefaultLibCheck": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "jsx": "react",
