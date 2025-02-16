@@ -7,23 +7,21 @@ export interface IDeviceDisplayTextListProps {
     content: DeviceDisplay['content'];
 }
 
-const TEXT_LIST_SEPERATOR = <span className="DeviceDisplayTextList__seperator">/</span>;
-
 const DeviceDisplayTextList: React.FunctionComponent<IDeviceDisplayTextListProps> = ({ content: content }) => {
-    const renderText = (text: any) => {
+    const renderText = (text: any, index: number) => {
         if(!text) return null;
 
         if(typeof text.message === 'string') {
-            return <FormattedMessage id={text.message} defaultMessage={text.text} />
+            return <FormattedMessage key={index} id={text.message} defaultMessage={text.text} />
         }
 
         if(typeof text.html === 'string') {
             const safeHtml = striptags(text.html, ['b', 'i', 'u', 'em', 'strong', 'span', 'sup', 'sub'])
-            return <span dangerouslySetInnerHTML={{__html: safeHtml}}></span>
+            return <span key={index} dangerouslySetInnerHTML={{__html: safeHtml}}></span>
         }
 
         if(typeof text.text === 'string') {
-            return text.text;
+            return <span key={index}>{text.text}</span>;
         }
 
         return null;
@@ -34,11 +32,11 @@ const DeviceDisplayTextList: React.FunctionComponent<IDeviceDisplayTextListProps
 
         return content.textList
             // render items
-            .map(t => renderText(t))
+            .map((t, i) => renderText(t, i))
              // remove items that are null
             .filter(t => t !== null)
             // add seperators in between items
-            .flatMap((t, i, arr) => i < arr.length-1 ? [t, TEXT_LIST_SEPERATOR] : [t])
+            .flatMap((t, i, arr) => i < arr.length-1 ? [t, <span className="DeviceDisplayTextList__seperator" key={`sep_${i}`}>/</span>] : [t])
     }
 
     return (
