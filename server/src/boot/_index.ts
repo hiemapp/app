@@ -1,7 +1,8 @@
 const BOOT_MODULES = [
     'module-alias', 
     'dayjs',
-    'error-handlers',
+    'error-handler',
+    'shutdown-handler',
     'config',
     'database',
     'taskrunner',
