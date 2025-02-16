@@ -1,0 +1,31 @@
+.RecordsGraphTooltip {
+    background-color: var(--gray-19);
+    color: var(--gray-1);
+    padding: 1rem;
+    border-radius: var(--border-radius-md);
+}
+
+.RecordsGraphTooltip__title {
+    font-size: 1rem;
+    color: var(--gray-1);
+}
+
+.RecordsGraphTooltip__date {
+    color: var(--gray-3);
+}
+
+.RecordsGraphTooltip__time {
+    font-weight: bolder;
+}
+
+.RecordsGraphTooltip__item-marker {
+    height: 0.5rem;
+    width: 0.5rem;
+    border-radius: 99px;
+    background: var(--RecordsGraphTooltip__item-accent);
+    display: inline-block;
+}
+
+.RecordsGraphTooltip__item-value {
+    color: var(--gray-3);
+}

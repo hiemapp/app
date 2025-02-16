@@ -24,6 +24,17 @@ export const deviceRouter = router({
             return await ctx.getDocumentOrThrow(Device, input.id);
         }),
 
+    getDriverManifest: publicProcedure
+        .input(z.object({
+            id: z.number(),
+        }))
+        .query(async ({ ctx, input }) => {  
+            ctx.requirePermissionKey(`device.${input.id}.view`);
+            const device = await ctx.getResourceOrThrow(Device, input.id);
+            
+            return device.driver.getManifest(device).toJSON();
+        }),
+    
     execute: publicProcedure
         .input(z.object({
             id: z.number(),

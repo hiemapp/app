@@ -1,71 +1,75 @@
-import React, { useRef, useEffect, useState } from 'react';
-import Chart from '@/Chart';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { getColorValue } from '@tjallingf/react-utils';
+import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, CartesianGrid, Tooltip } from 'recharts';
+import dayjs from 'dayjs';
+import { trpc } from '@/utils/trpc/trpc';
+import LargeLoadingIcon from '@/LargeLoadingIcon';
+import { DeviceDriverManifestRecordingField } from 'hiem';
+import { chain, keyBy, mapValues } from 'lodash';
+import RecordsGraphTooltip from './RecordsGraphTooltip';
 
 export interface IRecordsGraphProps {
-    datasets: any[];
-    deviceId: number;
-    getDatasetLabel: (id: string) => unknown
+    records: Record<string, number>[];
+    fields: DeviceDriverManifestRecordingField[];
+    getFieldLabel: (name: string) => string|undefined;
 }
 
-// TODO: convert to tRPC
-const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ deviceId, datasets, getDatasetLabel }) => {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [ data, setData ] = useState({});
+const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, records, getFieldLabel }) => {
+    const [showFields, setShowFields] = useState<Record<string, boolean>>({});
+    const fieldsObj = useMemo(() => keyBy(fields, 'name'), [fields]);
 
-    datasets = datasets.filter(d => d.id === 'powerConsuming');
-    
     useEffect(() => {
-        setData({
-            datasets: getFormattedDataSets()
-        })
+        // only show primary fields by default
+        setShowFields(mapValues(fieldsObj, f => f.hiddenByDefault ? false : true));
     }, []);
 
-    const getFormattedDataSets = () => {
-        if(!canvasRef.current) return null;
+    const modifiedRecords = useMemo(() => {
+        return chain(records)
+            .map(record => {
+                return mapValues(record, (value, fieldId) => {
+                    const field = fieldsObj[fieldId];
+                    if (!field) return value;
 
-        const ctx = canvasRef.current.getContext('2d');
-        if(!ctx) return null;
+                    // invert record value 
+                    if (field.invert) value = value * -1
 
-        return datasets.map(dataset => {
-            const label = getDatasetLabel(dataset.id);
-            const data = dataset.values.map(([ x, y ]: any[]) => {
-                return { x, y };
+                    return value;
+                })
             })
-
-            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, getColorValue('$blue-3')!);
-            gradient.addColorStop(1, getColorValue('$blue-0')!);
-
-            return { 
-                label, 
-                data,
-                backgroundColor: gradient,
-                borderWidth: 1,
-                borderColor: getColorValue('$blue-4'),
-                fill: true,
-                pointRadius: 0
-            };
-        })
-    }
-
-    const options = {
-        scales: {
-            x: {
-                type: 'time',
-                display: false,
-            },
-            y: {
-                display: true,
-            },
-        },
-        tension: 0.3
-    };
+            .orderBy('$time', 'asc')
+            .value()
+    }, [records]);
 
     return (
-        <div className="RecordsGraph w-100">
-            <Chart type="line" data={data as any} options={options as any} canvasRef={canvasRef}></Chart>
-        </div>
+        <ResponsiveContainer className="RecordsGraph" width="100%" height="100%">
+            <AreaChart
+                width={500}
+                height={400}
+                data={modifiedRecords}
+                margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0,
+                }}>
+                <CartesianGrid strokeDasharray="5" />
+                <XAxis
+                    dataKey="$time"
+                    tickFormatter={timeStr => dayjs(timeStr).format('DD-MM')}
+                    domain={['dataMin', 'dataMax']}
+                    type="number" />
+                <YAxis />
+                <Tooltip content={<RecordsGraphTooltip />} />
+                {fields.map(field => {
+                    if (!showFields[field.name]) return null;
+
+                    const colorValue = getColorValue(field.color ?? '$blue-5');
+                    const label = getFieldLabel(field.name);
+
+                    return <Area type="monotone" dataKey={field.name} stroke={colorValue} fill={colorValue} name={label} />
+                })}
+            </AreaChart>
+        </ResponsiveContainer>
     );
 };
 

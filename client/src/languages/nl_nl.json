@@ -42,12 +42,18 @@
     },
     "$page": {
         "generic": {
-            "noData.title": "Oeps!",
+            "noData": {
+                "title": "Oeps!",
+                "message": "Er zijn geen gegevens gevonden."
+            },
             "notSignedIn.message": "Je bent niet ingelogd. {signInLink} om in te loggen.",
             "signIn.link": "Klik hier"
         },
         "devices": {
-            "title": "Apparaten"
+            "title": "Apparaten",
+            "noData": {
+                "message": "Er zijn geen apparaten gevonden."
+            }
         },
         "dashboard": {
             "title": "Dashboard"

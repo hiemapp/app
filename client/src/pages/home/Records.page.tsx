@@ -4,44 +4,41 @@ import { Suspense, lazy } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
 import LargeLoadingIcon from '@/LargeLoadingIcon';
 import { useIntl } from 'react-intl';
+import { getMessageId } from '@/utils/language';
+import { useParams } from 'react-router';
 
 const RecordsGraph = lazy(() => import('../../components/records/RecordsGraph'));
 
 const Records: React.FunctionComponent = () => {
-    const id = 7;
-
+    const deviceId = parseInt(useParams().deviceId!);
     const { formatMessage } = useIntl();
+    
+    const deviceQuery = trpc.device.get.useQuery({ id: deviceId });
+    const manifestQuery = trpc.device.getDriverManifest.useQuery({ id: deviceId });
+    const recordQuery = trpc.record.listToday.useQuery({ id: deviceId })
 
-    const deviceQuery = trpc.device.get.useQuery({ id });
-    const recordQuery = trpc.record.listLatest.useQuery({
-        id: id,
-        top: 600
-    })
-
-    const getDatasetLabel = (alias: string) => {
-        if(!recordQuery.data?.fields || !deviceQuery.data) return null;
-
-        const field = recordQuery.data.fields.find((field: any) => field.alias === alias);
-        if(typeof field?.name !== 'string') return null;
+    const getFieldLabel = (name: string) => {
+        if(!recordQuery.data?.records || !manifestQuery.data?.recording?.fields || !deviceQuery.data) return;
+        const messageId = getMessageId(deviceQuery.data.driver.type!, 'devices.drivers', `recording.fields.${name}.label`);
         
-        const driverConfig = deviceQuery.data.driver;
-        console.log(driverConfig);
-        if(typeof driverConfig?.type !== 'string') return field.name;
-
-        const [ extId, driverModuleId ] = driverConfig.type.split('.');
-        const messageId = `${extId}.deviceDrivers.${driverModuleId}.recording.fields.${field.name}.title`;
-        
-        return formatMessage({ id: messageId, defaultMessage: field.name });
+        return formatMessage({ id: messageId, defaultMessage: name });
     }
 
     const renderGraph = () => {
-        if(!recordQuery.data?.datasets|| deviceQuery.isLoading) {
-            return <LargeLoadingIcon />
-        }
+        if(recordQuery.isLoading|| manifestQuery.isLoading || deviceQuery.isLoading) return <LargeLoadingIcon />;
+        
+        if(!Array.isArray(recordQuery.data?.records)) 
+            throw new Error('Failed to load records.');
+
+        if(!Array.isArray(manifestQuery.data?.recording?.fields)) 
+            throw new Error('Failed to load recording fields manifest.');
 
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
-                <RecordsGraph deviceId={id} datasets={recordQuery.data.datasets} getDatasetLabel={getDatasetLabel} />
+                <RecordsGraph 
+                    fields={manifestQuery.data.recording.fields} 
+                    records={recordQuery.data.records} 
+                    getFieldLabel={getFieldLabel} />
             </Suspense>
         )
     }
@@ -49,7 +46,7 @@ const Records: React.FunctionComponent = () => {
 
     return (
         <Page id="records">
-            <Container>
+            <Container className="h-100">
                 <Box gutterX={1} align="center" className="mb-3">
                     <h2>Vandaag</h2>   
                     <Icon id="chevron-down" weight="solid" size={12} />

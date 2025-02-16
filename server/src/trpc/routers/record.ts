@@ -8,20 +8,30 @@ export const recordRouter = router({
             await ctx.getIndex(Device, [], device => ctx.req.user.hasPermission(device, 'view') && device.getOption('recording.enabled') === true)
         ),
 
+    listToday: publicProcedure.input(z.object({
+        id: z.number()
+    })).query(async ({ ctx, input }) => {
+        const device = await ctx.getResourceOrThrow(Device, input.id);
+
+        const records = await device.records.readToday();
+        const sampler = new RecordSampler(records);
+
+        return {
+            records: RecordSampler.serialize(sampler.getDatasets())
+        }
+    }),
+
     listLatest: publicProcedure.input(z.object({
         id: z.number(),
         top: z.number()
     })).query(async ({ ctx, input }) => {
         const device = await ctx.getResourceOrThrow(Device, input.id);
 
-        const records = await device.records.readLatest(500);
+        const records = await device.records.readLatest(input.top);
         const sampler = new RecordSampler(records);
-        const datasets = sampler.downsample(10);
-
-        console.log(datasets.length, records.length);
 
         return {
-            datasets: datasets,
+            records: RecordSampler.serialize(sampler.getDatasets()),
             fields: device.records.fields
         }
     }),

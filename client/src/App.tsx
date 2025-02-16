@@ -49,7 +49,7 @@ const App: React.FunctionComponent<IProvidersProps> = ({ children }) => {
                                 <Route element={<MainLayout />}> 
                                     <Route path="/homes/:homeId/dashboard" element={addErrorBoundary(<Dashboard />)} />
                                     <Route path="/homes/:homeId/devices" element={addErrorBoundary(<Devices />)} />
-                                    <Route path="/homes/:homeId/devices/:id/records" element={addErrorBoundary(<Records />)} />
+                                    <Route path="/homes/:homeId/devices/:deviceId/records" element={addErrorBoundary(<Records />)} />
                                     <Route path="/homes/:homeId/login" element={addErrorBoundary(<Login />)} />
                                     {/* <Route path="/homes/:homeId/records" element={addErrorBoundary(<Records />)} /> */}
                                     <Route path="/homes/:homeId/flows" element={addErrorBoundary(<Flows />)} />

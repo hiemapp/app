@@ -12,6 +12,7 @@ import { findTraitOption, hasTrait } from '@/utils/traits';
 import DeviceMenuContainer from '../DeviceMenuContainer';
 import { useNavigate } from 'react-router';
 import DeviceRichDisplay from '@/components/devices/DeviceRichDisplay';
+import HomeController from '@/utils/homes/HomeController';
 
 export interface DeviceProps {
     data: DeviceType['serializedProps'];
@@ -22,6 +23,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
     const { id, display, color, name, icon, connection, traits, options } = data;
     const palette = getPalette(color);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const home = HomeController.findCurrent();
     
     const hasMenu = hasTrait(traits, trait => trait.config.menu && !trait.options.sensor);
     const hasRecords = (options?.recording?.enabled === true);
@@ -64,10 +66,6 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
         if(typeof primaryAction?.command === 'string' && sensor !== true) {
             execute(primaryAction.command, primaryAction.params);
             return;
-        }
-
-        if(hasRecords) {
-            navigate(`/devices/${id}/records`);
         }
     }
 
@@ -123,14 +121,16 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
     // }
 
     const richDisplay = renderRichDisplay();
+    const hasClickHandler = hasMenu || (typeof primaryAction?.command === 'string' && sensor !== true);
 
     return (
         <>
             <Button 
-                onClick={handleClick}
+                onClick={hasClickHandler ? handleClick : undefined}
+                href={!hasClickHandler && hasRecords ? home.scopePath(`/devices/${id}/records`) : undefined}
                 variant="secondary" 
                 active={display.isActive}
-                disabled={sensor}
+                disabled={sensor && !hasRecords}
                 ref={buttonRef}
                 className={classNames('Device', { 
                         'Device--with-menu': hasMenu,

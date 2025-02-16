@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import HomeController from '@/utils/homes/HomeController';
 import { Link } from 'react-router-dom';
 import VoidSvg from '@/assets/svg/undraw/void.svg?react';
+import { useIntl } from 'react-intl';
+import useAuth from '@/hooks/useAuth';
 
 export interface PageProps extends React.PropsWithChildren, Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
     id: string;
@@ -22,6 +24,8 @@ const Page: React.FunctionComponent<PageProps> = ({
     ...rest
 }) => {
     const currentHome = HomeController.findCurrent();
+    const { formatMessage } = useIntl();
+    const { user } = useAuth();
 
     const renderNoDataMessage = () => {
         if(query?.data?.length) return null;
@@ -30,19 +34,21 @@ const Page: React.FunctionComponent<PageProps> = ({
             <div className="Page__no-data-message">
                 <div className="d-flex flex-column align-items-center">
                      <VoidSvg className="Page__no-data-message__svg" />
-                    <h4 className="mb-1"><FormattedMessage id="$page.generic.noData.title" /></h4>
+                    <h4 className="mb-1"><FormattedMessage id={`$page.${id}.noData.title`} defaultMessage={formatMessage({ id: "$page.generic.noData.title"} )} /></h4>
                     <p>
-                        <FormattedMessage id={`$page.${id}.noData.message`} />
+                        <FormattedMessage id={`$page.${id}.noData.message`} defaultMessage={formatMessage({ id: "$page.generic.noData.message"} )} />
                     </p>
-                    <p className="text-muted">
-                        <FormattedMessage id="$page.generic.notSignedIn.message" values={{
-                            signInLink: (
-                                <Link to={currentHome.scopePath('/login')}>
-                                    <FormattedMessage id="$page.generic.signIn.link" />
-                                </Link>
-                            )
-                        }} />
-                    </p>
+                    {!user.isAuthenticated() && (
+                        <p className="text-muted">
+                            <FormattedMessage id="$page.generic.notSignedIn.message" values={{
+                                signInLink: (
+                                    <Link to={currentHome.scopePath('/login')}>
+                                        <FormattedMessage id="$page.generic.signIn.link" />
+                                    </Link>
+                                )
+                            }} />
+                        </p>
+                    )}
                 </div>
             </div>
         )

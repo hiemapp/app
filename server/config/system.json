@@ -17,7 +17,7 @@
     },
     "devices": {
         "recording": {
-            "memorySize": -1
+            "memorySize": 10
         }
     },
     "logs": {
