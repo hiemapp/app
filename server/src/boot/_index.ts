@@ -1,9 +1,9 @@
 const BOOT_MODULES = [
     'module-alias', 
     'dayjs',
+    'config',
     'error-handler',
     'shutdown-handler',
-    'config',
     'database',
     'taskrunner',
     'controllers',
@@ -12,11 +12,13 @@ const BOOT_MODULES = [
 ]
 
 export default async function boot(rootDir: string) {
-    
     for(const name of BOOT_MODULES) {
         const module = await import(`./${name}`);
         if(typeof module.boot === 'function') {
-            await module.boot(rootDir);
+            await module.boot(rootDir).catch((err: any) => {
+                console.error(`Failed to boot module '${name}':`, err);
+                process.exit(1);
+            })
         }
     }
 };
