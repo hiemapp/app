@@ -5,33 +5,21 @@ import { Device, DeviceController, Notification } from 'hiem';
 import type { GetPropsSerializedType } from 'hiem/@types/helpers';
 
 export const deviceRouter = router({
-    list: publicProcedure
-        .query(async ({ ctx }): Promise<GetPropsSerializedType<Device>[]> =>
-            await ctx.getCollection(Device, device => ctx.req.user.hasPermission(device, 'view'))
-        ),
-
     index: publicProcedure
-        .query(async ({ ctx }) =>
-            await ctx.getIndex(Device, [], device => ctx.req.user.hasPermission(device, 'view'))
-        ),
+        .query(async ({ ctx }) => await ctx.getIndex(Device, [])),
 
     get: publicProcedure
         .input(z.object({
             id: z.number(),
         }))
-        .query(async ({ ctx, input }) => {  
-            ctx.requirePermissionKey(`device.${input.id}.view`);
-            return await ctx.getDocumentOrThrow(Device, input.id);
-        }),
+        .query(({ ctx, input }) => ctx.getDocumentOrThrow(Device, input.id)),
 
     getDriverManifest: publicProcedure
         .input(z.object({
             id: z.number(),
         }))
         .query(async ({ ctx, input }) => {  
-            ctx.requirePermissionKey(`device.${input.id}.view`);
             const device = await ctx.getResourceOrThrow(Device, input.id);
-            
             return device.driver.getManifest(device).toJSON();
         }),
     
@@ -46,9 +34,7 @@ export const deviceRouter = router({
             )
         }))
         .mutation(async ({ ctx, input }) => {
-            ctx.requirePermissionKey(`device.${input.id}.input`);
-
-            const device = await ctx.getResourceOrThrow(Device, input.id);
+            const device = await ctx.getResourceOrThrow(Device, input.id, 'interact');
 
             const promises = input.commands.map(command => {
                 return device.execute(command.name, command.params, ctx.req.user)

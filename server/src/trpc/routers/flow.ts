@@ -15,18 +15,11 @@ export const flowRouter = router({
 
 
     index: publicProcedure
-        .query(async ({ ctx }) => {
-            return await ctx.getIndex(Flow, ['name', 'icon', 'color'], flow => {
-                return ctx.req.user.hasPermission(flow, 'view');
-            });
-        }),
+        .query(({ ctx }) => ctx.getIndex(Flow, ['name', 'icon', 'color'])),
 
     get: publicProcedure
         .input(z.object({
             id: z.number(),
         }))
-        .query(async ({ ctx, input }) => {  
-            ctx.requirePermissionKey(`flow.${input.id}.view`);
-            return await ctx.getDocumentOrThrow(Flow, input.id);
-        }),
+        .query(({ ctx, input }) => ctx.getDocumentOrThrow(Flow, input.id)),
 })

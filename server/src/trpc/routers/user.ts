@@ -8,16 +8,11 @@ export const userRouter = router({
         .input(z.object({
             id: z.union([ z.number(), z.literal('me') ])
         }))
-        .query(async ({ ctx, input }) => {
-            let userId: number;
-            
+        .query(({ ctx, input }) => {           
             if(input.id === 'me') {
-                userId = ctx.req.user.id;
-            } else {
-                ctx.requirePermissionKey(`user.${input.id}.read`);
-                userId = input.id;
+                return ctx.getDocumentOrThrow(User, ctx.req.user.id, false);
             }
-            
-            return ctx.getDocumentOrThrow(User, userId);
+                
+            return ctx.getDocumentOrThrow(User, input.id);
         })
 })

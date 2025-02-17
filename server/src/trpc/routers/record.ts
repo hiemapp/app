@@ -5,7 +5,7 @@ import { Device, RecordSampler } from 'hiem';
 export const recordRouter = router({
     index: publicProcedure
         .query(async ({ ctx }) =>
-            await ctx.getIndex(Device, [], device => ctx.req.user.hasPermission(device, 'view') && device.getOption('recording.enabled') === true)
+            (await ctx.getIndex(Device, [])).filter(d => d.getOption('recording.enabled') === true)
         ),
 
     listToday: publicProcedure.input(z.object({

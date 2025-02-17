@@ -9,6 +9,6 @@ export const languageRouter = router({
             id: z.string(),
         }))
         .query(async ({ ctx, input }): Promise<GetPropsSerializedType<Language>> => {    
-            return await ctx.getDocumentOrThrow(Language, input.id);
+            return await ctx.getDocumentOrThrow(Language, input.id, false);
         }),
 })

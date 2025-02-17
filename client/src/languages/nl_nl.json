@@ -37,6 +37,11 @@
         "errors": {
             "auth": {
                 "emptyUsernameError": "Gebruikersnaam mag niet leeg zijn."
+            },
+            "permission": {
+                "interactError": "Je hebt geen toestemming om dit te bedienen.",
+                "viewError": "Je hebt geen toestemming om dit te bekijken.",
+                "manageError": "Je hebt geen toestemming om dit te beheren."
             }
         }
     },

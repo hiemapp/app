@@ -9,6 +9,8 @@ const errorFormatter = (opts: any) => {
     } else if(error.cause instanceof errors.CustomError) {
         customError = error.cause;
     }
+
+    console.log(customError);
     
     if(customError) {
         const notification = Notification.fromError(customError);

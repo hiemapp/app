@@ -14,18 +14,11 @@ export const scriptRouter = router({
         }),
 
     index: publicProcedure
-        .query(async ({ ctx }) => {
-            return await ctx.getIndex(Script, ['name', 'icon'], script => {
-                return ctx.req.user.hasPermission(script, 'view');
-            });
-        }),
+        .query(async ({ ctx }) => ctx.getIndex(Script, ['name', 'icon'])),
 
     get: publicProcedure
         .input(z.object({
             id: z.number(),
         }))
-        .query(async ({ ctx, input }) => {  
-            ctx.requirePermissionKey(`script.${input.id}.view`);
-            return await ctx.getDocumentOrThrow(Script, input.id);
-        }),
+        .query(({ ctx, input }) => ctx.getDocumentOrThrow(Script, input.id)),
 })
