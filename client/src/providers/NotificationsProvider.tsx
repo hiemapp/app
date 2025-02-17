@@ -7,9 +7,8 @@ export interface INotificationsProviderProps {
 
 const NotificationsProvider: React.FunctionComponent<INotificationsProviderProps> = ({ children }) => {
     const [ notifications, setNotifications ] = useState<any[]>([]);
-    let [ handler ] = useState(null);
     
-    return <NotificationsContext.Provider value={{ notifications, setNotifications, handler }}>{children}</NotificationsContext.Provider>;
+    return <NotificationsContext.Provider value={{ notifications, setNotifications }}>{children}</NotificationsContext.Provider>;
 };
 
 export default NotificationsProvider;

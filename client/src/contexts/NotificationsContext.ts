@@ -4,7 +4,6 @@ import { NotificationData } from '@/components/notifications/Notification/Notifi
 export interface INotificationsContext {
     notifications: NotificationData[];
     setNotifications: React.Dispatch<React.SetStateAction<NotificationData[]>>;
-    handler: any;
 }
 
 const NotificationsContext = createContext({} as INotificationsContext);

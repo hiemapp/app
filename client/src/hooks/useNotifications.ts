@@ -6,19 +6,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 const useNotifications = (handler?: (notification: NotificationData) => unknown) => {
     const ctx = useContext(NotificationsContext);
-    
-    useEffect(() => {
-        if(typeof handler !== 'function') return;
-        ctx.handler = handler;
-    });
 
     useSocketEvent('notification', notification => {
         handleReceive(notification);
     })
 
     const handleReceive = (notification: NotificationData) => {
-        if(typeof ctx.handler !== 'function') return;
-        ctx.handler(notification);
+        if(typeof handler !== 'function') return;
+        handler(notification);
     }
 
     const show = (notification: Omit<NotificationData, 'id'>) => {

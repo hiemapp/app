@@ -13,6 +13,7 @@ import DeviceMenuContainer from '../DeviceMenuContainer';
 import { useNavigate } from 'react-router';
 import DeviceRichDisplay from '@/components/devices/DeviceRichDisplay';
 import HomeController from '@/utils/homes/HomeController';
+import useNotifications from '@/hooks/useNotifications';
 
 export interface DeviceProps {
     data: DeviceType['serializedProps'];
@@ -24,6 +25,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
     const palette = getPalette(color);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const home = HomeController.findCurrent();
+    const notifications = useNotifications();
     
     const hasMenu = hasTrait(traits, trait => trait.config.menu && !trait.options.sensor);
     const hasRecords = (options?.recording?.enabled === true);
