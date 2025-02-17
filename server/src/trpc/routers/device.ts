@@ -1,8 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
-import { Device, DeviceController, Notification } from 'hiem';
-import type { GetPropsSerializedType } from 'hiem/@types/helpers';
+import { Device} from 'hiem';
 
 export const deviceRouter = router({
     index: publicProcedure

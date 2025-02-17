@@ -9,9 +9,6 @@
             }
         }
     },
-    "users": {
-        "defaultUser": "__DEFAULT__"
-    },
     "flows": {
         "interval": 60
     },

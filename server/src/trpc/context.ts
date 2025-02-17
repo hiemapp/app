@@ -1,15 +1,12 @@
 import type { Constructor } from 'hiem/@types/helpers'
-import { UserController, type ModelWithProps, errors } from 'hiem';
+import { UserController, type ModelWithProps, errors, User, ControllerRegister } from 'hiem';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
-import type { User, UserPermissionAction } from 'hiem';
+import { InferSchema } from 'hiem/dist/lib/ModelWithProps';
 
 interface Request extends ExRequest {
     user: User
 }
-
-export type SerializedPropsOf<M extends ModelWithProps<any>> = M extends ModelWithProps<infer T> ? T['serializedProps'] : never;
-export type PropsOf<M extends ModelWithProps<any>> = M extends ModelWithProps<infer T> ? T['props'] : never;
 
 export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
     const requirePermission = (resource: ModelWithProps<any>, action: UserPermissionAction) => {
@@ -34,7 +31,7 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         id: number | string, 
         permissionAction: UserPermissionAction | false = 'view'
     ) => {
-        const controller = model.prototype.__modelConfig().controller;
+        const controller = ControllerRegister.get(model);
         const resource = controller.find(id);
 
         if (!resource) {
@@ -57,13 +54,14 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         action: UserPermissionAction | false = 'view'
     ) => {
         const resource = await getResourceOrThrow(model, id, action);
-        return await resource.getAllProps() as SerializedPropsOf<M>;
+        return await resource.getAllProps() as InferSchema<M>
     }
 
     const getCollection = async <T extends ModelWithProps<any>>(
         model: Constructor<T>
     ): Promise<T[]> => {
-        const controller = model.prototype.__modelConfig().controller;
+        const controller = ControllerRegister.get(model);
+        console.log(req.user.hasPermission('device.1.view'))
         return controller.index().filter((r: any) => req.user.hasPermission(r, 'view'));
     }
 

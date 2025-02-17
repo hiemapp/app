@@ -25,6 +25,6 @@ export default class User extends Model {
     }
 
     isAuthenticated() {
-        return this.props.username !== '__DEFAULT__';
+        return this.props.username !== null;
     }
 }
