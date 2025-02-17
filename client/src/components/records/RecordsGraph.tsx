@@ -12,9 +12,13 @@ export interface IRecordsGraphProps {
     records: Record<string, number>[];
     fields: DeviceDriverManifestRecordingField[];
     getFieldLabel: (name: string) => string|undefined;
+    isAnimationActive?: boolean;
 }
 
-const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, records, getFieldLabel }) => {
+const FIELD_GRADIENT_START_OPACITY = 0.6;
+const FIELD_GRADIENT_STOP_OPACITY = 0.3;
+
+const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, records, getFieldLabel, isAnimationActive }) => {
     const [showFields, setShowFields] = useState<Record<string, boolean>>({});
     const fieldsObj = useMemo(() => keyBy(fields, 'name'), [fields]);
 
@@ -65,8 +69,28 @@ const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, rec
 
                     const colorValue = getColorValue(field.color ?? '$blue-5');
                     const label = getFieldLabel(field.name);
+                    const gradientId = `RecordsGraph-field-gradient-${field.name}`;
 
-                    return <Area type="monotone" dataKey={field.name} stroke={colorValue} fill={colorValue} name={label} />
+                    return (<>
+                        {showFields[field.name] && (
+                            <Area 
+                                isAnimationActive={isAnimationActive}
+                                type="monotone" 
+                                dataKey={field.name} 
+                                stroke={colorValue} 
+                                strokeWidth={2}
+                                fill={`url(#${gradientId})`} 
+                                name={label} />
+                        )}
+
+                        {/* fill gradient */}
+                        <defs>
+                            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="20%" stopColor={colorValue} stopOpacity={field.invert ? FIELD_GRADIENT_STOP_OPACITY : FIELD_GRADIENT_START_OPACITY} />
+                                <stop offset="80%" stopColor={colorValue} stopOpacity={field.invert ? FIELD_GRADIENT_START_OPACITY : FIELD_GRADIENT_STOP_OPACITY} />
+                            </linearGradient>
+                        </defs>
+                    </>)
                 })}
             </AreaChart>
         </ResponsiveContainer>

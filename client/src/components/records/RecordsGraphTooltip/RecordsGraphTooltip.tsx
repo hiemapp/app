@@ -13,9 +13,7 @@ const RecordsGraphTooltip: React.FunctionComponent<RecordsGraphTooltipProps> = (
     payload = payload?.length ? payload : [ { payload: { $time: 0 }}];
     const date = dayjs(payload[0].payload.$time);
 
-    console.log(payload);
-
-    if (active || 1) {
+    if (active) {
         return (
             <div className="RecordsGraphTooltip">
                 <h3 className="RecordsGraphTooltip__title fw-bold mb-1">

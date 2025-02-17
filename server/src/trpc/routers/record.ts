@@ -31,8 +31,7 @@ export const recordRouter = router({
         const sampler = new RecordSampler(records);
 
         return {
-            records: RecordSampler.serialize(sampler.getDatasets()),
-            fields: device.records.fields
+            records: RecordSampler.serialize(sampler.getDatasets())
         }
     }),
 
@@ -44,12 +43,12 @@ export const recordRouter = router({
         }))
         .query(async ({ ctx, input }) => {
             const device = await ctx.getResourceOrThrow(Device, input.id);
-            // const recordSet = await device.records.readPeriod(input.start, input.end, false);
+            
+            const records = await device.records.readPeriod(input.start, input.end);
+            const sampler = new RecordSampler(records);
 
             return {
-                // records: recordSet.getRecords(),
-                records: [],
-                fields: device.records.fields
+                records: RecordSampler.serialize(sampler.getDatasets())
             }
         })
 })
