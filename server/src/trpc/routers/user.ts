@@ -1,6 +1,5 @@
 import { router, publicProcedure } from '../trpc';
-import { User, UserController } from 'hiem';
-import { GetPropsSerializedType } from 'hiem/@types/helpers';
+import { User, InferSchema } from 'hiem';
 import { z } from 'zod';
 
 export const userRouter = router({

@@ -1,5 +1,5 @@
 import type { Constructor } from 'hiem/@types/helpers'
-import { UserController, type ModelWithProps, errors, User, ControllerRegister, UserPermissionAction, InferSchema, Model } from 'hiem';
+import { UserController, type ModelWithProps, errors, User, ControllerRegister, UserPermissionAction, Model, InferSchema } from 'hiem';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
 

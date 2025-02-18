@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import './Device.scss';
 import DeviceDisplayRecord from '../DeviceDisplayRecord';
 import DeviceDisplayTextList from '../DeviceDisplayTextList';
-import type { DeviceType } from 'hiem';
+import type { Device as DeviceModel, InferSchema } from 'hiem';
 import Modal from '@/components/Modal';
 import { trpc } from '@/utils/trpc/trpc';
 import { findTraitOption, hasTrait } from '@/utils/traits';
@@ -16,7 +16,7 @@ import HomeController from '@/utils/homes/HomeController';
 import useNotifications from '@/hooks/useNotifications';
 
 export interface DeviceProps {
-    data: DeviceType['serializedProps'];
+    data: InferSchema<DeviceModel>;
     dataUpdatedAt: number;
 }
 

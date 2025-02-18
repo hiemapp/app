@@ -1,5 +1,5 @@
 import React from 'react';
-import { DevicePropsSerialized } from 'hiem';
+import { Device, InferSchema } from 'hiem';
 import OpenCloseMenu from '../menus/OpenCloseMenu';
 import ColorMenu from '../menus/ColorMenu';
 import './DeviceMenuContainer.scss';
@@ -11,10 +11,10 @@ const MENU_COMPONENTS: Record<string, React.FC<DeviceMenuProps>> = {
 }
 
 export interface DeviceMenuContainerProps extends React.PropsWithChildren {
-    traits: DevicePropsSerialized['traits'];
+    traits: InferSchema<Device>['traits'];
     execute: (command: string, params: any, doVibrate?: boolean) => unknown;
     palette: Palette;
-    device: DevicePropsSerialized
+    device: InferSchema<Device>
 }
 
 export interface DeviceMenuProps extends DeviceMenuContainerProps{
