@@ -7,8 +7,8 @@ export async function up(knex: Knex): Promise<void> {
         t.string('uuid').index();
         t.string('interval');
         t.string('keyword');
-        t.json('data');
-        t.json('meta');
+        t.text('data');
+        t.text('meta');
         t.timestamps();
     })
 }

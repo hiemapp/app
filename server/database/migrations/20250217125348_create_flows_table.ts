@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         t.increments('id');
         t.string('name');
         t.string('icon');
-        t.json('state');
+        t.text('state');
         t.timestamps();
     })
 }

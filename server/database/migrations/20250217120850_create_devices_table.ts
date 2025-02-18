@@ -7,10 +7,10 @@ export async function up(knex: Knex): Promise<void> {
         t.string('name');
         t.string('icon');
         t.string('color');
-        t.json('driver');
+        t.text('driver');
         t.integer('connector_id');
-        t.json('options');
-        t.json('metadata');
+        t.text('options');
+        t.text('metadata');
         t.timestamps();
     })
 }

@@ -4,10 +4,11 @@ import type { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('users', t => {
         t.increments('id');
-        t.string('name');
         t.string('username');
-        t.json('permissions');
-        t.json('settings');
+        t.string('first_name');
+        t.string('last_name');
+        t.text('permissions');
+        t.text('settings');
         t.string('password');
         t.timestamps();
     })

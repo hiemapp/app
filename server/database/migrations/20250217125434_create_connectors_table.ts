@@ -4,7 +4,7 @@ import type { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('connectors', t => {
         t.increments('id');
-        t.json('protocol');
+        t.text('protocol');
         t.timestamps();
     })
 }
