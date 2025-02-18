@@ -1,15 +1,14 @@
 import type { Constructor } from 'hiem/@types/helpers'
-import { UserController, type ModelWithProps, errors, User, ControllerRegister } from 'hiem';
+import { UserController, type ModelWithProps, errors, User, ControllerRegister, UserPermissionAction, InferSchema, Model } from 'hiem';
 import { TRPCError, inferAsyncReturnType } from '@trpc/server';
 import { type Request as ExRequest, type Response } from 'express';
-import { InferSchema } from 'hiem/dist/lib/ModelWithProps';
 
 interface Request extends ExRequest {
     user: User
 }
 
 export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
-    const requirePermission = (resource: ModelWithProps<any>, action: UserPermissionAction) => {
+    const requirePermission = (resource: Model<any>, action: UserPermissionAction) => {
         if (!req.user.hasPermission(resource, action)) {
             switch(action) {
                 case 'view': 
@@ -61,7 +60,6 @@ export const createContext = async ({ req, res }: { req: Request, res: Response 
         model: Constructor<T>
     ): Promise<T[]> => {
         const controller = ControllerRegister.get(model);
-        console.log(req.user.hasPermission('device.1.view'))
         return controller.index().filter((r: any) => req.user.hasPermission(r, 'view'));
     }
 
