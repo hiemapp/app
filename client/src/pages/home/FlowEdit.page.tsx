@@ -5,7 +5,7 @@ import { lazy, Suspense } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
 import LargeLoadingIcon from '@/LargeLoadingIcon';
 
-const FlowEditor = lazy(() => import('../../components/flows/FlowEditor'));
+const FlowWorkspace = lazy(() => import('../../components/flows/FlowWorkspace'));
 
 const FlowEdit: React.FunctionComponent = () => {
     const { flowId } = useParams();
@@ -22,17 +22,14 @@ const FlowEdit: React.FunctionComponent = () => {
 
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
-                <FlowEditor 
-                    flowData={flow.data!} 
-                    blockData={blocks.data!} 
-                    blockCategoryData={blockCategories.data!} />
+                <FlowWorkspace />
             </Suspense>
         )
     }
 
     return (
         <Page id="flow_edit" titleValues={{ flowName: flow.data!.name }}>
-            <Container>
+            <Container className="h-100 w-100">
                 {renderEditor()}
             </Container>
         </Page>
