@@ -19,22 +19,22 @@ const BlocklyWorkspace: React.FunctionComponent<IBlocklyWorkspaceProps> = memo((
     onInject,
     ...rest
 }) => {
-    const ref = useRef(null);
+    const divRef = useRef(null);
 
     useEffect(() => {
-        if (!ref.current) {
-            throw new Error('Failed to inject Blockly, ref.current is invalid.');
+        if (!divRef.current) {
+            throw new Error('Failed to inject Blockly, ref is invalid..');
         }
 
         try {
-            const workspace = Blockly.inject(ref.current, injectOptions);
+            const workspace = Blockly.inject(divRef.current, injectOptions);
             onInject?.(workspace);
         } catch(err) {
             console.error(err);
         }
     }, []);
     
-    return <div {...rest} ref={ref} className={classNames('BlocklyWorkspace', className)}></div>;
+    return <div {...rest} ref={divRef} className={classNames('BlocklyWorkspace', className)}></div>;
 }, () => true);
 
 export default BlocklyWorkspace;

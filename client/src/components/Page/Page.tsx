@@ -12,7 +12,8 @@ import useAuth from '@/hooks/useAuth';
 export interface PageProps extends React.PropsWithChildren, Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
     id: string;
     titleValues?: any;
-    query?: UseTRPCQueryResult<any, any>
+    query?: UseTRPCQueryResult<any, any>;
+    plain?: boolean;
 }
 
 const Page: React.FunctionComponent<PageProps> = ({
@@ -21,6 +22,7 @@ const Page: React.FunctionComponent<PageProps> = ({
     titleValues,
     query,
     className,
+    plain = false,
     ...rest
 }) => {
     const currentHome = HomeController.findCurrent();
@@ -54,19 +56,29 @@ const Page: React.FunctionComponent<PageProps> = ({
         )
     }
 
+    const renderContent = () => {
+        if(plain) return children;
+
+        return (
+            <>
+                <Container className="my-4 mt-md-3">
+                    <h1 className="Page__title">
+                        <FormattedMessage id={`$page.${id}.title`} defaultMessage={" "} values={titleValues} />
+                    </h1>
+                </Container>
+                <main className="Page__content h-100">
+                    {children}
+                    {query && !query.isLoading && renderNoDataMessage()}
+                </main>
+            </>
+        )
+    }
+
     return (
         <div {...rest} 
-            className={classNames('Page d-flex flex-column h-100', className)}
+            className={classNames('Page d-flex flex-column h-100', className, { 'p-0': plain })}
             id={id}>
-            <Container className="my-4 mt-md-3">
-                <h1 className="Page__title">
-                    <FormattedMessage id={`$page.${id}.title`} defaultMessage={" "} values={titleValues} />
-                </h1>
-            </Container>
-            <main className="Page__content h-100">
-                {children}
-                {query && !query.isLoading && renderNoDataMessage()}
-            </main>
+            {renderContent()}
         </div>
     )
 }

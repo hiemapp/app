@@ -1,0 +1,23 @@
+.FlowWorkspaceCategoryToolbox {
+    background: var(--gray-0);
+    height: 100%;
+    padding: 0.5rem;
+    border-right: var(--FlowWorkspace__toolbox-border);
+}
+
+.FlowWorkspaceCategoryToolbox-item {
+    margin-bottom: 0.5rem;
+
+    .Button {
+        --Button--hover-background: var(--gray-1);
+        --Button--focus-background: var(--gray-2);
+        --Button--active-background: var(--gray-1);
+        padding-right: 3rem;
+    }
+}
+
+.FlowWorkspaceCategoryToolbox-item__icon {
+    padding: 0.375rem;
+    border-radius: var(--border-radius-md);
+    color: var(--FlowWorkspaceCategoryToolbox-item-color);
+}

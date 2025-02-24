@@ -10,6 +10,11 @@
     }
 }
 
+.Modal--size-fill {
+    height: 95%;
+    width: 95%;
+}
+
 // Allow clicking through the overlay when it's closing  
 .ReactModal__Overlay--before-close {
     pointer-events: none !important;

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { trpc } from '@/utils/trpc/trpc';
 import LargeLoadingIcon from '@/LargeLoadingIcon';
+import Modal from '@/components/Modal';
 
 const FlowWorkspace = lazy(() => import('../../components/flows/FlowWorkspace'));
 
@@ -28,10 +29,8 @@ const FlowEdit: React.FunctionComponent = () => {
     }
 
     return (
-        <Page id="flow_edit" titleValues={{ flowName: flow.data!.name }}>
-            <Container className="h-100 w-100">
-                {renderEditor()}
-            </Container>
+        <Page id="flow_edit" titleValues={{ flowName: flow.data!.name }} plain>
+            {renderEditor()}
         </Page>
     );
 };

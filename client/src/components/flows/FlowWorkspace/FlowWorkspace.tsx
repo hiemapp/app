@@ -1,10 +1,15 @@
-import FlowBlockParser from '@/flows/FlowBlockParser';
+import FlowWorkspaceBlock from '@/flows/FlowWorkspaceBlock';
 import { trpc } from '@/utils/trpc/trpc';
-import { getColorValue } from '@tjallingf/react-utils';
+import { Box, getColorValue } from '@tjallingf/react-utils';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Blockly from 'blockly';
 import BlocklyWorkspace from '@/components/BlocklyWorkspace';
 import { useIntl } from 'react-intl';
+import FlowWorkspaceTheme from '@/flows/FlowWorkspaceTheme';
+import FlowWorkspaceCategory from '@/flows/FlowWorkspaceCategory';
+import _ from 'lodash';
+import FlowWorkspaceCategoryToolbox from './FlowWorkspaceCategoryToolbox';
+import './FlowWorkspace.scss';
 
 export interface FlowWorkspaceProps extends React.PropsWithChildren {
 
@@ -14,33 +19,87 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
 
 }) => {
     const intl = useIntl(); 
-    const workspaceRef = useRef(null);
+    const workspaceRef = useRef<Blockly.WorkspaceSvg>();
+    
     const blocksQuery = trpc.flowWorkspace.listBlocks.useQuery();
+    const categoriesQuery = trpc.flowWorkspace.listCategories.useQuery();
 
-    const parsers = useMemo(() => {
-        if (!Array.isArray(blocksQuery.data)) return null;
+    const [ wspBlocks, setWspBlocks] = useState<Record<string, FlowWorkspaceBlock>>();
+    const [ wspCategories, setWspCategories ] = useState<Record<string, FlowWorkspaceCategory>>();
+    const [ selectedToolboxCategoryId, setSelectedToolboxCategoryId ] = useState<string|null>(null);
 
-        return blocksQuery.data.map(block => {
-            return new FlowBlockParser(block.type, block.manifest, block.layout, intl);
-        });
-    }, [blocksQuery.data]);
+    const handleWorkspaceEvent = (event: any) => {
+        switch(event.type) {
+            case Blockly.Events.TOOLBOX_ITEM_SELECT:
+                setSelectedToolboxCategoryId(event.newItem || null);
+                break;
+        }
+    }
 
+    const handleInject = (workspace: Blockly.WorkspaceSvg) => {
+        workspaceRef.current = workspace;
+        workspaceRef.current?.addChangeListener(handleWorkspaceEvent)
+    }
 
-    if(!parsers) return null;
+    const selectToolboxCategory = (categoryId: string|null) => {
+        if(!workspaceRef.current) return;
+
+        const toolbox = workspaceRef.current.getToolbox() as any;
+        toolbox.setSelectedItem(toolbox.getToolboxItemById(categoryId));
+    }
+
+    useEffect(() => {
+        if(!wspCategories) return;
+
+        FlowWorkspaceTheme.register(wspCategories);
+
+        setWspBlocks(_.chain(blocksQuery.data)
+            .filter(block => !!wspCategories[block.manifest.category])
+            .mapValues(block => 
+                new FlowWorkspaceBlock(block.type, block.manifest, block.layout, wspCategories![block.category], intl))
+            .keyBy('type')
+        .value());
+    }, [ wspCategories ]);
+
+    useEffect(() => {
+        if (!blocksQuery.data || !categoriesQuery.data) return;
+
+        setWspCategories(_.chain(categoriesQuery.data!)
+            .mapValues(category => 
+                new FlowWorkspaceCategory(category.id, category.manifest, category.extensionId, intl))
+            .keyBy('id')
+        .value())
+    }, [ blocksQuery.data, categoriesQuery.data ]);
+
+    if(!wspBlocks || !wspCategories) return null;
 
     const toolbox = {
-                "kind": "flyoutToolbox",
-        "contents": parsers.map(p => p.getToolboxLayout())
+        kind: 'categoryToolbox',
+        contents: _.values(wspCategories).map(category => category.getToolboxLayout(wspBlocks))
     }
     
     return (
-        <BlocklyWorkspace injectOptions={{
-            grid: {
-                spacing: 20
-            },
-            toolbox,
-            renderer: 'zelos'
-        }}/>
+        <Box className="FlowWorkspace">
+            <FlowWorkspaceCategoryToolbox 
+                wspCategories={wspCategories} 
+                selectedCategoryId={selectedToolboxCategoryId}
+                onSelect={selectToolboxCategory} />
+            <BlocklyWorkspace 
+                onInject={handleInject}
+                injectOptions={{
+                    zoom: {
+                        startScale: 0.8
+                    },
+                    grid: {
+                        spacing: 20,
+                        snap: true
+                    },
+                    toolbox,
+                    renderer: 'zelos',
+                    theme: 'flow_workspace',
+                    sounds: false
+                }} />
+        </Box>
     )
 }
 

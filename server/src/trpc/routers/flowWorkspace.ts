@@ -14,7 +14,7 @@ export const flowWorkspaceRouter = router({
                     result.push({
                         type: extModule.$module.id,
                         manifest: extModule.getManifest().toJSON(),
-                        layout: extModule.$module.methods.getLayout(),
+                        layout: extModule.$module.methods.getLayout().toJSON(),
                     });
                 } catch (err: any) {
                     logger.error(err);
@@ -25,7 +25,7 @@ export const flowWorkspaceRouter = router({
             return result;
         }),
 
-    listBlockCategories: publicProcedure
+    listCategories: publicProcedure
         .query(({ ctx }): Array<any> => {
             const flowBlockCategories = ExtensionController.findAllModulesOfType(FlowBlockCategory);
             const result: any[] = [];
