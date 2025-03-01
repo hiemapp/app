@@ -1,7 +1,8 @@
-import { logger, UserController, ExtensionController, ConnectorController, DeviceController, FlowController, ScriptController, LanguageController } from 'hiem';
+import { logger, UserController, ExtensionController, ConnectorController, DeviceController, FlowController, ScriptController, LanguageController, TaskController } from 'hiem';
 
 export async function boot() {
     logger.debug('Booting controllers...');
+    await TaskController.load();
     await UserController.load();
     await ExtensionController.load();
     await ConnectorController.load();

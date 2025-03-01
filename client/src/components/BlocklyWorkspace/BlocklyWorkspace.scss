@@ -9,25 +9,30 @@
     .blocklyToolboxDiv {
         display: none !important;
     }
+
+    .blocklyScrollbarHandle {
+        fill: var(--gray-3);
+    }
+
 }
 
 /** Select dropdowns **/
 .blocklyDropDownDiv {
     padding: 0;
-    background: var(--blockly-dropdown-background);
-    border: var(--blockly-dropdown-border);
+    background: var(--gray-1);
+    border: 2px solid var(--gray-2);
+    border-radius: var(--border-radius-md);
 
     .blocklyMenuItem {
-        color: var(--blockly-dropdown-color);
+        color: var(--text-primary);
         padding: 0.5rem;
 
         &:hover {
-            background: var(--blockly-dropdown__item--hover-background);
+            background: var(--gray-2);
         }
 
         &.blocklyMenuItemSelected {
-            background: var(--blockly-dropdown__item--active-background);
-            font-weight: 700;
+            background: var(--gray-2);
         }
     }
 

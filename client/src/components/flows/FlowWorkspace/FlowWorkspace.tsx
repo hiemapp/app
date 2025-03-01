@@ -1,7 +1,7 @@
 import FlowWorkspaceBlock from '@/flows/FlowWorkspaceBlock';
 import { trpc } from '@/utils/trpc/trpc';
 import { Box, getColorValue } from '@tjallingf/react-utils';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Blockly from 'blockly';
 import BlocklyWorkspace from '@/components/BlocklyWorkspace';
 import { useIntl } from 'react-intl';
@@ -10,43 +10,90 @@ import FlowWorkspaceCategory from '@/flows/FlowWorkspaceCategory';
 import _ from 'lodash';
 import FlowWorkspaceCategoryToolbox from './FlowWorkspaceCategoryToolbox';
 import './FlowWorkspace.scss';
+import FlowWorkspaceToolbar from './FlowWorkspaceToolbar';
+import type { Flow, InferSchema } from 'hiem';
+import { flowWorkspaceStorage } from '@/utils/storage';
 
 export interface FlowWorkspaceProps extends React.PropsWithChildren {
-
+    flow: InferSchema<Flow>
 }
 
 const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
-
+    flow
 }) => {
     const intl = useIntl(); 
-    const workspaceRef = useRef<Blockly.WorkspaceSvg>();
     
     const blocksQuery = trpc.flowWorkspace.listBlocks.useQuery();
     const categoriesQuery = trpc.flowWorkspace.listCategories.useQuery();
+    const saveMutation = trpc.flow.save.useMutation({
+        onSuccess: () => clearWorkspaceDraft()
+    });
 
+    const [ workspace, setWorkspace ] = useState<Blockly.WorkspaceSvg>();
     const [ wspBlocks, setWspBlocks] = useState<Record<string, FlowWorkspaceBlock>>();
     const [ wspCategories, setWspCategories ] = useState<Record<string, FlowWorkspaceCategory>>();
     const [ selectedToolboxCategoryId, setSelectedToolboxCategoryId ] = useState<string|null>(null);
+
+    const handleSave = () => {
+        saveMutation.mutate({
+            id: flow.id,
+            state: serializeWorkspace()
+        })
+    }
+
+    const serializeWorkspace = () => {
+        if(!workspace) return;
+        return Blockly.serialization.workspaces.save(workspace);
+    }
+
+    const clearWorkspaceDraft = () => {
+        return flowWorkspaceStorage.removeItem(`workspaces.${flow.id}`);
+    }
+
+    const saveWorkspaceDraft = () => {
+        const state = serializeWorkspace();
+        return flowWorkspaceStorage.setItem(`workspaces.${flow.id}`, state);
+    }
+    const saveWorkspaceDraftDebounced = useCallback(_.debounce(saveWorkspaceDraft, 1000), [ workspace ]);
+
+    const loadWorkspaceDraft = async () => {
+        if(!workspace) return;
+        try {
+            const state = await flowWorkspaceStorage.getItem(`workspaces.${flow.id}`) as any;
+            if(!state) return;
+
+            Blockly.serialization.workspaces.load(state, workspace);
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
     const handleWorkspaceEvent = (event: any) => {
         switch(event.type) {
             case Blockly.Events.TOOLBOX_ITEM_SELECT:
                 setSelectedToolboxCategoryId(event.newItem || null);
                 break;
+            case Blockly.Events.BLOCK_CHANGE:
+            case Blockly.Events.BLOCK_CREATE:
+            case Blockly.Events.BLOCK_DELETE:
+            case Blockly.Events.BLOCK_MOVE:
+                saveWorkspaceDraftDebounced();
+                break;
         }
     }
 
-    const handleInject = (workspace: Blockly.WorkspaceSvg) => {
-        workspaceRef.current = workspace;
-        workspaceRef.current?.addChangeListener(handleWorkspaceEvent)
-    }
-
     const selectToolboxCategory = (categoryId: string|null) => {
-        if(!workspaceRef.current) return;
-
-        const toolbox = workspaceRef.current.getToolbox() as any;
+        if(!workspace) return;
+        const toolbox = workspace.getToolbox() as any;
         toolbox.setSelectedItem(toolbox.getToolboxItemById(categoryId));
     }
+
+    useEffect(() => {
+        if(!workspace) return;
+
+        workspace.addChangeListener(handleWorkspaceEvent);
+        loadWorkspaceDraft();
+    }, [ workspace ]);
 
     useEffect(() => {
         if(!wspCategories) return;
@@ -84,21 +131,27 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
                 wspCategories={wspCategories} 
                 selectedCategoryId={selectedToolboxCategoryId}
                 onSelect={selectToolboxCategory} />
-            <BlocklyWorkspace 
-                onInject={handleInject}
-                injectOptions={{
-                    zoom: {
-                        startScale: 0.8
-                    },
-                    grid: {
-                        spacing: 20,
-                        snap: true
-                    },
-                    toolbox,
-                    renderer: 'zelos',
-                    theme: 'flow_workspace',
-                    sounds: false
-                }} />
+            <Box direction="column" className="w-100 h-100">
+                <FlowWorkspaceToolbar
+                    flow={flow} 
+                    workspace={workspace}
+                    onSave={handleSave} />
+                <BlocklyWorkspace 
+                    onInject={setWorkspace}
+                    injectOptions={{
+                        zoom: {
+                            startScale: 0.8
+                        },
+                        grid: {
+                            spacing: 20,
+                            snap: true
+                        },
+                        toolbox,
+                        renderer: 'thrasos',
+                        theme: 'flow_workspace',
+                        sounds: false
+                    }} />
+            </Box>
         </Box>
     )
 }

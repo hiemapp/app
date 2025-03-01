@@ -23,7 +23,7 @@ const FlowEdit: React.FunctionComponent = () => {
 
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
-                <FlowWorkspace />
+                <FlowWorkspace flow={flow.data!} />
             </Suspense>
         )
     }

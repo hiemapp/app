@@ -1,0 +1,10 @@
+.FlowWorkspaceToolbar {
+    padding: 0.5rem;
+    width: 100%;
+    border-bottom: var(--FlowWorkspace__toolbar-border);
+}
+
+.FlowWorkspaceToolbar__divider {
+    height: 100%;
+    border-left: var(--FlowWorkspace__toolbar-border);
+}

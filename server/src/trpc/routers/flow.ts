@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { FlowController, Flow } from 'hiem';
 
 export const flowRouter = router({
-    edit: publicProcedure
+    save: publicProcedure
         .input(z.object({
             id: z.number(),
             state: z.any()

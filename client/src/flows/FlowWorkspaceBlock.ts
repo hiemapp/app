@@ -209,8 +209,6 @@ export default class FlowWorkspaceBlock {
             def[`message${i+1}`] = this.getStatementLabel(statement);
         })
 
-        console.log(def);
-
         def.output = this.getOutputType();
 
         return def;
@@ -224,7 +222,6 @@ export default class FlowWorkspaceBlock {
         Blockly.Blocks[this.type] = {
             init: function () {
                 try {
-                    console.log('initB');
                     this.jsonInit(that.def());
                 } catch(err) {
                     console.error(err);
