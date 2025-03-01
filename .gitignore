@@ -30,7 +30,7 @@ server/public
 
 # Userdata
 server/storage/**
-server/config/**
+server/config/user/**
 
 # Vite
 vite.config.ts.timestamp-*
