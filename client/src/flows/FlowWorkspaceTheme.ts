@@ -4,10 +4,9 @@ import { getColorValue, parseColor } from '@tjallingf/react-utils';
 import Color from 'color';
 import FlowWorkspaceCategory from './FlowWorkspaceCategory';
 import _ from 'lodash';
-import { ITheme } from 'blockly/core/theme';
 
 export default class FlowWorkspaceTheme {
-    static def(wspCategories: Record<string, FlowWorkspaceCategory>): ITheme {
+    static def(wspCategories: Record<string, FlowWorkspaceCategory>): Blockly.Theme {
         const blockStyles: Record<string, any> = {};
 
         _.values(wspCategories).forEach(category => {
@@ -37,7 +36,7 @@ export default class FlowWorkspaceTheme {
                 workspaceBackgroundColour: 'var(--FlowWorkspace-background)',
                 flyoutBackgroundColour: 'var(--FlowWorkspace__flyout-background)'
             }
-        }
+        } as any;
     }
 
     static register(wspCategories: Record<string, FlowWorkspaceCategory>) {

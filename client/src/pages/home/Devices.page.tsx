@@ -22,8 +22,6 @@ const Devices: React.FunctionComponent = () => {
 
             return {...oldData, ...data.device};
         })
-
-        // deviceQueries.find(q => q.data?.id === data.device.id)?.refetch?.();
     });
 
     const devices = useMemo(() => deviceQueries.map(query => {  

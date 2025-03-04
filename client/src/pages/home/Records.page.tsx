@@ -6,7 +6,6 @@ import LargeLoadingIcon from '@/LargeLoadingIcon';
 import { useIntl } from 'react-intl';
 import { getMessageId } from '@/utils/language';
 import { useParams } from 'react-router';
-import ButtonGroup from '@/components/ButtonGroup';
 import RecordsGraphToolbar from '@/components/records/RecordsGraphToolbar';
 
 const RecordsGraph = lazy(() => import('../../components/records/RecordsGraph'));
@@ -18,10 +17,16 @@ const Records: React.FunctionComponent = () => {
     
     const deviceQuery = trpc.device.get.useQuery({ id: deviceId });
     const manifestQuery = trpc.device.getDriverManifest.useQuery({ id: deviceId });
-    const recordQuery = trpc.record.listPeriod.useQuery({ id: deviceId, start: period[0], end: period[1] }, { enabled: false });
+    const recordQuery = trpc.record.listPeriod.useQuery({ 
+        id: deviceId, 
+        start: period[0], 
+        end: period[1], 
+        sample: Math.round(window.innerWidth / 3)
+    }, { enabled: false });
+    console.log('len', recordQuery?.data?.records.length)
 
     useEffect(() => {
-        if(period.length >= 2) {
+        if(period.length === 2) {
             recordQuery.refetch();
         }
     }, [ period ]);
@@ -35,7 +40,6 @@ const Records: React.FunctionComponent = () => {
 
     const handlePeriodChange = (start: Date, end: Date) => {
         setPeriod([ start, end ]);
-        console.log(start, end);
     }
 
     const renderGraph = () => {
@@ -50,6 +54,7 @@ const Records: React.FunctionComponent = () => {
         return (
             <Suspense fallback={<LargeLoadingIcon />}>
                 <RecordsGraph 
+                    period={period}
                     fields={manifestQuery.data.recording.fields} 
                     records={recordQuery.isLoading ? [] : recordQuery.data!.records} 
                     getFieldLabel={getFieldLabel} />

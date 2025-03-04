@@ -5,11 +5,11 @@ import userMiddleware from '@/websocket/middleware/userMiddleware';
 import { Socket } from 'socket.io';
 
 export async function boot() {
-    if (typeof Config.getOrFail('secret.jwtSecret') !== 'string') {
+    Config.getOrCreate('system.server.jwtSecret', () => {
         logger.debug('Generating new JWT secret...');
-        Config.update('secret.jwtSecret', crypto.randomBytes(256).toString('base64'));
-    }
-
+        return crypto.randomBytes(256).toString('base64');
+    });
+    
     // Initialize the webserver
     WebServer.init();
 
@@ -33,21 +33,27 @@ export async function boot() {
 
     // Add websocket listeners for device events
     DeviceController.index().forEach(device => {
-        ['state:update', 'connection:update'].forEach((event: any) => {
-            device.on(event, async () => {
-                const sockets = await WebServer.io.fetchSockets();
-                sockets.map(socket => {
-                    const user = socket.data.user;
+        device.on('state:update', async () => {
+            const state = device.getState();
 
-                    WebServer.io.sockets.emit('device:update', {
-                        device: {
-                            id: device.id,
-                            state: device.getState(),
-                            display: device.getDisplay(user)
-                        }
-                    });
+            const sockets = await WebServer.io.fetchSockets();
+            sockets.forEach(socket => {
+                socket.emit('device:update', {
+                    device: {
+                        id: device.id,
+                        state: state,
+                        display: device.getDisplay(socket.data.user).toJSON()
+                    }
                 })
+            })
+        })
 
+        device.on('connection:update', async () => {
+            WebServer.io.sockets.emit('device:update', {
+                device: {
+                    id: device.id,
+                    isConnected: device.isConnected()
+                }
             })
         })
     })

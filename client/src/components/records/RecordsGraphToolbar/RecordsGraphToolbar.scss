@@ -1,9 +1,27 @@
-.RecordsGraphToolbar__timespan-selector .Button {
+.RecordsGraphToolbar__unit-selector .Button {
     --Button-background: var(--gray-1);
     --Button--hover-background: var(--gray-2);
     --Button--focus-background: var(--blue-4);
     --Button--active-background: var(--blue-4);
+    --Button--active-color: var(--text-light);
     width: auto;
     padding-left: 2rem;
     padding-right: 2rem;
+}
+
+.RecordsGraphToolbar__time-selector {   
+    & :first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    & :last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+.RecordsGraphToolbar__time-selector__label {
+    padding: 0 1rem;
+    background: var(--gray-2);
 }

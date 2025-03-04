@@ -35,7 +35,8 @@ export const getUserFromToken = (token: any) => {
 
     try {
         if(typeof token === 'string') {
-            const payload: any = jwt.verify(token, Config.get('secret.jwtSecret'));
+            const jwtSecret = Config.get('system.server.jwtSecret');
+            const payload: any = jwt.verify(token, jwtSecret);
 
             if(payload && typeof payload.userId === 'number') {
                 user = UserController.find(payload.userId);
@@ -51,7 +52,7 @@ export const generateToken = (user: User) => {
         throw new Error('Invalid user.');
     }
 
-    const jwtSecret = Config.get('secret.jwtSecret');
+    const jwtSecret = Config.get('system.server.jwtSecret');
     const token = jwt.sign({ userId: user.id }, jwtSecret);
 
     return token;

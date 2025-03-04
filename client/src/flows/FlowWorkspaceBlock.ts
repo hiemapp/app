@@ -1,10 +1,8 @@
-import { IFlowBlockLayout, IFlowBlockLayout_parameter, IFlowBlockLayout_parameter_type, IFlowBlockLayout_statement, IFlowBlockLayoutSerialized, IFlowBlockLayoutSerialized_parameter, IFlowBlockManifest } from 'hiem';
-import Blockly from 'blockly';
+import { IFlowBlockLayout_parameter, IFlowBlockLayout_statement, IFlowBlockLayoutSerialized, IFlowBlockLayoutSerialized_parameter, IFlowBlockManifest } from 'hiem';
+import * as Blockly from 'blockly';
 import _ from 'lodash';
 import { IntlShape } from 'react-intl';
-import { getColorValue } from '@tjallingf/react-utils';
 import FlowWorkspaceCategory from './FlowWorkspaceCategory';
-import dayjs from 'dayjs';
 
 export default class FlowWorkspaceBlock {
     static primitives: Record<string, string> = {} as any;
@@ -70,14 +68,6 @@ export default class FlowWorkspaceBlock {
         }
     }
 
-    protected serializeDropdownValue(value: any) {
-        return JSON.stringify(value);
-    }
-
-    protected unserializeDropdownValue(value: string) {
-        return JSON.parse(value);
-    }
-
     protected toBlocklyCheck(type: IFlowBlockLayout_parameter['type']) {
         const types = _.castArray(type);
         if(types.includes('any')) return null;
@@ -109,7 +99,7 @@ export default class FlowWorkspaceBlock {
             // See https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#prefixsuffix_matching)
             const labelStr = (label+'').replaceAll(' ', '\u00A0');
 
-            return [ labelStr, this.serializeDropdownValue(opt.value) ];
+            return [ labelStr, opt.value ];
         });
         if (options.length === 0) options.push([param.id, '']);
 

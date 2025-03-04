@@ -1,8 +1,8 @@
 import FlowWorkspaceBlock from '@/flows/FlowWorkspaceBlock';
 import { trpc } from '@/utils/trpc/trpc';
-import { Box, getColorValue } from '@tjallingf/react-utils';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Blockly from 'blockly';
+import { Box } from '@tjallingf/react-utils';
+import React, { useCallback, useEffect, useState } from 'react';
+import * as Blockly from 'blockly';
 import BlocklyWorkspace from '@/components/BlocklyWorkspace';
 import { useIntl } from 'react-intl';
 import FlowWorkspaceTheme from '@/flows/FlowWorkspaceTheme';
@@ -45,6 +45,12 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
         if(!workspace) return;
         return Blockly.serialization.workspaces.save(workspace);
     }
+    
+    const loadWorkspace = async () => {
+        if(!workspace) return;
+        const draft = await getWorkspaceDraft();
+        Blockly.serialization.workspaces.load(draft ? draft.state : flow.state, workspace);
+    }
 
     const clearWorkspaceDraft = () => {
         return flowWorkspaceStorage.removeItem(`workspaces.${flow.id}`);
@@ -52,17 +58,19 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
 
     const saveWorkspaceDraft = () => {
         const state = serializeWorkspace();
-        return flowWorkspaceStorage.setItem(`workspaces.${flow.id}`, state);
+        return flowWorkspaceStorage.setItem(`workspaces.${flow.id}`, {
+            changedAt: Date.now(),
+            state: state
+        });
     }
     const saveWorkspaceDraftDebounced = useCallback(_.debounce(saveWorkspaceDraft, 1000), [ workspace ]);
 
-    const loadWorkspaceDraft = async () => {
+    const getWorkspaceDraft = async () => {
         if(!workspace) return;
         try {
-            const state = await flowWorkspaceStorage.getItem(`workspaces.${flow.id}`) as any;
-            if(!state) return;
-
-            Blockly.serialization.workspaces.load(state, workspace);
+            const draft = await flowWorkspaceStorage.getItem(`workspaces.${flow.id}`) as any;
+            if(!draft?.state) return;
+            return draft;
         } catch(err) {
             console.error(err);
         }
@@ -92,7 +100,7 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
         if(!workspace) return;
 
         workspace.addChangeListener(handleWorkspaceEvent);
-        loadWorkspaceDraft();
+        loadWorkspace();
     }, [ workspace ]);
 
     useEffect(() => {

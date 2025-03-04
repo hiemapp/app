@@ -9,29 +9,29 @@ export const recordRouter = router({
         ),
 
     listToday: publicProcedure.input(z.object({
-        id: z.number()
+        id: z.number(),
+        sample: z.number().default(100)
     })).query(async ({ ctx, input }) => {
         const device = await ctx.getResourceOrThrow(Device, input.id);
 
         const records = await device.records.readToday();
-        const sampler = new RecordSampler(records);
 
         return {
-            records: RecordSampler.serialize(sampler.getDatasets())
+            records: RecordSampler.serialize(RecordSampler.downsample(records, input.sample))
         }
     }),
 
     listLatest: publicProcedure.input(z.object({
         id: z.number(),
-        top: z.number()
+        top: z.number(),
+        sample: z.number().default(100)
     })).query(async ({ ctx, input }) => {
         const device = await ctx.getResourceOrThrow(Device, input.id);
 
         const records = await device.records.readLatest(input.top);
-        const sampler = new RecordSampler(records);
 
         return {
-            records: RecordSampler.serialize(sampler.getDatasets())
+            records: RecordSampler.serialize(RecordSampler.downsample(records, input.sample))
         }
     }),
 
@@ -39,16 +39,16 @@ export const recordRouter = router({
         .input(z.object({
             id: z.number(),
             start: z.date(),
-            end: z.date()
+            end: z.date(),
+            sample: z.number().default(100)
         }))
         .query(async ({ ctx, input }) => {
             const device = await ctx.getResourceOrThrow(Device, input.id);
             
             const records = await device.records.readPeriod(input.start, input.end);
-            const sampler = new RecordSampler(records);
 
             return {
-                records: RecordSampler.serialize(sampler.getDatasets())
+                records: RecordSampler.serialize(RecordSampler.downsample(records, input.sample))
             }
         })
 })

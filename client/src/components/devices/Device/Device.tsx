@@ -21,7 +21,7 @@ export interface DeviceProps {
 }
 
 const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
-    const { id, display, color, name, icon, connection, traits, options } = data;
+    const { id, display, color, name, icon, isConnected, traits, options } = data;
     const palette = getPalette(color);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const home = HomeController.findCurrent();
@@ -38,7 +38,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ data }) => {
     const navigate = useNavigate();
     
     const error = (() => {
-        if(!connection.isOpen) {
+        if(!isConnected) {
             return { icon: 'wifi-slash' };
         }
     })()

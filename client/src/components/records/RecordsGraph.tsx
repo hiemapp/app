@@ -13,14 +13,22 @@ export interface IRecordsGraphProps {
     fields: DeviceDriverManifestRecordingField[];
     getFieldLabel: (name: string) => string|undefined;
     isAnimationActive?: boolean;
+    period: Date[];
 }
 
 const FIELD_GRADIENT_START_OPACITY = 0.6;
 const FIELD_GRADIENT_STOP_OPACITY = 0.3;
 
-const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, records, getFieldLabel, isAnimationActive }) => {
+const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ 
+    fields, 
+    records, 
+    getFieldLabel, 
+    isAnimationActive,
+    period
+}) => {
     const [showFields, setShowFields] = useState<Record<string, boolean>>({});
     const fieldsObj = useMemo(() => keyBy(fields, 'name'), [fields]);
+    const hasInvertedField = useMemo(() => fields.some(f => f.invert), [fields])
 
     useEffect(() => {
         // only show primary fields by default
@@ -62,8 +70,8 @@ const RecordsGraph: React.FunctionComponent<IRecordsGraphProps> = ({ fields, rec
                     tickFormatter={timeStr => dayjs(timeStr).format('DD-MM')}
                     domain={['dataMin', 'dataMax']}
                     type="number" />
-                <YAxis />
-                <Tooltip content={<RecordsGraphTooltip />} />
+                <YAxis tickFormatter={t => hasInvertedField ? Math.abs(t) : t}/>
+                <Tooltip content={<RecordsGraphTooltip fieldsObj={fieldsObj} />} />
                 {fields.map(field => {
                     if (!showFields[field.name]) return null;
 
