@@ -40,7 +40,7 @@
     color: var(--text-primary);
     border: 1px solid var(--gray-0);
     outline: none !important;
-    transition: 300ms ease-out, 200ms opacity 100ms ease-out;
+    transition: 200ms ease-out, 150ms opacity 50ms ease-out;
     transform: translate(var(--Modal-transform-x), var(--Modal-transform-y)) scale(var(--Modal-scale)) !important;
     transform-origin: 50% 50%;
     opacity: var(--Modal-opacity);
