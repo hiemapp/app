@@ -11,14 +11,14 @@ import RecordsGraphToolbar from '@/components/records/RecordsGraphToolbar';
 const RecordsGraph = lazy(() => import('../../components/records/RecordsGraph'));
 
 const Records: React.FunctionComponent = () => {
-    const deviceId = parseInt(useParams().deviceId!);
+    const { deviceId } = useParams();
     const { formatMessage } = useIntl();
     const [ period, setPeriod ] = useState<Date[]>([]);
     
-    const deviceQuery = trpc.device.get.useQuery({ id: deviceId });
-    const manifestQuery = trpc.device.getDriverManifest.useQuery({ id: deviceId });
+    const deviceQuery = trpc.device.get.useQuery({ id: deviceId! });
+    const manifestQuery = trpc.device.getDriverManifest.useQuery({ id: deviceId! });
     const recordQuery = trpc.record.listPeriod.useQuery({ 
-        id: deviceId, 
+        id: deviceId!, 
         start: period[0], 
         end: period[1], 
         sample: Math.round(window.innerWidth / 3)

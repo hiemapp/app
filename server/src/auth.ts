@@ -38,7 +38,7 @@ export const getUserFromToken = (token: any) => {
             const jwtSecret = Config.get('system.server.jwtSecret');
             const payload: any = jwt.verify(token, jwtSecret);
 
-            if(payload && typeof payload.userId === 'number') {
+            if(payload && typeof payload.userId !== 'undefined') {
                 user = UserController.find(payload.userId);
             }
         }

@@ -5,10 +5,10 @@ import { z } from 'zod';
 export const userRouter = router({
     get: publicProcedure
         .input(z.object({
-            id: z.union([ z.number(), z.literal('me') ])
+            id: z.string().optional()
         }))
         .query(({ ctx, input }) => {           
-            if(input.id === 'me') {
+            if(typeof input.id !== 'string') {
                 return ctx.getDocumentOrThrow(User, ctx.req.user.id, false);
             }
                 

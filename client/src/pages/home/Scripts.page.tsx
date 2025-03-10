@@ -45,7 +45,7 @@ const Scripts: React.FunctionComponent = () => {
                     ))}
                     <ScriptEditor 
                         defaultValue={editorValue} 
-                        isOpen={typeof scriptId === 'number'}
+                        isOpen={typeof scriptId === 'string'}
                         filename={scriptQuery.data?.name!}
                         onRequestClose={() => setScriptId(null)} />
                 </Box>

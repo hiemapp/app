@@ -1136,6 +1136,11 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@blockly/field-colour@^5.0.12":
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.12.tgz#b412c77801ea3c209307ed470ebc4e6dd15c380a"
+  integrity sha512-vNw6L/B0cpf+j0S6pShX31bOI16KJu+eACpsfHGOBZbb7+LT3bYKcGHe6+VRe+KtIE3jGlY7vYfnaJdOCrYlfQ==
+
 "@capacitor-community/electron@^5.0.1":
   version "5.0.1"
   resolved "https://registry.npmjs.org/@capacitor-community/electron/-/electron-5.0.1.tgz"

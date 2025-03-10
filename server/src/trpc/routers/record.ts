@@ -9,7 +9,7 @@ export const recordRouter = router({
         ),
 
     listToday: publicProcedure.input(z.object({
-        id: z.number(),
+        id: z.string(),
         sample: z.number().default(100)
     })).query(async ({ ctx, input }) => {
         const device = await ctx.getResourceOrThrow(Device, input.id);
@@ -22,7 +22,7 @@ export const recordRouter = router({
     }),
 
     listLatest: publicProcedure.input(z.object({
-        id: z.number(),
+        id: z.string(),
         top: z.number(),
         sample: z.number().default(100)
     })).query(async ({ ctx, input }) => {
@@ -37,7 +37,7 @@ export const recordRouter = router({
 
     listPeriod: publicProcedure
         .input(z.object({
-            id: z.number(),
+            id: z.string(),
             start: z.date(),
             end: z.date(),
             sample: z.number().default(100)

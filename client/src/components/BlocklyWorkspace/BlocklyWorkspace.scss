@@ -47,6 +47,25 @@
     stroke: yellow !important;
 }
 
+.blocklyColourTable {
+    tr {
+        display: flex;
+        flex-direction: row;
+    }
+
+    td {
+        border: 2px solid transparent !important;
+        border-radius: 99px;
+        margin: 1px;
+        box-shadow: none !important;
+
+        &.blocklyColourHighlighted,
+        &.blocklyColourSelected {
+            border-color: #fff !important;
+        }
+    }
+}
+
 .blocklyHtmlInput {
     background: #fff !important;
     color: var(--text-primary-inverse) !important;

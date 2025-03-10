@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@aashu-dubey/capacitor-statusbar-safe-area": "^2.1.1",
+        "@blockly/field-colour": "^5.0.12",
         "@capacitor/keyboard": "^6.0.0",
         "@monaco-editor/react": "^4.6.0",
         "@tanstack/react-query": "^4.18.0",

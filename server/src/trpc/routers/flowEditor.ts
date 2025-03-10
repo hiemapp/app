@@ -28,7 +28,7 @@ export const flowEditorRouter = router({
 
     getDynamicParamLayout: publicProcedure
         .input(z.object({
-            flowId: z.number(),
+            flowId: z.string(),
             blockId: z.string(),
             blockType: z.string(),
             paramId: z.string(),

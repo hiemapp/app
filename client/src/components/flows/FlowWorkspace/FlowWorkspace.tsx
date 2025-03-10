@@ -1,11 +1,11 @@
 import FlowWorkspaceBlock from '@/flows/FlowWorkspaceBlock';
 import { trpc } from '@/utils/trpc/trpc';
 import { Box } from '@tjallingf/react-utils';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as Blockly from 'blockly';
 import BlocklyWorkspace from '@/components/BlocklyWorkspace';
 import { useIntl } from 'react-intl';
-import FlowWorkspaceTheme from '@/flows/FlowWorkspaceTheme';
+import { registerFlowWorkspaceTheme } from '@/flows/FlowWorkspaceTheme';
 import FlowWorkspaceCategory from '@/flows/FlowWorkspaceCategory';
 import _ from 'lodash';
 import FlowWorkspaceCategoryToolbox from './FlowWorkspaceCategoryToolbox';
@@ -13,6 +13,9 @@ import './FlowWorkspace.scss';
 import FlowWorkspaceToolbar from './FlowWorkspaceToolbar';
 import type { Flow, InferSchema } from 'hiem';
 import { flowWorkspaceStorage } from '@/utils/storage';
+import { registerFieldColour } from '@blockly/field-colour';
+import { registerFieldFlowWorkspaceMenu } from '@/flows/FlowWorkspaceMenuField';
+import FlowWorkspaceMenu, { FlowWorkspaceMenuContent } from './FlowWorkspaceMenu';
 
 export interface FlowWorkspaceProps extends React.PropsWithChildren {
     flow: InferSchema<Flow>
@@ -29,6 +32,9 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
         onSuccess: () => clearWorkspaceDraft()
     });
 
+    const modalRef = useRef();
+    const [ isToolboxOpen, setToolboxOpen ] = useState(false);
+    const [ menuContent, setMenuContent ] = useState<FlowWorkspaceMenuContent>({ options: [], show: false });
     const [ workspace, setWorkspace ] = useState<Blockly.WorkspaceSvg>();
     const [ wspBlocks, setWspBlocks] = useState<Record<string, FlowWorkspaceBlock>>();
     const [ wspCategories, setWspCategories ] = useState<Record<string, FlowWorkspaceCategory>>();
@@ -106,7 +112,9 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
     useEffect(() => {
         if(!wspCategories) return;
 
-        FlowWorkspaceTheme.register(wspCategories);
+        registerFlowWorkspaceTheme(wspCategories);
+        registerFieldColour();
+        registerFieldFlowWorkspaceMenu(setMenuContent);
 
         setWspBlocks(_.chain(blocksQuery.data)
             .filter(block => !!wspCategories[block.manifest.category])
@@ -135,6 +143,9 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
     
     return (
         <Box className="FlowWorkspace">
+            <FlowWorkspaceMenu 
+                content={menuContent}
+                onRequestClose={() => setMenuContent(m => ({...m, show: false}))} />
             <FlowWorkspaceCategoryToolbox 
                 wspCategories={wspCategories} 
                 selectedCategoryId={selectedToolboxCategoryId}
@@ -143,12 +154,13 @@ const FlowWorkspace: React.FunctionComponent<FlowWorkspaceProps> = ({
                 <FlowWorkspaceToolbar
                     flow={flow} 
                     workspace={workspace}
-                    onSave={handleSave} />
+                    onSave={handleSave}
+                    onToolboxOpen={() => setToolboxOpen(true)} />
                 <BlocklyWorkspace 
                     onInject={setWorkspace}
                     injectOptions={{
                         zoom: {
-                            startScale: 0.8
+                            startScale: 0.9
                         },
                         grid: {
                             spacing: 20,

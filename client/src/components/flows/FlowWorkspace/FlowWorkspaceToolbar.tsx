@@ -7,13 +7,15 @@ import { useEffect, useReducer } from 'react';
 export interface FlowWorkspaceToolbarProps extends React.PropsWithChildren {
     flow: InferSchema<Flow>;
     workspace: Blockly.WorkspaceSvg | undefined;
-    onSave: () => unknown
+    onSave: () => unknown;
+    onToolboxOpen: () => unknown
 }
 
 const FlowWorkspaceToolbar: React.FunctionComponent<FlowWorkspaceToolbarProps> = ({
     flow,
     workspace,
-    onSave
+    onSave,
+    onToolboxOpen
 }) => {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -47,9 +49,10 @@ const FlowWorkspaceToolbar: React.FunctionComponent<FlowWorkspaceToolbarProps> =
     return (
         <div className="FlowWorkspaceToolbar">
             <Box gutterX={2}>
-                <Button variant="primary" square accent="$green-4"
+                <Button variant="primary" accent="$green-4"
                     onClick={onSave}>
-                    <Icon id="play" weight="solid" />
+                    <Icon id="play" weight="solid" size={16} className="me-1" />
+                    Run
                 </Button>
                 <Button variant="link" square accent="$blue-4"
                     onClick={handleUndo}

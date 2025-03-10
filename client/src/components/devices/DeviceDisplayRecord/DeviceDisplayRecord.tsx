@@ -2,7 +2,7 @@ import './DeviceDisplayRecord.scss';
 import { DeviceDisplay } from 'hiem';
 
 export interface IDeviceDisplayRecordProps {
-    id: number;
+    id: string;
     content: DeviceDisplay['content'];
     deviceColor: string;
 }

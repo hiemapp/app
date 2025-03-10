@@ -9,13 +9,13 @@ export const deviceRouter = router({
 
     get: publicProcedure
         .input(z.object({
-            id: z.number(),
+            id: z.string(),
         }))
         .query(({ ctx, input }) => ctx.getDocumentOrThrow(Device, input.id)),
 
     getDriverManifest: publicProcedure
         .input(z.object({
-            id: z.number(),
+            id: z.string(),
         }))
         .query(async ({ ctx, input }) => {  
             const device = await ctx.getResourceOrThrow(Device, input.id);
@@ -24,7 +24,7 @@ export const deviceRouter = router({
     
     execute: publicProcedure
         .input(z.object({
-            id: z.number(),
+            id: z.string(),
             commands: z.array(
                 z.object({
                     name: z.string(),

@@ -11,7 +11,7 @@ const FlowWorkspace = lazy(() => import('../../components/flows/FlowWorkspace'))
 const FlowEdit: React.FunctionComponent = () => {
     const { flowId } = useParams();
 
-    const flow = trpc.flow.get.useQuery({ id: parseInt(flowId!) });
+    const flow = trpc.flow.get.useQuery({ id: flowId! });
     const blocks = trpc.flowEditor.listBlocks.useQuery();
     const blockCategories = trpc.flowEditor.listBlockCategories.useQuery();
 

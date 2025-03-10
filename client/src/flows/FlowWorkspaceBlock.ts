@@ -57,7 +57,7 @@ export default class FlowWorkspaceBlock {
         if(param.options) return;
 
         const shadow = param.shadow;
-        const shadowType = (typeof shadow?.type === 'string' ? shadow.type : _.castArray(param.type)[0]);
+        const shadowType = (typeof shadow?.type === 'string' ? shadow.type : param.type[0]);
         const type = FlowWorkspaceBlock.primitives[shadowType] || shadowType;
 
         if(!Blockly.Blocks[type]) return;
@@ -68,10 +68,8 @@ export default class FlowWorkspaceBlock {
         }
     }
 
-    protected toBlocklyCheck(type: IFlowBlockLayout_parameter['type']) {
-        const types = _.castArray(type);
+    protected toBlocklyCheck(types: IFlowBlockLayoutSerialized_parameter['type']) {
         if(types.includes('any')) return null;
-        
         return types.map(type => this.toBlocklyType(type));
     }
 
@@ -162,6 +160,7 @@ export default class FlowWorkspaceBlock {
      */
     protected getMessage() {
         const values: Record<string, string> = {};
+        console.log(this.type, this.layout);
         this.layout.parameters.forEach((param, i) => {
             values[param?.id] = `%${i+1}`;
         })

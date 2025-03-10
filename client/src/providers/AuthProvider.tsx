@@ -11,7 +11,7 @@ export interface IAuthProviderProps {
 }
 
 const AuthProvider: React.FunctionComponent<IAuthProviderProps> = ({ children }) => {
-    const userQuery = trpc.user.get.useQuery({ id: 'me' });
+    const userQuery = trpc.user.get.useQuery({});
     const [ user, setUser ] = useState<User|null>(null);
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import * as Blockly from 'blockly';
 import classNames from 'classnames';
 import { memo } from 'react';
 import './BlocklyWorkspace.scss';
+import { registerFieldColour } from '@blockly/field-colour';
 
 // Blockly.dialog.setPrompt((p1, p2) => {
 //     console.log(p1, p2);

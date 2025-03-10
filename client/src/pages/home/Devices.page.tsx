@@ -29,15 +29,13 @@ const Devices: React.FunctionComponent = () => {
             return null;
         }
 
-        if(query.isError || typeof query.data.id !== 'number') {
+        if(query.isError || typeof query.data.id !== 'string') {
             console.error('Failed to load device:', query.error);
             return null;
         }
 
         // Don't show dummy devices
-        if(query.data.options.dummy === true) {
-            return null;
-        }
+        if(query.data.options?.dummy === true) return null;
 
         return (
             <ErrorBoundary key={query.data.id}>
